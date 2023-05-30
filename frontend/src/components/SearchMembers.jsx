@@ -2,8 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { useTable, useFilters } from "react-table";
 import FilterText from "./FilterText";
 import FilterDates from "./FiterDates";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 import "./SearchMembers.css";
-
+import { modalBox } from "../MuiStyles";
+import Profile from "./Profile";
 const COLUMNS = [
   {
     Header: "Member ID",
@@ -32,18 +35,13 @@ const COLUMNS = [
   },
 ];
 
-const toBase64 = (arr) => {
-  if (arr !== null) {
-    const photo = atob(
-      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
-    );
-    return photo;
-  }
-};
-
 const SearchMembers = () => {
   const [data, setData] = useState([]);
-  // useeffect ...
+  const [open, setOpen] = useState(false);
+  const [currentMemberID, setCurrentMemberID] = useState(null);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,7 +84,14 @@ const SearchMembers = () => {
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr
+                onClick={(e) => {
+                  setCurrentMemberID(row.cells[0].value);
+                  handleOpen();
+                }}
+                {...row.getRowProps()}
+                style={{ cursor: "pointer" }}
+              >
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -97,19 +102,18 @@ const SearchMembers = () => {
           })}
         </tbody>
       </table>
-      {data.map((member) => {
-        try {
-          return (
-            <img
-              key={member.membership_id}
-              src={`data:image/jpeg;base64,${toBase64(member.photo.data)}`}
-              alt="photo"
-            />
-          );
-        } catch (e) {
-          return <p>No Img</p>;
-        }
-      })}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div>
+          <Box sx={modalBox}>
+            <Profile memberID={currentMemberID} closeModal={handleClose} />
+          </Box>
+        </div>
+      </Modal>
     </div>
   );
 };

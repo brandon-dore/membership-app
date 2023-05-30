@@ -20,4 +20,6 @@ export const textField = {
 export const sharpButton = {
   borderTopRightRadius: "0",
   borderTopLeftRadius: "0",
+  borderBottomRightRadius: "0",
+  borderBottomLeftRadius: "0",
 };

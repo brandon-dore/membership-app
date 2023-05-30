@@ -81,6 +81,7 @@ const CreateMember = () => {
                 audio={false}
                 screenshotFormat="image/jpeg"
                 videoConstraints={videoConstraints}
+                className="photoContainer"
               >
                 {({ getScreenshot }) => {
                   return (
