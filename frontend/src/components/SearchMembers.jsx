@@ -1,33 +1,34 @@
 import { useState, useEffect, useMemo } from "react";
 import { useTable, useFilters } from "react-table";
-import FilterForm from "./FilterForm";
+import FilterText from "./FilterText";
+import FilterDates from "./FiterDates";
 import "./SearchMembers.css";
 
 const COLUMNS = [
   {
-    Header: "ID",
+    Header: "Member ID",
     accessor: "membership_id",
-    Filter: FilterForm,
+    Filter: FilterText,
   },
   {
     Header: "First Name",
     accessor: "first_name",
-    Filter: FilterForm,
+    Filter: FilterText,
   },
   {
     Header: "Last Name",
     accessor: "last_name",
-    Filter: FilterForm,
+    Filter: FilterText,
   },
   {
     Header: "Expiry Date",
     accessor: "expiry_date",
-    Filter: FilterForm,
+    Filter: FilterDates,
   },
   {
     Header: "Date of Birth",
     accessor: "dob",
-    Filter: FilterForm,
+    Filter: FilterDates,
   },
 ];
 

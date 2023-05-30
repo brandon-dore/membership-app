@@ -15,6 +15,7 @@ const darkTheme = createTheme({
     mode: "dark",
   },
 });
+
 function App() {
   const [users, setUsers] = useState(false);
   const [open, setOpen] = useState(false);

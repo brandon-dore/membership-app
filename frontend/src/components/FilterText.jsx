@@ -1,13 +1,13 @@
 import { TextField } from "@mui/material";
-import React from "react";
 
-const FilterForm = ({ column }) => {
+const FilterFormText = ({ column }) => {
   const { filterValue, setFilter } = column;
   return (
     <span>
       <TextField
         id="outlined-basic"
         variant="outlined"
+        type="text"
         value={filterValue || ""}
         onChange={(e) => setFilter(e.target.value)}
       />
@@ -15,4 +15,4 @@ const FilterForm = ({ column }) => {
   );
 };
 
-export default FilterForm;
+export default FilterFormText;
