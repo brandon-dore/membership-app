@@ -8,7 +8,7 @@ const pool = new Pool({
 });
 const getUsers = (request, response) => {
   pool.query(
-    "SELECT * FROM users ORDER BY membership_id ASC",
+    "SELECT membership_id, first_name, last_name, dob, expiry_date FROM users ORDER BY membership_id ASC",
     (error, results) => {
       if (error) {
         throw error;
