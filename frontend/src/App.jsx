@@ -6,20 +6,8 @@ import CreateMember from "./components/CreateMember";
 import "./App.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import cupidImg from "./assets/cupid.png";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "black",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { modalBox } from "./MuiStyles";
 
 function App() {
   const [users, setUsers] = useState(false);
@@ -62,7 +50,7 @@ function App() {
           className="primaryButton"
           onClick={() => {
             handleOpen();
-            setComponent("x");
+            setComponent("SearchMember");
           }}
         >
           <div className="buttonContent">Search for Member</div>
@@ -105,14 +93,7 @@ function App() {
       >
         {/* <p>t</p> */}
         <div>
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-
+          <Box sx={modalBox}>
             {
               {
                 CreateMember: <CreateMember />,

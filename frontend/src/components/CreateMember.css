@@ -1,0 +1,37 @@
+.formHeader {
+  color: black;
+}
+
+.inputFields {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.formContainer {
+  position: relative;
+  display: grid;
+  width: 90%;
+  grid-template-columns: 1fr 1fr;
+}
+
+.photoContainer {
+  position: fixed;
+  left: 55%;
+  top: 22%;
+  display: flex;
+  width: 40%;
+  aspect-ratio: 1/1;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5rem;
+}
