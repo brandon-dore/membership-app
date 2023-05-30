@@ -7,6 +7,7 @@ import "./App.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import cupidImg from "./assets/cupid.png";
 
 const style = {
   position: "absolute",
@@ -50,9 +51,9 @@ function App() {
     <div>
       <div className="titleContainer">
         <h1 className="pageTitle">
-          <img className="logo" src="public/cupid.png" alt="logo" />
+          <img className="logo" src={cupidImg} alt="logo" />
           Cupid's
-          <img className="logo" src="public/cupid.png" alt="logo" />
+          <img className="logo" src={cupidImg} alt="logo" />
         </h1>
         {users}
       </div>
