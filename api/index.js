@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express()
 const db = require('./queries')
 const port = 3000
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5174'];
 
 app.use(bodyParser.json())
 app.use(

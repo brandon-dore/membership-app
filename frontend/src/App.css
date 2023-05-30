@@ -1,42 +1,100 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  --buttonsHeight: 35rem;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 2rem;
+  pointer-events: none;
+  user-select: none;
+  font-size: 4rem;
+  margin-top: 5rem;
+}
+
+.buttons {
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  width: 100%;
+  /* left: -10%; */
+  top: 15rem;
+  background-color: #333;
+}
+
+.primaryButton {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  height: var(--buttonsHeight);
+  background-color: #333;
+  transition: 0.2s;
+  transform: skew(20deg);
+  z-index: 1;
+  border: solid firebrick;
+  border-width: 0px 2px 0px 2px;
+}
+
+.primaryButton::after {
+  border: none;
+  content: "";
+  opacity: 0.5;
+  display: block;
+  background: #242424;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0;
+  width: calc(100% - 4px);
+  transition: 0.2s;
+}
+
+.primaryButton:nth-child(odd) {
+  border: none;
+}
+
+.primaryButton:hover::after {
+  height: var(--buttonsHeight);
+}
+
+.primaryButton:active {
+  background-color: firebrick;
+}
+
+.buttonContent {
+  transform: skew(-20deg);
+  z-index: 2;
+  font-size: 2rem;
+  max-width: 15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  width: 5rem;
+  aspect-ratio: 1/1;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.secondaryButtons {
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  display: flex;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.secondaryButton {
+  background: #333;
+  margin: 2rem;
+  transition: 0.2s;
+  border-radius: 4px;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.secondaryButton:hover {
+  background: firebrick;
 }

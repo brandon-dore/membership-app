@@ -1,13 +1,13 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: 'postgres',
+  user: 'amos',
   host: 'localhost',
   database: 'membership-app',
   password: 'password',
   port: 5432,
 })
 const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY membership_number ASC', (error, results) => {
+  pool.query('SELECT * FROM users ORDER BY membership_id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -18,7 +18,7 @@ const getUsers = (request, response) => {
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM users WHERE membership_number = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM users WHERE membership_id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -42,7 +42,7 @@ const updateUser = (request, response) => {
   const { name, email } = request.body
 
   pool.query(
-    'UPDATE users SET first_name = $1, last_name = $2 WHERE membership_number = $3',
+    'UPDATE users SET first_name = $1, last_name = $2 WHERE membership_id = $3',
     [name, email, id],
     (error, results) => {
       if (error) {
@@ -56,7 +56,7 @@ const updateUser = (request, response) => {
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM users WHERE membership_number = $1', [id], (error, results) => {
+  pool.query('DELETE FROM users WHERE membership_id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }

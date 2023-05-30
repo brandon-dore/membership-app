@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
   const [users, setUsers] = useState(false);
 
   useEffect(() => {
@@ -12,40 +9,42 @@ function App() {
   }, []);
 
   const getUsers = () => {
-    fetch('http://localhost:3000/users')
-      .then(response => {
+    fetch("http://localhost:3000/users")
+      .then((response) => {
         return response.text();
       })
-      .then(data => {
+      .then((data) => {
         setUsers(data);
+        console.log(data);
       });
-  }
-
+  };
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="titleContainer">
+        <h1 className="pageTitle">
+          <img className="logo" src="public/cupid.png" alt="logo" />
+          Cupid's
+          <img className="logo" src="public/cupid.png" alt="logo" />
+        </h1>
+        {users}
       </div>
-      <h1>Vite + React</h1>
-      <h2>{users}</h2>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <div className="buttons">
+        <button className="primaryButton">
+          <div className="buttonContent">Enter Member ID</div>
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <button className="primaryButton">
+          <div className="buttonContent">Search Members</div>
+        </button>
+        <button className="primaryButton">
+          <div className="buttonContent">Create New Member</div>
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className="secondaryButtons">
+        <button className="secondaryButton">Member List</button>
+        <button className="secondaryButton">Dates</button>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
