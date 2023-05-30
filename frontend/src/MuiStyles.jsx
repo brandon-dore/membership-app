@@ -5,7 +5,7 @@ export const modalBox = {
   transform: "translate(-50%, -50%)",
   width: "60rem",
   height: "40rem",
-  bgcolor: "lightgrey",
+  bgcolor: "#121212",
   border: "2px solid #000",
   borderRadius: "4px",
   boxShadow: 24,

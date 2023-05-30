@@ -1,7 +1,3 @@
-.formHeader {
-  color: black;
-}
-
 .inputFields {
   display: flex;
   flex-direction: column;

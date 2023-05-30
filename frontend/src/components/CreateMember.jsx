@@ -42,7 +42,7 @@ const CreateMember = () => {
 
   return (
     <>
-      <div className="formHeader">
+      <div>
         <h1>Create</h1>
       </div>
       <div className="modalContent">

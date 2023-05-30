@@ -8,7 +8,13 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import cupidImg from "./assets/cupid.png";
 import { modalBox } from "./MuiStyles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 function App() {
   const [users, setUsers] = useState(false);
   const [open, setOpen] = useState(false);
@@ -36,7 +42,7 @@ function App() {
   };
 
   return (
-    <div>
+    <ThemeProvider theme={darkTheme}>
       <div className="titleContainer">
         <h1 className="pageTitle">
           <img className="logo" src={cupidImg} alt="logo" />
@@ -105,7 +111,7 @@ function App() {
           </Box>
         </div>
       </Modal>
-    </div>
+    </ThemeProvider>
   );
 }
 
