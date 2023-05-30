@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 
 const CheckInMember = () => {
-  const [x, setX] = useState(false);
-
   useEffect(() => {
     getX();
   }, []);
