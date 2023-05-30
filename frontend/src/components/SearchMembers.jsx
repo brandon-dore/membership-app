@@ -32,6 +32,15 @@ const COLUMNS = [
   },
 ];
 
+const toBase64 = (arr) => {
+  if (arr !== null) {
+    const photo = atob(
+      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+    return photo;
+  }
+};
+
 const SearchMembers = () => {
   const [data, setData] = useState([]);
   // useeffect ...
@@ -88,6 +97,19 @@ const SearchMembers = () => {
           })}
         </tbody>
       </table>
+      {data.map((member) => {
+        try {
+          return (
+            <img
+              key={member.membership_id}
+              src={`data:image/jpeg;base64,${toBase64(member.photo.data)}`}
+              alt="photo"
+            />
+          );
+        } catch (e) {
+          return <p>No Img</p>;
+        }
+      })}
     </div>
   );
 };

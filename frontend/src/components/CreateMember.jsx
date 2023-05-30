@@ -22,7 +22,6 @@ const CreateMember = () => {
   const [pic, setPic] = useState("");
 
   const handleSubmit = () => {
-    console.log(firstName, lastName, dob, exp);
     const formdata = {
       first_name: firstName,
       last_name: lastName,
@@ -34,6 +33,7 @@ const CreateMember = () => {
       .post("http://localhost:3000/users", formdata)
       .then((res) => {
         console.log(res);
+        location.reload();
       })
       .catch((e) => {
         console.log(e);
@@ -86,7 +86,9 @@ const CreateMember = () => {
                   return (
                     <Button
                       sx={sharpButton}
-                      onClick={() => setPic(getScreenshot())}
+                      onClick={() =>
+                        setPic(btoa(getScreenshot().split(",")[1]))
+                      }
                       variant="contained"
                     >
                       Take Picture
@@ -96,7 +98,10 @@ const CreateMember = () => {
               </Webcam>
             ) : (
               <>
-                <img src={pic} alt="Picture" />
+                <img
+                  src={`data:image/jpeg;base64,${atob(pic)}`}
+                  alt="Picture"
+                />
                 <Button
                   sx={sharpButton}
                   onClick={() => setPic("")}
