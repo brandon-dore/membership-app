@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 :root {
-  --buttonsHeight: 35rem;
+  --buttonsHeight: calc(100vh - 10rem);
+  overflow: hidden;
 }
 
 .pageTitle {
@@ -23,8 +24,8 @@
   display: flex;
   position: absolute;
   flex-direction: row;
-  width: 100%;
-  /* left: -10%; */
+  width: 112%;
+  left: -6%;
   top: 15rem;
   background-color: #333;
 }
