@@ -1,18 +1,8 @@
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import "./CreateMember.css";
-import { sharpButton, textField } from "../MuiStyles";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Webcam from "react-webcam";
 import axios from "axios";
 
-const videoConstraints = {
-  width: 720,
-  height: 720,
-  facingMode: "user",
-};
 const toBase64 = (arr) => {
   if (arr !== null) {
     const photo = atob(
@@ -22,11 +12,6 @@ const toBase64 = (arr) => {
   }
 };
 const Profile = ({ memberID, closeModal }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [exp, setExp] = useState("");
-  const [pic, setPic] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -76,7 +61,7 @@ const Profile = ({ memberID, closeModal }) => {
             <h2>Expiry Date</h2>
             {user.expiry_date}
             <div className="photoContainer">
-              {user.photo !== null ? (
+              {user.photo !== null || toBase64(user.photo.data) !== null ? (
                 <img
                   key={user.membership_id}
                   src={`data:image/jpeg;base64,${toBase64(user.photo.data)}`}

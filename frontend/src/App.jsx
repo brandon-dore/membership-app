@@ -5,10 +5,13 @@ import CheckInMember from "./components/CheckInMember";
 import CreateMember from "./components/CreateMember";
 import "./App.css";
 import Modal from "@mui/material/Modal";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import cupidImg from "./assets/cupid.png";
 import { modalBox } from "./MuiStyles";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import CreateIcon from "@mui/icons-material/Create";
 
 const darkTheme = createTheme({
   palette: {
@@ -60,7 +63,10 @@ function App() {
             setComponent("SearchMember");
           }}
         >
-          <div className="buttonContent">Search for Member</div>
+          <div className="buttonContent">
+            <SearchIcon sx={{ fontSize: "6rem" }} />
+            Search for Member
+          </div>
         </button>
         <button
           className="primaryButton"
@@ -69,7 +75,10 @@ function App() {
             setComponent("CheckInMember");
           }}
         >
-          <div className="buttonContent">Check-in Member</div>
+          <div className="buttonContent">
+            <HowToRegIcon sx={{ fontSize: "6rem" }} />
+            Check-in Member
+          </div>
         </button>
         <button
           className="primaryButton"
@@ -78,7 +87,10 @@ function App() {
             setComponent("CreateMember");
           }}
         >
-          <div className="buttonContent">Create New Member</div>
+          <div className="buttonContent">
+            <CreateIcon sx={{ fontSize: "6rem" }} />
+            Create New Member
+          </div>
         </button>
       </div>
       <div className="secondaryButtons">

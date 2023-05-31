@@ -21,6 +21,10 @@ const CreateMember = () => {
   const [exp, setExp] = useState("");
   const [pic, setPic] = useState("");
 
+  const checkEmpty = () => {
+    return (!firstName || !lastName || !dob || !exp || !pic)
+  }
+
   const handleSubmit = () => {
     const formdata = {
       first_name: firstName,
@@ -113,7 +117,7 @@ const CreateMember = () => {
             )}
           </div>
         </form>
-        <Button onClick={handleSubmit} color="info" variant="contained">
+        <Button disabled={checkEmpty()} onClick={handleSubmit} color="info" variant="contained">
           Create Member
         </Button>
       </div>
