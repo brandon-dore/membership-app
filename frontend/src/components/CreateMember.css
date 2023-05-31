@@ -19,8 +19,6 @@
   width: 30%;
   align-self: center;
   justify-self: center;
-  justify-content: center;
-  align-items: center;
   display: flex;
   flex-direction: column;
   border: 1px solid #0088d1;
@@ -33,12 +31,4 @@
   justify-content: center;
   flex-direction: column;
   gap: 5rem;
-}
-
-.profileModal {
-  display: flex;
-  width: 90%;
-  justify-content: center;
-  flex-direction: column;
-  gap: 2rem;
 }
