@@ -40,7 +40,7 @@ const Profile = ({ memberID, closeModal }) => {
   return (
     <>
       {user !== null ? (
-        <div className="profileModal">
+        <div>
           <Button
             color="info"
             variant="contained"

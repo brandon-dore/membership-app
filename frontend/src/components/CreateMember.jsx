@@ -22,8 +22,8 @@ const CreateMember = () => {
   const [pic, setPic] = useState("");
 
   const checkEmpty = () => {
-    return (!firstName || !lastName || !dob || !exp || !pic)
-  }
+    return !firstName || !lastName || !dob || !exp || !pic;
+  };
 
   const handleSubmit = () => {
     const formdata = {
@@ -46,9 +46,7 @@ const CreateMember = () => {
 
   return (
     <>
-      <div>
-        <h1>Create</h1>
-      </div>
+      <h1>Create</h1>
       <div className="modalContent">
         <form className="formContainer">
           <div className="inputFields">
@@ -117,7 +115,12 @@ const CreateMember = () => {
             )}
           </div>
         </form>
-        <Button disabled={checkEmpty()} onClick={handleSubmit} color="info" variant="contained">
+        <Button
+          disabled={checkEmpty()}
+          onClick={handleSubmit}
+          color="info"
+          variant="contained"
+        >
           Create Member
         </Button>
       </div>

@@ -1,18 +1,67 @@
-import { useEffect, useState } from "react";
+import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useState, useMemo } from "react";
+import { useTable, useFilters } from "react-table";
+import FilterText from "./FilterText";
+import FilterDates from "./FiterDates";
+import Search from "@mui/icons-material/Search";
+import Profile from "./Profile";
+import "./CheckInMember.css";
+import "./DataTable.css";
+import axios from "axios";
+
+const COLUMNS = [
+  {
+    Header: "Member ID",
+    accessor: "membership_id",
+    Filter: FilterText,
+  },
+  {
+    Header: "First Name",
+    accessor: "first_name",
+    Filter: FilterText,
+  },
+  {
+    Header: "Last Name",
+    accessor: "last_name",
+    Filter: FilterText,
+  },
+  {
+    Header: "Expiry Date",
+    accessor: "expiry_date",
+    Filter: FilterDates,
+  },
+  {
+    Header: "Date of Birth",
+    accessor: "dob",
+    Filter: FilterDates,
+  },
+];
 
 const CheckInMember = () => {
-  useEffect(() => {
-    getX();
-  }, []);
+  const [id, setId] = useState("");
 
-  const getX = () => {
-    fetch("")
+  const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [currentMemberID, setCurrentMemberID] = useState(null);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const columns = useMemo(() => COLUMNS, []);
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data }, useFilters);
+
+  const fetchData = () => {
+    // Replace this with some filter logic
+    axios
+      .get("http://localhost:3000/users")
       .then((response) => {
-        return response.text();
+        return response.data;
       })
       .then((data) => {
-        setX(data);
-        console.log(data);
+        setData(data);
       })
       .catch((e) => {
         console.log(e);
@@ -21,7 +70,99 @@ const CheckInMember = () => {
 
   return (
     <>
-      <h1>test</h1>
+      <h1>Check In</h1>
+      <div className="">
+        <h2>Check in member: </h2>
+        <OutlinedInput
+          sx={{ width: "20rem" }}
+          id="id"
+          type="number"
+          variant="outlined"
+          placeholder="Membership ID"
+          onChange={(e) => setId(e.target.value)}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                disabled={!id}
+                onClick={() => console.log("check in")}
+              >
+                <CheckCircleIcon />
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </div>
+      <h2>Search Member:</h2>
+      <div className="formContainer">
+        {/* Replace this with various searchable fields to update state object */}
+        <OutlinedInput
+          sx={{ width: "20rem" }}
+          id="last_name"
+          type="text"
+          variant="outlined"
+          placeholder="Last Name"
+          onChange={(e) => setId(e.target.value)}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton disabled={!id} onClick={fetchData}>
+                <Search />
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </div>
+      {currentMemberID !== null ? (
+        <p>Last opened ID: {currentMemberID}</p>
+      ) : (
+        <br />
+      )}
+      <br />
+
+      {data.length > 0 && (
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                    <div>
+                      {column.canFilter ? column.render("Filter") : null}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  className="contentRow"
+                  onClick={(e) => {
+                    setCurrentMemberID(row.cells[0].value);
+                    handleOpen();
+                  }}
+                  {...row.getRowProps()}
+                  style={{ cursor: "pointer" }}
+                >
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
+      {open && (
+        <div className="profileContainer">
+          <Profile memberID={currentMemberID} closeModal={handleClose} />
+        </div>
+      )}
     </>
   );
 };
