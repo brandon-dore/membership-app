@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 :root {
-  --buttonsHeight: calc(100vh - 10rem);
+  /* --buttonsHeight: calc(50rem - 10rem); */
+  --buttonsHeight: 70vh;
   overflow: hidden;
 }
 
