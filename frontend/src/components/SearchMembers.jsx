@@ -5,6 +5,7 @@ import FilterDates from "./FiterDates";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import "./SearchMembers.css";
+import "./DataTable.css";
 import { modalBox } from "../MuiStyles";
 import Profile from "./Profile";
 const COLUMNS = [
@@ -67,6 +68,7 @@ const SearchMembers = () => {
 
   return (
     <div>
+      <h1>Search</h1>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -85,12 +87,12 @@ const SearchMembers = () => {
             prepareRow(row);
             return (
               <tr
+                className="contentRow"
                 onClick={(e) => {
                   setCurrentMemberID(row.cells[0].value);
                   handleOpen();
                 }}
                 {...row.getRowProps()}
-                style={{ cursor: "pointer" }}
               >
                 {row.cells.map((cell) => {
                   return (
@@ -105,8 +107,8 @@ const SearchMembers = () => {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="Open Profile"
+        aria-describedby="Open Profile"
       >
         <div>
           <Box sx={modalBox}>
