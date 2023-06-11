@@ -3,8 +3,8 @@ export const modalBox = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "60rem",
-  height: "40rem",
+  width: "70rem",
+  height: "45rem",
   bgcolor: "#121212",
   border: "2px solid #000",
   borderRadius: "4px",
@@ -13,7 +13,7 @@ export const modalBox = {
 };
 
 export const textField = {
-  width: "28rem",
+  width: "32rem",
   color: "white",
 };
 

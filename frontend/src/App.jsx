@@ -52,7 +52,6 @@ function App() {
           Cupid's
           <img className="logo" src={cupidImg} alt="logo" />
         </h1>
-        {users}
       </div>
       <div className="buttons">
         <button

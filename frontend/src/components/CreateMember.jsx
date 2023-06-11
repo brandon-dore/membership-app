@@ -30,6 +30,18 @@ const CreateMember = () => {
     return !firstName || !lastName || !dob || !exp || !pic;
   };
 
+  const calcExpiry = (increment) => {
+    let date = new Date();
+    let expiryDate = new Date(date.setMonth(date.getMonth() + increment));
+    return expiryDate.toISOString().split("T")[0];
+  };
+
+  const convertDate = (date) => {
+    date = date.split("-");
+    let converted = date.reverse();
+    return converted.join("/");
+  };
+
   const handleSubmit = () => {
     const formdata = {
       first_name: firstName,
@@ -77,14 +89,44 @@ const CreateMember = () => {
                 onChange={(e) => setDob(e.format("yyyy-MM-DD"))}
               />
             </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DatePicker
-                label="Expiry Date"
-                onChange={(e) => setExp(e.format("yyyy-MM-DD"))}
-              />
-            </LocalizationProvider>
+            <div>
+              <p style={{ marginTop: 0 }}>
+                <strong>Expires in:</strong>
+              </p>
+              <div className="expiryPicker">
+                <Button
+                  variant="outlined"
+                  onClick={() => setExp(calcExpiry(1))}
+                >
+                  1 Months
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setExp(calcExpiry(3))}
+                >
+                  3 Months
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setExp(calcExpiry(6))}
+                >
+                  6 Months
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setExp(calcExpiry(12))}
+                >
+                  1 Year
+                </Button>
+              </div>
+              {exp && (
+                <p>
+                  <strong>Expires on {convertDate(exp)}</strong>
+                </p>
+              )}
+            </div>
             <FormControl>
-              <InputLabel>Sex</InputLabel>
+              <InputLabel variant="filled">Sex</InputLabel>
               <Select value={sex} onChange={(e) => setSex(e.target.value)}>
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
@@ -92,7 +134,7 @@ const CreateMember = () => {
               </Select>
             </FormControl>
             <FormControl>
-              <InputLabel>Relationship Status</InputLabel>
+              <InputLabel variant="filled">Relationship Status</InputLabel>
 
               <Select
                 value={relationshipStatus}
@@ -139,6 +181,15 @@ const CreateMember = () => {
                 </Button>
               </>
             )}
+          </div>
+          <div className="notesContainer">
+            <TextField
+              sx={{ width: "60%" }}
+              multiline
+              label="Notes"
+              placeholder="Notes..."
+              rows={4}
+            />
           </div>
         </form>
         <Button
