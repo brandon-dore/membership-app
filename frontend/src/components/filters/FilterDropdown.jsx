@@ -4,7 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const FilterDropdown = ({ column }) => {
-  const { filterValue, setFilter, options } = column;
+  const { filterValue, setFilter, options, id } = column;
 
   const handleChange = (event) => {
     setFilter(event.target.value);

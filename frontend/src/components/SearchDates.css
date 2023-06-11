@@ -1,0 +1,8 @@
+.dateInput {
+  display: flex;
+  gap: 1rem;
+  height: 100px;
+  vertical-align: middle;
+  align-items: center;
+  padding: 10px 0px;
+}

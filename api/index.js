@@ -37,6 +37,9 @@ app.post("/members", db.createMember);
 app.put("/members/:id", db.updateMember);
 app.delete("/members/:id", db.deleteMember);
 
+app.get("/dates", db.getDates);
+app.get("/dates/:date", db.getDate);
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });

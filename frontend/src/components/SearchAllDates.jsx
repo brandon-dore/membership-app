@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useFilters, useTable } from "react-table";
 import "./DataTable.css";
-import "./SearchDates.css";
-
 import "./SearchMembers.css";
-import { sharpButton, textField } from "../MuiStyles";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { Button, Typography } from "@mui/material";
 
 const COLUMNS = [
   {
@@ -24,19 +18,15 @@ const COLUMNS = [
   },
 ];
 
-const SearchDates = () => {
+const SearchAllDates = () => {
   const [data, setData] = useState([]);
-  const [date, setDate] = useState("");
 
-  const checkEmpty = () => {
-    return !date;
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const fetchData = (allDates) => {
-    const URL = allDates
-      ? `http://localhost:3000/dates/`
-      : `http://localhost:3000/dates/${date}`;
-    fetch(URL)
+  const fetchData = () => {
+    fetch("http://localhost:3000/dates")
       .then((response) => {
         return response.text();
       })
@@ -59,31 +49,6 @@ const SearchDates = () => {
   return (
     <div>
       <h1>Search</h1>
-      <div className="dateInput">
-        <LocalizationProvider dateAdapter={AdapterMoment}>
-          <DatePicker
-            label="Entry Date"
-            onChange={(e) => setDate(e.format("yyyy-MM-DD"))}
-          />
-        </LocalizationProvider>
-        <Button
-          disabled={checkEmpty()}
-          onClick={() => fetchData(false)}
-          color="info"
-          variant="contained"
-        >
-          Search Date
-        </Button>
-        <Typography>OR</Typography>
-        <Button
-          disabled={checkEmpty()}
-          onClick={() => fetchData(true)}
-          color="info"
-          variant="contained"
-        >
-          Get all Dates
-        </Button>
-      </div>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -116,4 +81,4 @@ const SearchDates = () => {
   );
 };
 
-export default SearchDates;
+export default SearchAllDates;

@@ -1,14 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
-import { useTable, useFilters } from "react-table";
+import Modal from "@mui/material/Modal";
+import { useEffect, useMemo, useState } from "react";
+import { useFilters, useTable } from "react-table";
+import { modalBox } from "../MuiStyles";
+import "./DataTable.css";
+import Profile from "./Profile";
+import "./SearchMembers.css";
+import FilterDropdown from "./filters/FilterDropdown";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
-import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import "./SearchMembers.css";
-import "./DataTable.css";
-import { modalBox } from "../MuiStyles";
-import Profile from "./Profile";
-import FilterDropdown from "./filters/FilterDropdown";
 
 const COLUMNS = [
   {
@@ -86,13 +86,7 @@ const SearchMembers = () => {
   };
 
   const columns = useMemo(() => COLUMNS, []);
-  const equalsString = (row, columnId, filterValue) => {
-    return (
-      (row.getValue < string) |
-      (null > columnId?.toString()?.toLowerCase() ===
-        filterValue?.toLowerCase())
-    );
-  };
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {

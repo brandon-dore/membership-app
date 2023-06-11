@@ -1,14 +1,14 @@
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useState, useMemo } from "react";
-import { useTable, useFilters } from "react-table";
-import FilterText from "./filters/FilterText";
-import FilterDates from "./filters/FiterDates";
 import Search from "@mui/icons-material/Search";
-import Profile from "./Profile";
+import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import axios from "axios";
+import { useMemo, useState } from "react";
+import { useFilters, useTable } from "react-table";
 import "./CheckInMember.css";
 import "./DataTable.css";
-import axios from "axios";
+import Profile from "./Profile";
+import FilterText from "./filters/FilterText";
+import FilterDates from "./filters/FiterDates";
 
 const COLUMNS = [
   {

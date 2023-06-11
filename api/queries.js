@@ -88,10 +88,39 @@ const deleteMember = (request, response) => {
   });
 };
 
+const getDates = (request, response) => {
+  pool.query(
+    "SELECT first_name, last_name, TO_CHAR(entry_date :: DATE, 'dd/mm/yyyy') entry_date FROM dates AS t INNER JOIN members AS m ON t.member_id = m.id ORDER BY entry_date DESC",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
+const getDate = (request, response) => {
+  const date = request.params.date;
+
+  pool.query(
+    "SELECT first_name, last_name, TO_CHAR(entry_date :: DATE, 'dd/mm/yyyy')  entry_date FROM dates AS t INNER JOIN members AS m ON t.member_id = m.id WHERE entry_date = $1 ORDER BY entry_date DESC",
+    [date],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 module.exports = {
   getMembers,
   getMemberById,
   createMember,
   updateMember,
   deleteMember,
+  getDates,
+  getDate,
 };
