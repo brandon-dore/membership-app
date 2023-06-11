@@ -38,7 +38,6 @@ function App() {
       })
       .then((data) => {
         setUsers(data);
-        console.log(data);
       })
       .catch((e) => {
         console.log(e);

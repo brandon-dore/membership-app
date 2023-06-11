@@ -8,6 +8,8 @@ import "./SearchMembers.css";
 import "./DataTable.css";
 import { modalBox } from "../MuiStyles";
 import Profile from "./Profile";
+import FilterDropdown from "./FilterDropdown";
+
 const COLUMNS = [
   {
     Header: "Member ID",
@@ -25,14 +27,33 @@ const COLUMNS = [
     Filter: FilterText,
   },
   {
-    Header: "Expiry Date",
-    accessor: "expiry_date",
-    Filter: FilterDates,
-  },
-  {
     Header: "Date of Birth",
     accessor: "dob",
     Filter: FilterDates,
+  },
+  {
+    Header: "Sex",
+    accessor: "sex",
+    Filter: FilterDropdown,
+    filter: "equals",
+    enableColumnFilter: true,
+    options: [
+      { value: "", label: "Unknown" },
+      { value: "Male", label: "Male" },
+      { value: "Female", label: "Female" },
+      { value: "Other", label: "Other" },
+    ],
+  },
+  {
+    Header: "Relationship",
+    accessor: "relationship_status",
+    Filter: FilterDropdown,
+    filter: "equals",
+    options: [
+      { value: "", label: "Unknown" },
+      { value: "Single", label: "Single" },
+      { value: "Couple", label: "Couple" },
+    ],
   },
 ];
 
@@ -65,9 +86,21 @@ const SearchMembers = () => {
   };
 
   const columns = useMemo(() => COLUMNS, []);
-
+  const equalsString = (row, columnId, filterValue) => {
+    return (
+      (row.getValue < string) |
+      (null > columnId?.toString()?.toLowerCase() ===
+        filterValue?.toLowerCase())
+    );
+  };
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useFilters);
+    useTable(
+      {
+        columns,
+        data,
+      },
+      useFilters
+    );
 
   return (
     <div>

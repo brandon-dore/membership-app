@@ -15,9 +15,7 @@ const Profile = ({ memberID, closeModal }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log(memberID);
     if (memberID !== null) {
-      console.log(memberID);
       getUser(memberID);
     }
   }, []);
@@ -29,7 +27,6 @@ const Profile = ({ memberID, closeModal }) => {
         return response.data;
       })
       .then((data) => {
-        console.log(data[0]);
         setUser(data[0]);
       })
       .catch((e) => {
@@ -38,7 +35,6 @@ const Profile = ({ memberID, closeModal }) => {
   };
 
   const deleteUser = () => {
-    console.log(memberID);
     axios
       .delete(`http://localhost:3000/users/${memberID}`)
       .then((response) => {

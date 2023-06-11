@@ -14,7 +14,6 @@ const SearchDates = () => {
       })
       .then((data) => {
         setX(data);
-        console.log(data);
       })
       .catch((e) => {
         console.log(e);

@@ -6,9 +6,10 @@ const pool = new Pool({
   password: "password",
   port: 5432,
 });
+
 const getUsers = (request, response) => {
   pool.query(
-    "SELECT membership_id, first_name, last_name, TO_CHAR(dob :: DATE, 'dd/mm/yyyy') dob, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM users ORDER BY membership_id ASC",
+    "SELECT membership_id, first_name, last_name, sex, relationship_status, TO_CHAR(dob :: DATE, 'dd/mm/yyyy') dob, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM users ORDER BY membership_id ASC",
     (error, results) => {
       if (error) {
         throw error;
@@ -34,11 +35,19 @@ const getUserById = (request, response) => {
 };
 
 const createUser = (request, response) => {
-  const { first_name, last_name, dob, expiry_date, photo } = request.body;
+  const {
+    first_name,
+    last_name,
+    dob,
+    expiry_date,
+    sex,
+    relationship_status,
+    photo,
+  } = request.body;
 
   pool.query(
-    "INSERT INTO users (first_name, last_name, dob, expiry_date, photo) VALUES ($1, $2, $3, $4, $5)",
-    [first_name, last_name, dob, expiry_date, photo],
+    "INSERT INTO users (first_name, last_name, dob, expiry_date, sex, relationship_status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [first_name, last_name, dob, expiry_date, sex, relationship_status, photo],
     (error, results) => {
       if (error) {
         throw error;

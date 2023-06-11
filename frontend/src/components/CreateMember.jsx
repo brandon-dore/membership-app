@@ -1,12 +1,15 @@
-import { Button, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
-import "./CreateMember.css";
-import { sharpButton, textField } from "../MuiStyles";
+import { Button, InputLabel, TextField } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Webcam from "react-webcam";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
+import { useState } from "react";
+import Webcam from "react-webcam";
+import { sharpButton, textField } from "../MuiStyles";
+import "./CreateMember.css";
 
 const videoConstraints = {
   width: 720,
@@ -19,6 +22,8 @@ const CreateMember = () => {
   const [lastName, setLastName] = useState("");
   const [dob, setDob] = useState("");
   const [exp, setExp] = useState("");
+  const [sex, setSex] = useState("");
+  const [relationshipStatus, setRelationshipStatus] = useState("");
   const [pic, setPic] = useState("");
 
   const checkEmpty = () => {
@@ -31,6 +36,8 @@ const CreateMember = () => {
       last_name: lastName,
       dob: dob,
       expiry_date: exp,
+      sex: sex,
+      relationship_status: relationshipStatus,
       photo: pic,
     };
     axios
@@ -76,6 +83,25 @@ const CreateMember = () => {
                 onChange={(e) => setExp(e.format("yyyy-MM-DD"))}
               />
             </LocalizationProvider>
+            <FormControl>
+              <InputLabel>Sex</InputLabel>
+              <Select value={sex} onChange={(e) => setSex(e.target.value)}>
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <InputLabel>Relationship Status</InputLabel>
+
+              <Select
+                value={relationshipStatus}
+                onChange={(e) => setRelationshipStatus(e.target.value)}
+              >
+                <MenuItem value="Single">Single</MenuItem>
+                <MenuItem value="Couple">Couple</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div className="photoContainer">
             {pic == "" ? (
