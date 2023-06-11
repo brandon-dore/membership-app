@@ -16,6 +16,18 @@
   gap: 1rem;
 }
 
+.confirmContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 1rem;
+}
+
 @keyframes open {
   from {
     opacity: 0;

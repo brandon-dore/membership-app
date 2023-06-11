@@ -12,6 +12,19 @@ export const modalBox = {
   p: 4,
 };
 
+export const smallModalBox = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "30rem",
+  height: "30rem",
+  bgcolor: "#121212",
+  border: "2px solid #000",
+  borderRadius: "4px",
+  boxShadow: 24,
+};
+
 export const textField = {
   width: "32rem",
   color: "white",

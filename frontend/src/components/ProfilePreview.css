@@ -1,0 +1,16 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.pictureContainer {
+  box-sizing: border-box;
+  border: 1px solid #0088d1;
+  border-radius: 0 0 4px 4px;
+}
+
+.namesContainer {
+  display: flex;
+  gap: 1rem;
+}

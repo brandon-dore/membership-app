@@ -1,6 +1,13 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Search from "@mui/icons-material/Search";
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  Modal,
+  OutlinedInput,
+} from "@mui/material";
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { useFilters, useTable } from "react-table";
@@ -9,32 +16,34 @@ import "./DataTable.css";
 import Profile from "./Profile";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
+import ProfilePreview from "./ProfilePreview";
+import { modalBox, smallModalBox } from "../MuiStyles";
 
 const COLUMNS = [
   {
     Header: "Member ID",
     accessor: "id",
-    Filter: FilterText,
+    // Filter: FilterText,
   },
   {
     Header: "First Name",
     accessor: "first_name",
-    Filter: FilterText,
+    // Filter: FilterText,
   },
   {
     Header: "Last Name",
     accessor: "last_name",
-    Filter: FilterText,
+    // Filter: FilterText,
   },
   {
     Header: "Expiry Date",
     accessor: "expiry_date",
-    Filter: FilterDates,
+    // Filter: FilterDates,
   },
   {
     Header: "Date of Birth",
     accessor: "birth_date",
-    Filter: FilterDates,
+    // Filter: FilterDates,
   },
 ];
 
@@ -53,7 +62,7 @@ const CheckInMember = () => {
   const columns = useMemo(() => COLUMNS, []);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useFilters);
+    useTable({ columns, data });
 
   const addFilter = (label, value) => {
     const temp = filters;
@@ -102,14 +111,15 @@ const CheckInMember = () => {
           placeholder="Membership ID"
           onChange={(e) => setId(e.target.value)}
           value={id}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton disabled={!id} onClick={handleCheckIn}>
-                <CheckCircleIcon />
-              </IconButton>
-            </InputAdornment>
-          }
+          endAdornment={<InputAdornment position="end"></InputAdornment>}
         />
+        <IconButton
+          sx={{ width: "3rem", aspectRatio: "1/1" }}
+          disabled={!id}
+          onClick={handleCheckIn}
+        >
+          <CheckCircleIcon />
+        </IconButton>
       </div>
       <h2>Search Member:</h2>
       <div className="formContainer">
@@ -159,6 +169,7 @@ const CheckInMember = () => {
                 <tr
                   className="contentRow"
                   onClick={(e) => {
+                    setOpen(true);
                     setId(row.cells[0].value);
                   }}
                   {...row.getRowProps()}
@@ -175,11 +186,25 @@ const CheckInMember = () => {
           </tbody>
         </table>
       )}
-      {/* {open && (
-        <div className="profileContainer">
-          <Profile memberID={currentMemberID} closeModal={handleClose} />
-        </div>
-      )} */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="Confirm Check In"
+        aria-describedby="Confirm Check In"
+      >
+        <Box sx={smallModalBox}>
+          <ProfilePreview memberID={id} closeModal={handleClose} />
+          <div className="confirmContainer">
+            <p>Would you like to check in this user? </p>
+            <div className="confirmButtons">
+              <Button onClick={handleCheckIn} variant="contained">
+                Confirm
+              </Button>
+              <Button onClick={handleClose}>Cancel</Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </>
   );
 };
