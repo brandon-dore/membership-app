@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 :root {
   /* --buttonsHeight: calc(50rem - 10rem); */
@@ -16,7 +16,7 @@
   user-select: none;
   font-size: 5rem;
   margin-top: 5rem;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: "Bebas Neue", sans-serif;
   letter-spacing: 0.2rem;
   text-transform: uppercase;
 }
@@ -38,7 +38,7 @@
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-  height: var(--buttonsHeight);
+  height: calc(50rem - 10rem);
   background-color: #333;
   transition: 0.2s;
   transform: skew(20deg);

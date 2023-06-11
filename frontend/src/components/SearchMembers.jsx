@@ -42,24 +42,27 @@ const SearchMembers = () => {
   const [currentMemberID, setCurrentMemberID] = useState(null);
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetch("http://localhost:3000/users")
-        .then((response) => {
-          return response.text();
-        })
-        .then((data) => {
-          setData(JSON.parse(data));
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = () => {
+    fetch("http://localhost:3000/users")
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        setData(JSON.parse(data));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const columns = useMemo(() => COLUMNS, []);
 

@@ -22,7 +22,7 @@ const Profile = ({ memberID, closeModal }) => {
     }
   }, []);
 
-  const getUser = (memberID) => {
+  const getUser = () => {
     axios
       .get(`http://localhost:3000/users/${memberID}`)
       .then((response) => {
@@ -31,6 +31,22 @@ const Profile = ({ memberID, closeModal }) => {
       .then((data) => {
         console.log(data[0]);
         setUser(data[0]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const deleteUser = () => {
+    console.log(memberID);
+    axios
+      .delete(`http://localhost:3000/users/${memberID}`)
+      .then((response) => {
+        return response.data;
+      })
+      .then((data) => {
+        setUser(data[0]);
+        closeModal();
       })
       .catch((e) => {
         console.log(e);
@@ -48,6 +64,14 @@ const Profile = ({ memberID, closeModal }) => {
             sx={{ width: "15%" }}
           >
             Back
+          </Button>
+          <Button
+            color="error"
+            variant="container"
+            onClick={deleteUser}
+            sx={{ width: "15%" }}
+          >
+            Delete user
           </Button>
           <div>
             <h1>Profile</h1>
