@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { useTable, useFilters } from "react-table";
-import FilterText from "./FilterText";
-import FilterDates from "./FiterDates";
+import FilterText from "./filters/FilterText";
+import FilterDates from "./filters/FiterDates";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import "./SearchMembers.css";
 import "./DataTable.css";
 import { modalBox } from "../MuiStyles";
 import Profile from "./Profile";
-import FilterDropdown from "./FilterDropdown";
+import FilterDropdown from "./filters/FilterDropdown";
 
 const COLUMNS = [
   {

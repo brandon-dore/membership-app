@@ -81,7 +81,7 @@ const Profile = ({ memberID, closeModal }) => {
             <h2>Expiry Date</h2>
             {user.expiry_date}
             <div className="photoContainer">
-              {user.photo !== null || toBase64(user.photo.data) !== null ? (
+              {user.photo !== null && toBase64(user.photo.data) !== null ? (
                 <img
                   key={user.membership_id}
                   src={`data:image/jpeg;base64,${toBase64(user.photo.data)}`}
