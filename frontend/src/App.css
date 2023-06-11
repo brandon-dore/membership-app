@@ -38,7 +38,7 @@
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-  height: calc(50rem - 10rem);
+  height: var(--buttonsHeight);
   background-color: #333;
   transition: 0.2s;
   transform: skew(20deg);
