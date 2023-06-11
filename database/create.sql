@@ -38,7 +38,7 @@ INSERT INTO members (first_name, last_name, expiry_date ) VALUES
   ('Ginger', 'Calhoun', '2023-09-11');
 
 INSERT INTO members (first_name, last_name, notes, sex, relationship_status, photo, birth_date, expiry_date ) VALUES
- ('Stephanie', 'Rose', 'comes in on weekends', 'Female', 'Couple', NULL, '1989-00-19', '2023-12-11'),
+ ('Stephanie', 'Rose', 'comes in on weekends', 'Female', 'Couple', NULL, '1989-01-19', '2023-12-11'),
   ('Phillip', 'Petersen', NULL, 'Male', 'Single', NULL, '2002-06-26', '2023-09-11'); 
 
 INSERT INTO couples (member_id_1, member_id_2) VALUES
