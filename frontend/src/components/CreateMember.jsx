@@ -41,7 +41,7 @@ const CreateMember = () => {
       photo: pic,
     };
     axios
-      .post("http://localhost:3000/users", formdata)
+      .post("http://localhost:3000/members", formdata)
       .then((res) => {
         console.log(res);
         location.reload();

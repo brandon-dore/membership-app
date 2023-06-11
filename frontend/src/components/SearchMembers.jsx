@@ -13,7 +13,7 @@ import FilterDropdown from "./FilterDropdown";
 const COLUMNS = [
   {
     Header: "Member ID",
-    accessor: "membership_id",
+    accessor: "id",
     Filter: FilterText,
   },
   {
@@ -28,7 +28,7 @@ const COLUMNS = [
   },
   {
     Header: "Date of Birth",
-    accessor: "dob",
+    accessor: "birth_date",
     Filter: FilterDates,
   },
   {
@@ -73,7 +73,7 @@ const SearchMembers = () => {
   }, []);
 
   const fetchData = () => {
-    fetch("http://localhost:3000/users")
+    fetch("http://localhost:3000/members")
       .then((response) => {
         return response.text();
       })

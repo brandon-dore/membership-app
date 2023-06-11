@@ -33,7 +33,7 @@ const COLUMNS = [
   },
   {
     Header: "Date of Birth",
-    accessor: "dob",
+    accessor: "birth_date",
     Filter: FilterDates,
   },
 ];
@@ -56,7 +56,7 @@ const CheckInMember = () => {
   const fetchData = () => {
     // Replace this with some filter logic
     axios
-      .get("http://localhost:3000/users")
+      .get("http://localhost:3000/members")
       .then((response) => {
         return response.data;
       })

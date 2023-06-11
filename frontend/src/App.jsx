@@ -32,7 +32,7 @@ function App() {
   }, []);
 
   const getUsers = () => {
-    fetch("http://localhost:3000/users")
+    fetch("http://localhost:3000/members")
       .then((response) => {
         return response.text();
       })

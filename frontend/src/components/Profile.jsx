@@ -22,7 +22,7 @@ const Profile = ({ memberID, closeModal }) => {
 
   const getUser = () => {
     axios
-      .get(`http://localhost:3000/users/${memberID}`)
+      .get(`http://localhost:3000/members/${memberID}`)
       .then((response) => {
         return response.data;
       })
@@ -36,7 +36,7 @@ const Profile = ({ memberID, closeModal }) => {
 
   const deleteUser = () => {
     axios
-      .delete(`http://localhost:3000/users/${memberID}`)
+      .delete(`http://localhost:3000/members/${memberID}`)
       .then((response) => {
         return response.data;
       })

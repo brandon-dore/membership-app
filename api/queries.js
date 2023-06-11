@@ -7,9 +7,9 @@ const pool = new Pool({
   port: 5432,
 });
 
-const getUsers = (request, response) => {
+const getMembers = (request, response) => {
   pool.query(
-    "SELECT membership_id, first_name, last_name, sex, relationship_status, TO_CHAR(dob :: DATE, 'dd/mm/yyyy') dob, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM users ORDER BY membership_id ASC",
+    "SELECT id, first_name, last_name, sex, relationship_status, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM members ORDER BY id ASC",
     (error, results) => {
       if (error) {
         throw error;
@@ -19,26 +19,22 @@ const getUsers = (request, response) => {
   );
 };
 
-const getUserById = (request, response) => {
+const getMemberById = (request, response) => {
   const id = parseInt(request.params.id);
 
-  pool.query(
-    "SELECT * FROM users WHERE membership_id = $1",
-    [id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json(results.rows);
+  pool.query("SELECT * FROM members WHERE id = $1", [id], (error, results) => {
+    if (error) {
+      throw error;
     }
-  );
+    response.status(200).json(results.rows);
+  });
 };
 
-const createUser = (request, response) => {
+const createMember = (request, response) => {
   const {
     first_name,
     last_name,
-    dob,
+    birth_date,
     expiry_date,
     sex,
     relationship_status,
@@ -46,8 +42,16 @@ const createUser = (request, response) => {
   } = request.body;
 
   pool.query(
-    "INSERT INTO users (first_name, last_name, dob, expiry_date, sex, relationship_status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-    [first_name, last_name, dob, expiry_date, sex, relationship_status, photo],
+    "INSERT INTO members (first_name, last_name, birth_date, expiry_date, sex, relationship_status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [
+      first_name,
+      last_name,
+      birth_date,
+      expiry_date,
+      sex,
+      relationship_status,
+      photo,
+    ],
     (error, results) => {
       if (error) {
         throw error;
@@ -57,12 +61,12 @@ const createUser = (request, response) => {
   );
 };
 
-const updateUser = (request, response) => {
+const updateMember = (request, response) => {
   const id = parseInt(request.params.id);
   const { name, email } = request.body;
 
   pool.query(
-    "UPDATE users SET first_name = $1, last_name = $2 WHERE membership_id = $3",
+    "UPDATE members SET first_name = $1, last_name = $2 WHERE id = $3",
     [name, email, id],
     (error, results) => {
       if (error) {
@@ -73,25 +77,21 @@ const updateUser = (request, response) => {
   );
 };
 
-const deleteUser = (request, response) => {
+const deleteMember = (request, response) => {
   const id = parseInt(request.params.id);
 
-  pool.query(
-    "DELETE FROM users WHERE membership_id = $1",
-    [id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`User deleted with ID: ${id}`);
+  pool.query("DELETE FROM members WHERE id = $1", [id], (error, results) => {
+    if (error) {
+      throw error;
     }
-  );
+    response.status(200).send(`User deleted with ID: ${id}`);
+  });
 };
 
 module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
+  getMembers,
+  getMemberById,
+  createMember,
+  updateMember,
+  deleteMember,
 };
