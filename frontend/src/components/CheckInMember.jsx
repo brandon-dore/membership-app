@@ -13,7 +13,7 @@ import FilterDates from "./filters/FiterDates";
 const COLUMNS = [
   {
     Header: "Member ID",
-    accessor: "membership_id",
+    accessor: "id",
     Filter: FilterText,
   },
   {
@@ -45,6 +45,8 @@ const CheckInMember = () => {
   const [open, setOpen] = useState(false);
   const [currentMemberID, setCurrentMemberID] = useState(null);
 
+  const [filters, setFilters] = useState({});
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -53,15 +55,34 @@ const CheckInMember = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useFilters);
 
-  const fetchData = () => {
-    // Replace this with some filter logic
+  const addFilter = (label, value) => {
+    const temp = filters;
+    if (value === "") {
+      delete temp[label];
+      setFilters(temp);
+      return;
+    }
+    temp[label] = value;
+    setFilters(temp);
+  };
+
+  const handleSearch = () => {
     axios
-      .get("http://localhost:3000/members")
-      .then((response) => {
-        return response.data;
+      .get("http://localhost:3000/filter", { params: filters })
+      .then((res) => {
+        return res.data;
       })
       .then((data) => {
         setData(data);
+      });
+  };
+
+  const handleCheckIn = () => {
+    console.log(id);
+    axios
+      .post(`http://localhost:3000/dates/${id}`)
+      .then((res) => {
+        console.log(res);
       })
       .catch((e) => {
         console.log(e);
@@ -80,12 +101,10 @@ const CheckInMember = () => {
           variant="outlined"
           placeholder="Membership ID"
           onChange={(e) => setId(e.target.value)}
+          value={id}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton
-                disabled={!id}
-                onClick={() => console.log("check in")}
-              >
+              <IconButton disabled={!id} onClick={handleCheckIn}>
                 <CheckCircleIcon />
               </IconButton>
             </InputAdornment>
@@ -97,25 +116,24 @@ const CheckInMember = () => {
         {/* Replace this with various searchable fields to update state object */}
         <OutlinedInput
           sx={{ width: "20rem" }}
+          id="first_name"
+          type="text"
+          variant="outlined"
+          placeholder="First Name"
+          onChange={(e) => addFilter("first_name", e.target.value)}
+        />
+        <OutlinedInput
+          sx={{ width: "20rem" }}
           id="last_name"
           type="text"
           variant="outlined"
           placeholder="Last Name"
-          onChange={(e) => setId(e.target.value)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton disabled={!id} onClick={fetchData}>
-                <Search />
-              </IconButton>
-            </InputAdornment>
-          }
+          onChange={(e) => addFilter("last_name", e.target.value)}
         />
+        <IconButton sx={{ width: "4rem" }} onClick={handleSearch}>
+          <Search />
+        </IconButton>
       </div>
-      {currentMemberID !== null ? (
-        <p>Last opened ID: {currentMemberID}</p>
-      ) : (
-        <br />
-      )}
       <br />
 
       {data.length > 0 && (
@@ -141,8 +159,7 @@ const CheckInMember = () => {
                 <tr
                   className="contentRow"
                   onClick={(e) => {
-                    setCurrentMemberID(row.cells[0].value);
-                    handleOpen();
+                    setId(row.cells[0].value);
                   }}
                   {...row.getRowProps()}
                   style={{ cursor: "pointer" }}
@@ -158,11 +175,11 @@ const CheckInMember = () => {
           </tbody>
         </table>
       )}
-      {open && (
+      {/* {open && (
         <div className="profileContainer">
           <Profile memberID={currentMemberID} closeModal={handleClose} />
         </div>
-      )}
+      )} */}
     </>
   );
 };
