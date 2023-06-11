@@ -38,7 +38,7 @@ const COLUMNS = [
     filter: "equals",
     enableColumnFilter: true,
     options: [
-      { value: "", label: "Unknown" },
+      { value: undefined, label: "Unknown" },
       { value: "Male", label: "Male" },
       { value: "Female", label: "Female" },
       { value: "Other", label: "Other" },
@@ -50,7 +50,7 @@ const COLUMNS = [
     Filter: FilterDropdown,
     filter: "equals",
     options: [
-      { value: "", label: "Unknown" },
+      { value: undefined, label: "Unknown" },
       { value: "Single", label: "Single" },
       { value: "Couple", label: "Couple" },
     ],
