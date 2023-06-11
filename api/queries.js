@@ -114,6 +114,39 @@ const getDate = (request, response) => {
     }
   );
 };
+const checkinMember = (request, response) => {
+  const id = parseInt(request.params.id);
+  console.log(id)
+  pool.query(
+    `INSERT INTO dates (member_id) VALUES ($1)`,[id], (error, results) => {
+      if(error){
+        throw error
+      }
+      response.status(201).send(`User checked in today with ID: ${id}`)
+    }
+  )
+}
+
+const queryMember = (request, response) => {
+  let query = "SELECT id, first_name, last_name, sex, relationship_status, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM members "
+  const params = request.query
+  if (Object.keys(params)) {
+    query += "WHERE "
+    let first = true
+    Object.entries(params).map(([key, val]) => {
+      query += first ? `${key}='${val}'` : ` AND ${key}='${val}'`
+      first = false
+    })
+  }
+  pool.query(
+    query, (error, results) => {
+      if(error){
+        throw error
+      }
+      response.status(200).json(results.rows)
+    }
+  )
+}
 
 module.exports = {
   getMembers,
@@ -123,4 +156,6 @@ module.exports = {
   deleteMember,
   getDates,
   getDate,
+  queryMember,
+  checkinMember
 };

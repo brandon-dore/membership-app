@@ -32,10 +32,12 @@ app.get("/", (request, response) => {
 });
 
 app.get("/members", db.getMembers);
+app.get("/filter", db.queryMember);
 app.get("/members/:id", db.getMemberById);
 app.post("/members", db.createMember);
 app.put("/members/:id", db.updateMember);
 app.delete("/members/:id", db.deleteMember);
+app.post('/dates/:id', db.checkinMember)
 
 app.get("/dates", db.getDates);
 app.get("/dates/:date", db.getDate);
