@@ -76,7 +76,6 @@ const SearchDates = () => {
         </Button>
         <Typography>OR</Typography>
         <Button
-          disabled={checkEmpty()}
           onClick={() => fetchData(true)}
           color="info"
           variant="contained"
