@@ -18,11 +18,13 @@ export const smallModalBox = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "30rem",
-  height: "30rem",
+  maxHeight: "30rem",
+  height: "fitContent",
   bgcolor: "#121212",
   border: "2px solid #000",
   borderRadius: "4px",
   boxShadow: 24,
+  padding: "1rem",
 };
 
 export const textField = {
