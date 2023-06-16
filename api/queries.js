@@ -81,12 +81,35 @@ const updateMember = (request, response) => {
 
 const deleteMember = (request, response) => {
   const id = parseInt(request.params.id);
+
   // Need to delete all check in dates for the member before deleting the member. Cascade is weird. 
   pool.query("DELETE FROM dates WHERE member_id = $1", [id], (error, results) => {
     if(error){
       throw error; 
     }
-    console.log(response)
+  })
+
+  pool.query("DELETE FROM couples WHERE member_id_1 = $1 OR member_id_2 = $1", [id], (error, results) => {
+    if(error){
+      throw error; 
+    }
+  })
+
+  pool.query("SELECT id FROM members WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.member_id_1 = members.id OR couples.member_id_2 = members.id)", (error, results)=> {
+    if(error){
+      throw error
+    }
+    let singles = []
+
+    results.rows.map((single)=> {
+      singles.push(single.id)
+    })
+    let query = `UPDATE members SET relationship_status = $1 WHERE id IN (${singles.join(',')})`
+    pool.query(query, ["Single"], (error, results)=> {
+      if(error){
+        throw error
+      }
+    })
   })
 
   pool.query("DELETE FROM members WHERE id = $1", [id], (error, results) => {
