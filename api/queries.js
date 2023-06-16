@@ -39,10 +39,11 @@ const createMember = (request, response) => {
     sex,
     relationship_status,
     photo,
+    notes
   } = request.body;
 
   pool.query(
-    "INSERT INTO members (first_name, last_name, birth_date, expiry_date, sex, relationship_status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    "INSERT INTO members (first_name, last_name, birth_date, expiry_date, sex, relationship_status, photo, notes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
     [
       first_name,
       last_name,
@@ -51,6 +52,7 @@ const createMember = (request, response) => {
       sex,
       relationship_status,
       photo,
+      notes,
     ],
     (error, results) => {
       if (error) {
@@ -79,6 +81,13 @@ const updateMember = (request, response) => {
 
 const deleteMember = (request, response) => {
   const id = parseInt(request.params.id);
+  // Need to delete all check in dates for the member before deleting the member. Cascade is weird. 
+  pool.query("DELETE FROM dates WHERE member_id = $1", [id], (error, results) => {
+    if(error){
+      throw error; 
+    }
+    console.log(response)
+  })
 
   pool.query("DELETE FROM members WHERE id = $1", [id], (error, results) => {
     if (error) {
@@ -148,6 +157,44 @@ const queryMember = (request, response) => {
   )
 }
 
+const createCouple = (request, response) => {
+  let {member_1, member_2} = request.body
+
+  pool.query("UPDATE members SET relationship_status = $1 WHERE id IN ($2, $3)", ['Couple',member_1, member_2], (error, results) => {
+    if(error){
+      throw error
+    }
+    console.log(response)
+  })
+
+  pool.query("INSERT into couples (member_id_1, member_id_2) VALUES ($1, $2)", [member_1, member_2], (error, results)=> {
+    if(error){
+      throw error
+    }
+    response.status(201).send(`Users ${member_1} and ${member_2} are now coupled.`)
+  })
+}
+
+const getMemberCouple = (request, response) => {
+  const id = parseInt(request.params.id);
+  pool.query(`SELECT * FROM couples WHERE member_id_1 = ${id} OR member_id_2 = ${id}`, (error, results)=> {
+    if(error){
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getCouples = (request, response) => {
+  const id = parseInt(request.params.id);
+  pool.query(`SELECT * FROM couples`, (error, results)=> {
+    if(error){
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 module.exports = {
   getMembers,
   getMemberById,
@@ -157,5 +204,8 @@ module.exports = {
   getDates,
   getDate,
   queryMember,
-  checkinMember
+  checkinMember,
+  getCouples,
+  getMemberCouple,
+  createCouple,
 };

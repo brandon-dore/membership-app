@@ -10,6 +10,7 @@ import { useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton, textField } from "../MuiStyles";
 import "./CreateMember.css";
+import { convertDate } from "../utils";
 
 const videoConstraints = {
   width: 720,
@@ -23,8 +24,9 @@ const CreateMember = () => {
   const [dob, setDob] = useState("");
   const [exp, setExp] = useState("");
   const [sex, setSex] = useState("");
-  const [relationshipStatus, setRelationshipStatus] = useState("");
+  // const [relationshipStatus, setRelationshipStatus] = useState("");
   const [pic, setPic] = useState("");
+  const [notes, setNotes] = useState("");
 
   const checkEmpty = () => {
     return !firstName || !lastName || !dob || !exp || !pic;
@@ -36,21 +38,17 @@ const CreateMember = () => {
     return expiryDate.toISOString().split("T")[0];
   };
 
-  const convertDate = (date) => {
-    date = date.split("-");
-    let converted = date.reverse();
-    return converted.join("/");
-  };
-
   const handleSubmit = () => {
     const formdata = {
       first_name: firstName,
       last_name: lastName,
-      dob: dob,
+      birth_date: dob,
       expiry_date: exp,
       sex: sex,
-      relationship_status: relationshipStatus,
+      // When a couple is added, update to be Couple
+      relationship_status: "Single",
       photo: pic,
+      notes: notes ? notes : "",
     };
     axios
       .post("http://localhost:3000/members", formdata)
@@ -133,7 +131,7 @@ const CreateMember = () => {
                 <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
-            <FormControl>
+            {/* <FormControl>
               <InputLabel variant="filled">Relationship Status</InputLabel>
 
               <Select
@@ -143,7 +141,7 @@ const CreateMember = () => {
                 <MenuItem value="Single">Single</MenuItem>
                 <MenuItem value="Couple">Couple</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
           </div>
           <div className="photoContainer">
             {pic == "" ? (
@@ -186,9 +184,10 @@ const CreateMember = () => {
             <TextField
               sx={{ width: "60%" }}
               multiline
-              label="Notes"
+              label="Notes (Optional)"
               placeholder="Notes..."
               rows={4}
+              onChange={(e) => setNotes(e.target.value)}
             />
           </div>
         </form>

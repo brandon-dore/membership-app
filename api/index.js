@@ -42,6 +42,10 @@ app.post('/dates/:id', db.checkinMember)
 app.get("/dates", db.getDates);
 app.get("/dates/:date", db.getDate);
 
+app.get('/couples', db.getCouples)
+app.get('/couples/:id', db.getMemberCouple)
+app.post('/couples', db.createCouple)
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });

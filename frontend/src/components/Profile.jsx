@@ -1,7 +1,8 @@
-import { Button } from "@mui/material";
+import { Button, OutlinedInput } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./CreateMember.css";
+import { convertDate } from "../utils";
 
 const toBase64 = (arr) => {
   if (arr !== null) {
@@ -13,10 +14,13 @@ const toBase64 = (arr) => {
 };
 const Profile = ({ memberID, closeModal }) => {
   const [user, setUser] = useState(null);
+  const [coupleID, setCoupleID] = useState("");
+  const [couples, setCouples] = useState([]);
 
   useEffect(() => {
     if (memberID !== null) {
-      getUser(memberID);
+      getUser();
+      getCouples();
     }
   }, []);
 
@@ -49,6 +53,31 @@ const Profile = ({ memberID, closeModal }) => {
       });
   };
 
+  const getCouples = () => {
+    axios
+      .get(`http://localhost:3000/couples/${memberID}`)
+      .then((response) => {
+        return response.data;
+      })
+      .then((data) => {
+        setCouples(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const addCouple = () => {
+    axios
+      .post(`http://localhost:3000/couples`, {
+        member_1: memberID,
+        member_2: coupleID,
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  };
+
   return (
     <>
       {user !== null ? (
@@ -71,15 +100,28 @@ const Profile = ({ memberID, closeModal }) => {
           </Button>
           <div>
             <h1>Profile</h1>
-
             <h2>First Name</h2>
             {user.first_name}
             <h2>Last Name</h2>
             {user.last_name}
             <h2>D.O.B</h2>
-            {user.dob}
+            {convertDate(user.birth_date)}
             <h2>Expiry Date</h2>
-            {user.expiry_date}
+            {convertDate(user.expiry_date)}
+            {couples && (
+              <div>
+                <h2>Partners</h2>
+                {couples.map((couple) => {
+                  return (
+                    <p key={couple["membership_id_1"]}>
+                      {couple["member_id_1"]} & {couple["member_id_2"]}
+                    </p>
+                  );
+                })}
+              </div>
+            )}
+
+            <h2>Add Couple</h2>
             <div className="photoContainer">
               {user.photo !== null && toBase64(user.photo.data) !== null ? (
                 <img
@@ -90,6 +132,17 @@ const Profile = ({ memberID, closeModal }) => {
               ) : (
                 <p>No Photo Found</p>
               )}
+            </div>
+            <div className="coupleContainer">
+              <OutlinedInput
+                sx={{ width: "20rem" }}
+                id="couple_id"
+                type="text"
+                variant="outlined"
+                placeholder="Couple ID"
+                onChange={(e) => setCoupleID(e.target.value)}
+              />
+              <Button onClick={addCouple}>Add Couple</Button>
             </div>
           </div>
         </div>
