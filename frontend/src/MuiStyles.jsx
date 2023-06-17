@@ -18,7 +18,7 @@ export const smallModalBox = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "30rem",
-  maxHeight: "30rem",
+  maxHeight: "50rem",
   height: "fitContent",
   bgcolor: "#121212",
   border: "2px solid #000",

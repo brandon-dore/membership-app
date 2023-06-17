@@ -2,8 +2,10 @@ import { Box, Button, Modal, OutlinedInput } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./CreateMember.css";
+import "./Profile.css";
 import { convertDate } from "../utils";
-import { modalBox } from "../MuiStyles";
+import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
+import ProfilePreview from "./ProfilePreview";
 
 const toBase64 = (arr) => {
   if (arr !== null) {
@@ -15,11 +17,12 @@ const toBase64 = (arr) => {
 };
 const Profile = ({ memberID, closeModal, nested = false }) => {
   const [user, setUser] = useState(null);
-  const [coupleID, setCoupleID] = useState("");
+  const [newCoupleID, setNewCoupleID] = useState("");
+  const [coupleID, setCoupleID] = useState(0);
   const [couples, setCouples] = useState([]);
-  const [partnerProfile, setPartnerProfile] = useState(0);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     if (memberID !== null) {
@@ -30,6 +33,19 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClosePreview = () => {
+    setShowPreview(false);
+  };
+
+  const handleOpenPreview = () => {
+    if (newCoupleID !== "") {
+      setShowPreview(true);
+      setError("");
+      return;
+    }
+    setError("Please enter a member ID");
   };
 
   const getUser = () => {
@@ -76,18 +92,35 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
   };
 
   const addCouple = () => {
-    if (coupleID) {
+    if (newCoupleID) {
       axios
         .post(`http://localhost:3000/couples`, {
           member_1: memberID,
-          member_2: coupleID,
+          member_2: newCoupleID,
         })
         .then((response) => {
           console.log(response.data);
           setError("");
+          setShowPreview(false);
         });
     } else {
       setError("Please enter a member ID");
+    }
+  };
+
+  const deleteCouple = () => {
+    if (coupleID) {
+      axios
+        .post("http://localhost:3000/couples/delete", {
+          member_1: memberID,
+          member_2: coupleID,
+        })
+        .then((response) => {
+          handleClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -103,15 +136,15 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             color="info"
             variant="contained"
             onClick={closeModal}
-            sx={{ width: "15%" }}
+            sx={{ ...sharpButton, width: "15%" }}
           >
             Back
           </Button>
           <Button
             color="error"
-            variant="container"
+            variant="contained"
             onClick={deleteUser}
-            sx={{ width: "15%" }}
+            sx={{ ...sharpButton, width: "15%" }}
           >
             Delete user
           </Button>
@@ -124,6 +157,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             <h2>D.O.B</h2>
             {convertDate(user.birth_date)}
             <h2>Expiry Date</h2>
+            {/* Highlight this if out of date */}
             {convertDate(user.expiry_date)}
             {couples.length && (
               <div>
@@ -136,7 +170,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
                         className="partnerBox clickable"
                         onClick={() => {
                           setOpen(true);
-                          setPartnerProfile(partner);
+                          setCoupleID(partner);
                         }}
                         key={partner}
                       >
@@ -169,12 +203,12 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
                 <OutlinedInput
                   sx={{ width: "20rem" }}
                   id="couple_id"
-                  type="text"
+                  type="number"
                   variant="outlined"
                   placeholder="Couple ID"
-                  onChange={(e) => setCoupleID(e.target.value)}
+                  onChange={(e) => setNewCoupleID(e.target.value)}
                 />
-                <Button onClick={addCouple}>Add Couple</Button>
+                <Button onClick={handleOpenPreview}>Add Couple</Button>
               </div>
               {error && (
                 <p className="errorMessage">Please enter a member ID</p>
@@ -194,10 +228,38 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
         <div>
           <Box sx={modalBox}>
             <Profile
-              memberID={partnerProfile}
+              memberID={coupleID}
               closeModal={handleClose}
               nested={true}
             />
+            <br />
+            <Button onClick={deleteCouple} variant="contained" color="error">
+              Remove Partner
+            </Button>
+          </Box>
+        </div>
+      </Modal>
+      <Modal
+        open={showPreview}
+        onClose={handleClosePreview}
+        aria-labelledby="Couple Profile"
+        aria-describedby="Couple Profile"
+      >
+        <div>
+          <Box sx={smallModalBox}>
+            <ProfilePreview
+              memberID={newCoupleID}
+              closeModal={handleClosePreview}
+            />
+            <div className="confirmContainer">
+              <p>Is this the user you are looking for? </p>
+              <div className="confirmButtons">
+                <Button onClick={addCouple} variant="contained">
+                  Confirm
+                </Button>
+                <Button onClick={handleClosePreview}>Cancel</Button>
+              </div>
+            </div>
           </Box>
         </div>
       </Modal>

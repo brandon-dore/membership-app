@@ -182,6 +182,7 @@ const queryMember = (request, response) => {
 
 const createCouple = (request, response) => {
   let {member_1, member_2} = request.body
+  console.log(request.body)
 
   pool.query("UPDATE members SET relationship_status = $1 WHERE id IN ($2, $3)", ['Couple',member_1, member_2], (error, results) => {
     if(error){
@@ -209,13 +210,39 @@ const getMemberCouple = (request, response) => {
 }
 
 const getCouples = (request, response) => {
-  const id = parseInt(request.params.id);
-  pool.query(`SELECT * FROM couples`, (error, results)=> {
+  pool.query(`SELECT id, member_id_1, member_id_2 FROM couples`, (error, results)=> {
     if(error){
       throw error
     }
     response.status(200).json(results.rows)
   })
+}
+
+const deleteCouple = (request, response) => {
+  const {member_1, member_2} = request.body
+
+  pool.query("DELETE FROM couples WHERE (member_id_1 = $1 AND member_id_2 = $2) OR (member_id_1 = $2 AND member_id_2 = $1)", [member_1, member_2], (error, results) => {
+    if (error) {
+      throw error;
+    }
+    pool.query("SELECT id FROM members WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.member_id_1 = members.id OR couples.member_id_2 = members.id)", (error, results)=> {
+      if(error){
+        throw error
+      }
+      let singles = []
+  
+      results.rows.map((single)=> {
+        singles.push(single.id)
+      })
+      let query = `UPDATE members SET relationship_status = $1 WHERE id IN (${singles.join(',')})`
+      pool.query(query, ["Single"], (error, results)=> {
+        if(error){
+          throw error
+        }
+      })
+    })
+    response.status(200).send(`Couple deleted.`);
+  });
 }
 
 module.exports = {
@@ -231,4 +258,5 @@ module.exports = {
   getCouples,
   getMemberCouple,
   createCouple,
+  deleteCouple
 };
