@@ -160,21 +160,24 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
           >
             Back
           </Button>
-          <Button
-            variant="outlined"
-            onClick={handleOpenEdit}
-            sx={{ ...sharpButton, width: "15%" }}
-          >
-            Edit user
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleOpenConfirm}
-            sx={{ ...sharpButton, width: "15%" }}
-          >
-            Delete user
-          </Button>
-          <div>
+          <div className="actionButtons">
+            <Button
+              variant="outlined"
+              onClick={handleOpenEdit}
+              sx={{ ...sharpButton, width: "10rem" }}
+              color="info"
+            >
+              Edit Member
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleOpenConfirm}
+              sx={{ ...sharpButton, width: "10rem" }}
+            >
+              Delete Member
+            </Button>
+          </div>
+          <div className="profileContent">
             <Typography variant="h1">Profile</Typography>
 
             <Typography variant="h2">First Name</Typography>

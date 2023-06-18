@@ -7,6 +7,12 @@ const pool = new Pool({
   port: 5432,
 });
 
+const correctRelationship = async () => {
+  return await  pool.query(
+    "SELECT id FROM members WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.member_id_1 = members.id OR couples.member_id_2 = members.id)"
+  );
+}
+
 const getMembers = async (request, response) => {
   try {
     const { rows } = await pool.query(
@@ -109,9 +115,7 @@ const deleteMember = async (request, response) => {
       [id]
     );
 
-    const { rows } = await pool.query(
-      "SELECT id FROM members WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.member_id_1 = members.id OR couples.member_id_2 = members.id)"
-    );
+    const { rows } = await correctRelationship()
 
     let singles = [];
 
@@ -244,9 +248,7 @@ const deleteCouple = async (request, response) => {
       [member_1, member_2]
     );
 
-    const { rows } = await pool.query(
-      "SELECT id FROM members WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.member_id_1 = members.id OR couples.member_id_2 = members.id)"
-    );
+    const { rows } = await correctRelationship()
 
     let singles = [];
 

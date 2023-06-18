@@ -1,4 +1,12 @@
-import { Button, InputLabel, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  InputLabel,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -37,6 +45,8 @@ const CreateMember = (props) => {
   const [notes, setNotes] = useState(props.notes ? props.notes : "");
   const [webcam, isWebcam] = useState("");
   const [webcamError, isWebcamError] = useState("");
+  const [errorCode, setErrorCode] = useState(0);
+  const [showError, setShowError] = useState(false);
 
   const checkEmpty = () => {
     return !firstName || !lastName || !dob || !exp || !pic;
@@ -46,6 +56,11 @@ const CreateMember = (props) => {
     let date = new Date();
     let expiryDate = new Date(date.setMonth(date.getMonth() + increment));
     return expiryDate.toISOString().split("T")[0];
+  };
+
+  const handleCloseError = () => {
+    console.log(errorCode);
+    setShowError(false);
   };
 
   const handleSubmit = () => {
@@ -77,7 +92,8 @@ const CreateMember = (props) => {
           location.reload();
         })
         .catch((e) => {
-          console.log(e);
+          setErrorCode(e.response.data.error_code);
+          setShowError(true);
         });
     }
   };
@@ -204,9 +220,13 @@ const CreateMember = (props) => {
                           Take Picture
                         </Button>
                       ) : (
-                        <Typography>
-                          {webcamError ? "Camera Not Dectected" : "Loading"}
-                        </Typography>
+                        <div className="messageContainer">
+                          {webcamError ? (
+                            <Typography>Camera Not Dectected </Typography>
+                          ) : (
+                            <CircularProgress />
+                          )}
+                        </div>
                       )}
                     </>
                   );
@@ -234,6 +254,17 @@ const CreateMember = (props) => {
           {props.id ? "Edit Member" : "Create Member"}
         </Button>
       </div>
+      <Snackbar
+        sx={{ position: "absolute" }}
+        autoHideDuration={5000}
+        open={showError}
+        onClose={handleCloseError}
+      >
+        <Alert severity="error">
+          There was an error on the back-end. Please contact Amos or Brandon
+          with the error code: {errorCode}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
