@@ -19,6 +19,7 @@ import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
 import ProfilePreview from "./ProfilePreview";
 import { modalBox, smallModalBox } from "../MuiStyles";
+import CreateMember from "./CreateMember";
 
 const COLUMNS = [
   {
@@ -53,7 +54,6 @@ const CheckInMember = () => {
 
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
-  const [currentMemberID, setCurrentMemberID] = useState(null);
 
   const [filters, setFilters] = useState({});
 
@@ -195,12 +195,14 @@ const CheckInMember = () => {
         <Box sx={smallModalBox}>
           <ProfilePreview memberID={id} closeModal={handleClose} />
           <div className="confirmContainer">
-            <p>Would you like to check in this user? </p>
+            <Typography>Would you like to check in this user? </Typography>
             <div className="confirmButtons">
               <Button onClick={handleCheckIn} variant="contained">
                 Confirm
               </Button>
-              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={handleClose} variant="outlined">
+                Cancel
+              </Button>
             </div>
           </div>
         </Box>

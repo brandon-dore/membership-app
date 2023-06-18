@@ -19,9 +19,10 @@ h1 {
 .photoContainer {
   position: fixed;
   left: 60%;
-  top: 14%;
+  top: 19.5%;
   display: flex;
   width: 29%;
+  aspect-ratio: 1/1;
   align-self: center;
   justify-self: center;
   display: flex;
@@ -32,7 +33,7 @@ h1 {
 
 .notesContainer {
   position: fixed;
-  top: 65%;
+  top: 70%;
   left: 60%;
   width: 50%;
 }
@@ -50,4 +51,3 @@ h1 {
   grid-template-columns: 1fr 1fr;
   gap: 0.2rem;
 }
-

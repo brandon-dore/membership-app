@@ -123,13 +123,13 @@ const SearchDates = () => {
         </div>
       ) : (
         <div className="errorMessage">
-          <p>{errorMessage}</p>
+          <Typography>{errorMessage}</Typography>
         </div>
       )}
-      {data.length && (
-        <p>
+      {data.length !== 0 && (
+        <Typography>
           Total visitors in search: <strong>{data.length}</strong>
-        </p>
+        </Typography>
       )}
     </div>
   );

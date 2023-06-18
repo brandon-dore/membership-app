@@ -10,7 +10,8 @@ import { useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton, textField } from "../MuiStyles";
 import "./CreateMember.css";
-import { convertDate } from "../utils";
+import { convertDate, toBase64 } from "../utils";
+import moment from "moment";
 
 const videoConstraints = {
   width: 720,
@@ -18,15 +19,24 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-const CreateMember = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [exp, setExp] = useState("");
-  const [sex, setSex] = useState("");
-  // const [relationshipStatus, setRelationshipStatus] = useState("");
-  const [pic, setPic] = useState("");
-  const [notes, setNotes] = useState("");
+const CreateMember = (props) => {
+  const [firstName, setFirstName] = useState(
+    props.first_name ? props.first_name : ""
+  );
+  const [lastName, setLastName] = useState(
+    props.last_name ? props.last_name : ""
+  );
+  const [dob, setDob] = useState(
+    props.birth_date ? moment(props.birth_date, "YYYY-MM-DD") : null
+  );
+  const [exp, setExp] = useState(
+    props.expiry_date ? convertDate(props.expiry_date) : null
+  );
+  const [sex, setSex] = useState(props.sex ? props.sex : "");
+  const [pic, setPic] = useState(props.photo ? props.photo : null);
+  const [notes, setNotes] = useState(props.notes ? props.notes : "");
+  const [webcam, isWebcam] = useState("");
+  const [webcamError, isWebcamError] = useState("");
 
   const checkEmpty = () => {
     return !firstName || !lastName || !dob || !exp || !pic;
@@ -50,25 +60,39 @@ const CreateMember = () => {
       photo: pic,
       notes: notes ? notes : "",
     };
-    axios
-      .post("http://localhost:3000/members", formdata)
-      .then((res) => {
-        console.log(res);
-        location.reload();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+
+    if (props.id) {
+      axios
+        .put(`http://localhost:3000/members/${props.id}`, formdata)
+        .then((res) => {
+          props.closeModal();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      axios
+        .post("http://localhost:3000/members", formdata)
+        .then((res) => {
+          location.reload();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
 
   return (
     <>
-      <Typography variant="h1">Create Member</Typography>
+      <Typography variant="h1">
+        {props.id ? "Edit Member" : "Create Member"}
+      </Typography>
       <div className="modalContent">
         <form className="formContainer">
           <div className="inputFields">
             <TextField
               onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
               sx={textField}
               id="first_name"
               label="First Name"
@@ -76,6 +100,7 @@ const CreateMember = () => {
             />
             <TextField
               onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
               sx={textField}
               id="last_name"
               label="Last Name"
@@ -84,7 +109,10 @@ const CreateMember = () => {
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DatePicker
                 label="D.O.B."
-                onChange={(e) => setDob(e.format("yyyy-MM-DD"))}
+                onChange={(e) => {
+                  setDob(e.format("yyyy-MM-DD"));
+                }}
+                value={dob}
               />
             </LocalizationProvider>
             <div>
@@ -93,35 +121,35 @@ const CreateMember = () => {
               </Typography>
               <div className="expiryPicker">
                 <Button
-                  variant="outlined"
+                  variant={exp === calcExpiry(1) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(1))}
                 >
                   1 Months
                 </Button>
                 <Button
-                  variant="outlined"
+                  variant={exp === calcExpiry(3) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(3))}
                 >
                   3 Months
                 </Button>
                 <Button
-                  variant="outlined"
+                  variant={exp === calcExpiry(6) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(6))}
                 >
                   6 Months
                 </Button>
                 <Button
-                  variant="outlined"
+                  variant={exp === calcExpiry(12) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(12))}
                 >
                   1 Year
                 </Button>
+                {exp && (
+                  <Typography>
+                    <strong>Expires on {convertDate(exp)}</strong>
+                  </Typography>
+                )}
               </div>
-              {exp && (
-                <Typography>
-                  <strong>Expires on {convertDate(exp)}</strong>
-                </Typography>
-              )}
             </div>
             <FormControl>
               <InputLabel variant="filled">Sex</InputLabel>
@@ -131,62 +159,68 @@ const CreateMember = () => {
                 <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
-            {/* <FormControl>
-              <InputLabel variant="filled">Relationship Status</InputLabel>
-
-              <Select
-                value={relationshipStatus}
-                onChange={(e) => setRelationshipStatus(e.target.value)}
-              >
-                <MenuItem value="Single">Single</MenuItem>
-                <MenuItem value="Couple">Couple</MenuItem>
-              </Select>
-            </FormControl> */}
           </div>
           <div className="photoContainer">
-            {pic == "" ? (
-              <Webcam
-                audio={false}
-                screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
-              >
-                {({ getScreenshot }) => {
-                  return (
-                    <Button
-                      sx={sharpButton}
-                      onClick={() =>
-                        setPic(btoa(getScreenshot().split(",")[1]))
-                      }
-                      variant="contained"
-                    >
-                      Take Picture
-                    </Button>
-                  );
-                }}
-              </Webcam>
-            ) : (
+            {pic ? (
               <>
-                <img
-                  src={`data:image/jpeg;base64,${atob(pic)}`}
-                  alt="Picture"
-                />
+                {pic.hasOwnProperty("data") ? (
+                  <img
+                    src={`data:image/jpeg;base64,${toBase64(pic.data)}`}
+                    alt="Picture"
+                  />
+                ) : (
+                  <img
+                    src={`data:image/jpeg;base64,${atob(pic)}`}
+                    alt="Picture"
+                  />
+                )}
                 <Button
                   sx={sharpButton}
-                  onClick={() => setPic("")}
+                  onClick={() => setPic(null)}
                   variant="contained"
                 >
                   Retake Picture
                 </Button>
               </>
+            ) : (
+              <Webcam
+                audio={false}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                onUserMedia={() => isWebcam(true)}
+                onUserMediaError={() => isWebcamError(true)}
+              >
+                {({ getScreenshot }) => {
+                  return (
+                    <>
+                      {webcam ? (
+                        <Button
+                          sx={sharpButton}
+                          onClick={() =>
+                            setPic(btoa(getScreenshot().split(",")[1]))
+                          }
+                          variant="contained"
+                        >
+                          Take Picture
+                        </Button>
+                      ) : (
+                        <Typography>
+                          {webcamError ? "Camera Not Dectected" : "Loading"}
+                        </Typography>
+                      )}
+                    </>
+                  );
+                }}
+              </Webcam>
             )}
           </div>
           <div className="notesContainer">
             <TextField
-              sx={{ width: "60%" }}
+              sx={{ width: "21.5rem" }}
               multiline
               label="Notes (Optional)"
               placeholder="Notes..."
-              rows={4}
+              rows={2}
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
@@ -197,7 +231,7 @@ const CreateMember = () => {
           color="info"
           variant="contained"
         >
-          Create Member
+          {props.id ? "Edit Member" : "Create Member"}
         </Button>
       </div>
     </>

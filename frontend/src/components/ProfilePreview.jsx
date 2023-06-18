@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./ProfilePreview.css";
+import { Typography } from "@mui/material";
 
 const toBase64 = (arr) => {
   if (arr !== null) {
@@ -15,7 +16,7 @@ const ProfilePreview = ({ memberID, closeModal }) => {
 
   useEffect(() => {
     if (memberID !== null) {
-      getUser(memberID);
+      getUser();
     }
   }, []);
 
@@ -33,33 +34,10 @@ const ProfilePreview = ({ memberID, closeModal }) => {
       });
   };
 
-  const deleteUser = () => {
-    axios
-      .delete(`http://localhost:3000/members/${memberID}`)
-      .then((response) => {
-        return response.data;
-      })
-      .then((data) => {
-        setUser(data[0]);
-        closeModal();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   return (
     <>
       {user !== null ? (
         <div className="modalContent">
-          {/* <Button
-            color="info"
-            variant="contained"
-            onClick={closeModal}
-            sx={{ width: "15%" }}
-          >
-            Back
-          </Button> */}
           <div className="pictureContainer">
             {user.photo !== null && toBase64(user.photo.data) !== null ? (
               <img
@@ -68,15 +46,17 @@ const ProfilePreview = ({ memberID, closeModal }) => {
                 alt="photo"
               />
             ) : (
-              <p>No Photo Found</p>
+              <Typography>No Photo Found</Typography>
             )}
           </div>
           <div className="namesContainer">
-            {user.first_name} {user.last_name}
+            <Typography>
+              {user.first_name} {user.last_name}
+            </Typography>
           </div>
         </div>
       ) : (
-        <p>No profile selected</p>
+        <Typography>No profile selected</Typography>
       )}
     </>
   );

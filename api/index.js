@@ -4,14 +4,14 @@ const cors = require("cors");
 const app = express();
 const db = require("./queries");
 const port = 3000;
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:4173"];
 
-app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
+app.use(bodyParser.json({ limit: "100mb" }));
 
 app.use(
   cors({
@@ -37,15 +37,15 @@ app.get("/members/:id", db.getMemberById);
 app.post("/members", db.createMember);
 app.put("/members/:id", db.updateMember);
 app.delete("/members/:id", db.deleteMember);
-app.post('/dates/:id', db.checkinMember)
+app.post("/dates/:id", db.checkinMember);
 
 app.get("/dates", db.getDates);
 app.get("/dates/:date", db.getDate);
 
-app.get('/couples', db.getCouples)
-app.get('/couples/:id', db.getMemberCouple)
-app.post('/couples', db.createCouple)
-app.post('/couples/delete', db.deleteCouple)
+app.get("/couples", db.getCouples);
+app.get("/couples/:id", db.getMemberCouple);
+app.post("/couples", db.createCouple);
+app.post("/couples/delete", db.deleteCouple);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

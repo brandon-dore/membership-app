@@ -1,21 +1,24 @@
-import { Box, Button, Modal, OutlinedInput } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  OutlinedInput,
+} from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import "./CreateMember.css";
 import "./Profile.css";
-import { convertDate } from "../utils";
+import { convertDate, toBase64 } from "../utils";
 import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
 import ProfilePreview from "./ProfilePreview";
+import CreateMember from "./CreateMember";
 
-const toBase64 = (arr) => {
-  if (arr !== null) {
-    const photo = atob(
-      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
-    );
-    return photo;
-  }
-};
 const Profile = ({ memberID, closeModal, nested = false }) => {
   const [user, setUser] = useState(null);
   const [newCoupleID, setNewCoupleID] = useState("");
@@ -23,6 +26,8 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
   const [couples, setCouples] = useState([]);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
@@ -32,8 +37,22 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
     }
   }, []);
 
+  const handleOpenEdit = () => setOpenEdit(true);
+  const handleCloseEdit = () => {
+    getUser();
+    setOpenEdit(false);
+  };
+
   const handleClose = () => {
     setOpen(false);
+    getCouples();
+  };
+
+  const handleOpenConfirm = () => {
+    setConfirm(true);
+  };
+  const handleCloseConfirm = () => {
+    setConfirm(false);
   };
 
   const handleClosePreview = () => {
@@ -71,7 +90,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
       })
       .then((data) => {
         setUser(data[0]);
-        closeModal();
+        handleClosePreview();
       })
       .catch((e) => {
         console.log(e);
@@ -103,6 +122,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
           console.log(response.data);
           setError("");
           setShowPreview(false);
+          getCouples();
         });
     } else {
       setError("Please enter a member ID");
@@ -141,9 +161,16 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             Back
           </Button>
           <Button
-            variant="contained"
-            onClick={deleteUser}
-            sx={{ width: "15%" }}
+            variant="outlined"
+            onClick={handleOpenEdit}
+            sx={{ ...sharpButton, width: "15%" }}
+          >
+            Edit user
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleOpenConfirm}
+            sx={{ ...sharpButton, width: "15%" }}
           >
             Delete user
           </Button>
@@ -160,7 +187,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             </Typography>
             <Typography variant="h2">Expiry Date</Typography>
             <Typography>{convertDate(user.expiry_date)}</Typography>
-            {couples.length && (
+            {couples.length !== 0 && (
               <div>
                 <Typography variant="h2">Partners</Typography>
                 <div className="partnersContainer">
@@ -203,7 +230,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
               )}
             </div>
             <div className="coupleContainer">
-              <h2>Add Couple</h2>
+              <Typography variant="h2">Add Couple</Typography>
               <div className="inputContainer">
                 <OutlinedInput
                   sx={{ width: "20rem" }}
@@ -257,7 +284,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
               closeModal={handleClosePreview}
             />
             <div className="confirmContainer">
-              <p>Is this the user you are looking for? </p>
+              <Typography>Is this the user you are looking for? </Typography>
               <div className="confirmButtons">
                 <Button onClick={addCouple} variant="contained">
                   Confirm
@@ -268,6 +295,38 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
           </Box>
         </div>
       </Modal>
+      <Modal
+        open={openEdit}
+        onClose={handleCloseEdit}
+        aria-labelledby="Confirm Check In"
+        aria-describedby="Confirm Check In"
+      >
+        <Box sx={modalBox}>
+          <CreateMember {...user} closeModal={handleCloseEdit} />
+        </Box>
+      </Modal>
+
+      <Dialog
+        open={confirm}
+        onClose={handleClose}
+        aria-labelledby="confirm-delete-user"
+        aria-describedby="confirm-delete-user"
+      >
+        <DialogTitle id="confirm-delete-user">Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-delete-user">
+            Would you like to delete this user?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleCloseConfirm}>
+            Cancel
+          </Button>
+          <Button variant="outlined" onClick={deleteUser} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
