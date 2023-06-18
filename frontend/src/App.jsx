@@ -12,10 +12,48 @@ import { modalBox } from "./MuiStyles";
 import SearchIcon from "@mui/icons-material/Search";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CreateIcon from "@mui/icons-material/Create";
+import { Button, Typography } from "@mui/material";
 
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    primary: {
+      light: "#B22222",
+      main: "#B22222",
+      dark: "#B22222",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#B22222",
+      main: "#B22222",
+      dark: "#B22222",
+      contrastText: "#000",
+    },
+  },
+  typography: {
+    allVariants: {
+      color: "white",
+    },
+    h1: {
+      fontFamily: ["Bebas Neue", "sans-serif"].join(","),
+      fontSize: 75,
+    },
+    h2: {
+      fontSize: 30,
+    },
+    h3: {
+      fontSize: 40,
+    },
+    fontWeightMedium: 650,
+    fontSize: 15,
+    fontFamily: [
+      "Inter",
+      "system-ui",
+      "Avenir",
+      "Helvetica",
+      "Arial",
+      "sans-serif",
+    ].join(","),
   },
 });
 
@@ -49,7 +87,7 @@ function App() {
       <div className="titleContainer">
         <h1 className="pageTitle">
           <img className="logo" src={cupidImg} alt="logo" />
-          Cupid's
+          <Typography variant="h1">Cupid's</Typography>
           <img className="logo" src={cupidImg} alt="logo" />
         </h1>
       </div>
@@ -62,8 +100,8 @@ function App() {
           }}
         >
           <div className="buttonContent">
-            <SearchIcon sx={{ fontSize: "6rem" }} />
-            Search for Member
+            <SearchIcon sx={{ fontSize: "6rem", color: "white" }} />
+            <Typography>Search for Member</Typography>
           </div>
         </button>
         <button
@@ -74,8 +112,8 @@ function App() {
           }}
         >
           <div className="buttonContent">
-            <HowToRegIcon sx={{ fontSize: "6rem" }} />
-            Check-in Member
+            <HowToRegIcon sx={{ fontSize: "6rem", color: "white" }} />
+            <Typography>Check-in Member</Typography>
           </div>
         </button>
         <button
@@ -86,21 +124,22 @@ function App() {
           }}
         >
           <div className="buttonContent">
-            <CreateIcon sx={{ fontSize: "6rem" }} />
-            Create New Member
+            <CreateIcon sx={{ fontSize: "6rem", color: "white" }} />
+            <Typography>Create New Member</Typography>
           </div>
         </button>
       </div>
       <div className="secondaryButtons">
-        <button
+        <Button
+          variant="contained"
           className="secondaryButton"
           onClick={() => {
             handleOpen();
             setComponent("SearchDates");
           }}
         >
-          Dates
-        </button>
+          Check-In Dates
+        </Button>
       </div>
       <Modal
         open={open}

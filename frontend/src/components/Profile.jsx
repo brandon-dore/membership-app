@@ -1,6 +1,7 @@
 import { Box, Button, Modal, OutlinedInput } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 import "./CreateMember.css";
 import "./Profile.css";
 import { convertDate } from "../utils";
@@ -133,7 +134,6 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
       {user !== null ? (
         <div>
           <Button
-            color="info"
             variant="contained"
             onClick={closeModal}
             sx={{ ...sharpButton, width: "15%" }}
@@ -141,27 +141,28 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             Back
           </Button>
           <Button
-            color="error"
             variant="contained"
             onClick={deleteUser}
-            sx={{ ...sharpButton, width: "15%" }}
+            sx={{ width: "15%" }}
           >
             Delete user
           </Button>
           <div>
-            <h1>Profile</h1>
-            <h2>First Name</h2>
-            {user.first_name}
-            <h2>Last Name</h2>
-            {user.last_name}
-            <h2>D.O.B</h2>
-            {convertDate(user.birth_date)}
-            <h2>Expiry Date</h2>
-            {/* Highlight this if out of date */}
-            {convertDate(user.expiry_date)}
+            <Typography variant="h1">Profile</Typography>
+
+            <Typography variant="h2">First Name</Typography>
+            <Typography>{user.first_name}</Typography>
+            <Typography variant="h2">Last Name</Typography>
+            <Typography>{user.last_name}</Typography>
+            <Typography variant="h2">D.O.B</Typography>
+            <Typography>
+              {convertDate(user.birth_date ? user.birth_date : "Unknown")}
+            </Typography>
+            <Typography variant="h2">Expiry Date</Typography>
+            <Typography>{convertDate(user.expiry_date)}</Typography>
             {couples.length && (
               <div>
-                <h2>Partners</h2>
+                <Typography variant="h2">Partners</Typography>
                 <div className="partnersContainer">
                   {couples.map((couple) => {
                     let partner = getPartner(Object.values(couple));
@@ -174,11 +175,15 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
                         }}
                         key={partner}
                       >
-                        <p className="partnerContent">{partner}</p>
+                        <Typography className="partnerContent">
+                          {partner}
+                        </Typography>
                       </div>
                     ) : (
                       <div key={partner} className="partnerBox">
-                        <p className="partnerContent">{partner}</p>
+                        <Typography className="partnerContent">
+                          {partner}
+                        </Typography>
                       </div>
                     );
                   })}
@@ -194,7 +199,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
                   alt="photo"
                 />
               ) : (
-                <p>No Photo Found</p>
+                <Typography>No Photo Found</Typography>
               )}
             </div>
             <div className="coupleContainer">
@@ -217,7 +222,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
           </div>
         </div>
       ) : (
-        <p>No profile selected</p>
+        <Typography>No profile selected</Typography>
       )}
       <Modal
         open={open}

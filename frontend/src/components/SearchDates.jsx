@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { useFilters, useTable } from "react-table";
+import { useMemo, useState } from "react";
+import { useTable } from "react-table";
 import "./DataTable.css";
 import "./SearchDates.css";
 
 import "./SearchMembers.css";
-import { sharpButton, textField } from "../MuiStyles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Button, Typography } from "@mui/material";
@@ -62,7 +61,7 @@ const SearchDates = () => {
 
   return (
     <div>
-      <h1>Search</h1>
+      <Typography variant="h1">Dates & Members</Typography>
       <div className={`dateInput ${data.length ? "" : "focused"}`}>
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <DatePicker

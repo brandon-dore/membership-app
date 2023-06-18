@@ -1,26 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-
 :root {
-  /* --buttonsHeight: calc(50rem - 10rem); */
-  --buttonsHeight: 73vh;
+  --buttonsHeight: 80vh;
   overflow: hidden;
 }
-
 .pageTitle {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  gap: 2rem;
   pointer-events: none;
   user-select: none;
-  font-size: 5rem;
-  margin-top: 5rem;
-  font-family: "Bebas Neue", sans-serif;
-  letter-spacing: 0.2rem;
   text-transform: uppercase;
+  margin-top: 5rem;
+  gap: 2rem;
+  letter-spacing: 0.25rem;
 }
-
 .buttons {
   display: flex;
   position: absolute;
@@ -30,7 +24,6 @@
   top: 15rem;
   background-color: #333;
 }
-
 .primaryButton {
   box-sizing: border-box;
   position: relative;
@@ -46,13 +39,12 @@
   border: solid firebrick;
   border-width: 0px 2px 0px 2px;
 }
-
 .primaryButton::after {
   border: none;
   content: "";
-  opacity: 0.5;
+  opacity: 0.2;
   display: block;
-  background: #242424;
+  background: #b22222;
   position: absolute;
   top: 0;
   left: 0;
@@ -60,19 +52,15 @@
   width: calc(100% - 4px);
   transition: 0.2s;
 }
-
 .primaryButton:nth-child(odd) {
   border: none;
 }
-
 .primaryButton:hover::after {
   height: var(--buttonsHeight);
 }
-
 .primaryButton:active {
   background-color: firebrick;
 }
-
 .buttonContent {
   transform: skew(-20deg);
   z-index: 2;
@@ -83,29 +71,24 @@
   justify-content: center;
   flex-direction: column;
 }
-
 .logo {
   height: 7rem;
 }
-
 .secondaryButtons {
   position: absolute;
-  top: 2rem;
-  left: 0;
+  top: 7rem;
+  left: 10rem;
   display: flex;
 }
-
 .secondaryButton {
   background: #333;
   margin: 2rem;
   transition: 0.2s;
   border-radius: 4px;
 }
-
 .secondaryButton:hover {
   background: firebrick;
 }
-
 .modalBox {
   position: "absolute";
   top: 50%;

@@ -1,4 +1,4 @@
-import { Button, InputLabel, TextField } from "@mui/material";
+import { Button, InputLabel, TextField, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -63,7 +63,7 @@ const CreateMember = () => {
 
   return (
     <>
-      <h1>Create</h1>
+      <Typography variant="h1">Create Member</Typography>
       <div className="modalContent">
         <form className="formContainer">
           <div className="inputFields">
@@ -88,9 +88,9 @@ const CreateMember = () => {
               />
             </LocalizationProvider>
             <div>
-              <p style={{ marginTop: 0 }}>
+              <Typography style={{ marginTop: 0 }}>
                 <strong>Expires in:</strong>
-              </p>
+              </Typography>
               <div className="expiryPicker">
                 <Button
                   variant="outlined"
@@ -118,9 +118,9 @@ const CreateMember = () => {
                 </Button>
               </div>
               {exp && (
-                <p>
+                <Typography>
                   <strong>Expires on {convertDate(exp)}</strong>
-                </p>
+                </Typography>
               )}
             </div>
             <FormControl>
