@@ -92,7 +92,7 @@ function App() {
         </h1>
       </div>
       <div className="buttons">
-        <Button
+        <button
           className="primaryButton"
           onClick={() => {
             handleOpen();
@@ -103,8 +103,8 @@ function App() {
             <SearchIcon sx={{ fontSize: "6rem", color: "white" }} />
             <Typography>Search for Member</Typography>
           </div>
-        </Button>
-        <Button
+        </button>
+        <button
           className="primaryButton"
           onClick={() => {
             handleOpen();
@@ -115,8 +115,8 @@ function App() {
             <HowToRegIcon sx={{ fontSize: "6rem", color: "white" }} />
             <Typography>Check-in Member</Typography>
           </div>
-        </Button>
-        <Button
+        </button>
+        <button
           className="primaryButton"
           onClick={() => {
             handleOpen();
@@ -127,7 +127,7 @@ function App() {
             <CreateIcon sx={{ fontSize: "6rem", color: "white" }} />
             <Typography>Create New Member</Typography>
           </div>
-        </Button>
+        </button>
       </div>
       <div className="secondaryButtons">
         <Button

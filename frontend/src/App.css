@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 :root {
-  --buttonsHeight: 78vh;
+  --buttonsHeight: 80vh;
   overflow: hidden;
 }
 .pageTitle {
@@ -36,6 +36,8 @@
   transition: 0.2s;
   transform: skew(20deg);
   z-index: 1;
+  border: solid firebrick;
+  border-width: 0px 2px 0px 2px;
 }
 .primaryButton::after {
   border: none;
