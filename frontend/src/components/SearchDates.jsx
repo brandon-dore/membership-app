@@ -26,12 +26,16 @@ const COLUMNS = [
 const SearchDates = () => {
   const [data, setData] = useState([]);
   const [date, setDate] = useState("");
+  const [errorMessage, setErrorMessage] = useState(
+    "Please enter the date you want to search."
+  );
 
   const checkEmpty = () => {
     return !date;
   };
 
   const fetchData = (allDates) => {
+    setErrorMessage("There were no results for your search.");
     const URL = allDates
       ? `http://localhost:3000/dates/`
       : `http://localhost:3000/dates/${date}`;
@@ -58,11 +62,13 @@ const SearchDates = () => {
   return (
     <div>
       <Typography variant="h1">Dates & Members</Typography>
-      <div className="dateInput">
+      <div className={`dateInput ${data.length ? "" : "focused"}`}>
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <DatePicker
             label="Entry Date"
-            onChange={(e) => setDate(e.format("yyyy-MM-DD"))}
+            onChange={(e) => {
+              setDate(e.format("yyyy-MM-DD"));
+            }}
           />
         </LocalizationProvider>
         <Button
@@ -82,34 +88,49 @@ const SearchDates = () => {
           Get all Dates
         </Button>
       </div>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>
-                  {column.render("Header")}
-                  <div>{column.canFilter ? column.render("Filter") : null}</div>
-                </th>
+      {data.length ? (
+        <div className="tableContainer">
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                      <div>
+                        {column.canFilter ? column.render("Filter") : null}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr className="contentRow" {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr className="contentRow" {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="errorMessage">
+          <p>{errorMessage}</p>
+        </div>
+      )}
+      {data.length && (
+        <p>
+          Total visitors in search: <strong>{data.length}</strong>
+        </p>
+      )}
     </div>
   );
 };

@@ -5,4 +5,25 @@
   vertical-align: middle;
   align-items: center;
   padding: 10px 0px;
+  transition: 0.5s;
+  width: fit-content;
+}
+
+.focused {
+  margin: 20% 0 0 25%;
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.tableContainer {
+  height: fit-content;
+  max-height: 30rem;
+  overflow: hidden;
+  overflow-y: auto;
 }

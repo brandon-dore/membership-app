@@ -88,7 +88,6 @@ const CheckInMember = () => {
   };
 
   const handleCheckIn = () => {
-    console.log(id);
     axios
       .post(`http://localhost:3000/dates/${id}`)
       .then((res) => {
@@ -117,7 +116,7 @@ const CheckInMember = () => {
         <IconButton
           sx={{ width: "3rem", aspectRatio: "1/1" }}
           disabled={!id}
-          onClick={handleCheckIn}
+          onClick={handleOpen}
         >
           <CheckCircleIcon />
         </IconButton>
@@ -170,7 +169,7 @@ const CheckInMember = () => {
                 <tr
                   className="contentRow"
                   onClick={(e) => {
-                    setOpen(true);
+                    handleOpen();
                     setId(row.cells[0].value);
                   }}
                   {...row.getRowProps()}
