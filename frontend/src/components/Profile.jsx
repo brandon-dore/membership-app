@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 import "./CreateMember.css";
 
 const toBase64 = (arr) => {
@@ -54,32 +55,26 @@ const Profile = ({ memberID, closeModal }) => {
       {user !== null ? (
         <div>
           <Button
-            color="info"
             variant="contained"
             onClick={closeModal}
             sx={{ width: "15%" }}
           >
             Back
           </Button>
-          <Button
-            color="error"
-            variant="container"
-            onClick={deleteUser}
-            sx={{ width: "15%" }}
-          >
+          <Button onClick={deleteUser} sx={{ width: "15%" }}>
             Delete user
           </Button>
           <div>
-            <h1>Profile</h1>
+            <Typography variant="h1">Profile</Typography>
 
-            <h2>First Name</h2>
-            {user.first_name}
-            <h2>Last Name</h2>
-            {user.last_name}
-            <h2>D.O.B</h2>
-            {user.dob}
-            <h2>Expiry Date</h2>
-            {user.expiry_date}
+            <Typography variant="h2">First Name</Typography>
+            <Typography>{user.first_name}</Typography>
+            <Typography variant="h2">Last Name</Typography>
+            <Typography>{user.last_name}</Typography>
+            <Typography variant="h2">D.O.B</Typography>
+            <Typography>{user.dob ? user.dob : "Unknown"}</Typography>
+            <Typography variant="h2">Expiry Date</Typography>
+            <Typography>{user.expiry_date}</Typography>
             <div className="photoContainer">
               {user.photo !== null && toBase64(user.photo.data) !== null ? (
                 <img
@@ -88,13 +83,13 @@ const Profile = ({ memberID, closeModal }) => {
                   alt="photo"
                 />
               ) : (
-                <p>No Photo Found</p>
+                <Typography>No Photo Found</Typography>
               )}
             </div>
           </div>
         </div>
       ) : (
-        <p>No profile selected</p>
+        <Typography>No profile selected</Typography>
       )}
     </>
   );

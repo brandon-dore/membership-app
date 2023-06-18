@@ -7,6 +7,7 @@ import {
   InputAdornment,
   Modal,
   OutlinedInput,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useMemo, useState } from "react";
@@ -100,9 +101,9 @@ const CheckInMember = () => {
 
   return (
     <>
-      <h1>Check In</h1>
+      <Typography variant="h1">Check In</Typography>
       <div className="">
-        <h2>Check in member: </h2>
+        <Typography variant="h2">Check in member: </Typography>
         <OutlinedInput
           sx={{ width: "20rem" }}
           id="id"
@@ -121,7 +122,7 @@ const CheckInMember = () => {
           <CheckCircleIcon />
         </IconButton>
       </div>
-      <h2>Search Member:</h2>
+      <Typography variant="h2">Search Member:</Typography>
       <div className="formContainer">
         {/* Replace this with various searchable fields to update state object */}
         <OutlinedInput

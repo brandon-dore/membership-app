@@ -8,8 +8,9 @@ import "./SearchMembers.css";
 import FilterDropdown from "./filters/FilterDropdown";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
-import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
+import Box from "@mui/material/Box";
 const COLUMNS = [
   {
     Header: "Member ID",
@@ -98,7 +99,7 @@ const SearchMembers = () => {
 
   return (
     <div>
-      <h1>Search</h1>
+      <Typography variant="h1">Search for Member</Typography>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (

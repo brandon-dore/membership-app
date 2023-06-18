@@ -21,12 +21,12 @@ h1 {
   left: 60%;
   top: 14%;
   display: flex;
-  width: 30%;
+  width: 29%;
   align-self: center;
   justify-self: center;
   display: flex;
   flex-direction: column;
-  border: 1px solid #0088d1;
+  border: 1px solid #b22222;
   border-radius: 0 0 4px 4px;
 }
 
