@@ -44,6 +44,7 @@ const darkTheme = createTheme({
     h3: {
       fontSize: 40,
     },
+    fontWeightMedium: 650,
     fontSize: 15,
     fontFamily: [
       "Inter",
@@ -85,7 +86,6 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <div className="titleContainer">
         <h1 className="pageTitle">
-          ``
           <img className="logo" src={cupidImg} alt="logo" />
           <Typography variant="h1">Cupid's</Typography>
           <img className="logo" src={cupidImg} alt="logo" />
