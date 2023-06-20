@@ -92,6 +92,7 @@ const CheckInMember = () => {
       .post(`http://localhost:3000/dates/${id}`)
       .then((res) => {
         console.log(res);
+        handleClose();
       })
       .catch((e) => {
         console.log(e);
@@ -197,7 +198,7 @@ const CheckInMember = () => {
           <div className="confirmContainer">
             <Typography>Would you like to check in this user? </Typography>
             <div className="confirmButtons">
-              <Button onClick={handleCheckIn} variant="contained">
+              <Button onClick={handleClose} variant="contained">
                 Confirm
               </Button>
               <Button onClick={handleClose} variant="outlined">
