@@ -4,7 +4,7 @@ import { useFilters, useTable } from "react-table";
 import { modalBox } from "../MuiStyles";
 import "./DataTable.css";
 import Profile from "./Profile";
-import "./SearchMembers.css";
+import "./SearchCustomers.css";
 import FilterDropdown from "./filters/FilterDropdown";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
@@ -13,7 +13,7 @@ import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 const COLUMNS = [
   {
-    Header: "Member ID",
+    Header: "Customer ID",
     accessor: "id",
     Filter: FilterText,
   },
@@ -56,15 +56,27 @@ const COLUMNS = [
       { value: "Couple", label: "Couple" },
     ],
   },
+  {
+    Header: "Member",
+    accessor: "is_member",
+    Filter: FilterDropdown,
+    filter: "equals",
+    options: [
+      { value: undefined, label: "Unknown" },
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
 ];
 
-const SearchMembers = () => {
+const SearchCustomers = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
-  const [currentMemberID, setCurrentMemberID] = useState(null);
+  const [currentCustomerID, setCurrentCustomerID] = useState(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
+    console.log(data);
     setOpen(false);
     fetchData();
   };
@@ -74,7 +86,7 @@ const SearchMembers = () => {
   }, []);
 
   const fetchData = () => {
-    fetch("http://localhost:3000/members")
+    fetch("http://localhost:3000/customers")
       .then((response) => {
         return response.text();
       })
@@ -99,7 +111,7 @@ const SearchMembers = () => {
 
   return (
     <div>
-      <Typography variant="h1">Search for Member</Typography>
+      <Typography variant="h1">Search for Customer</Typography>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -120,7 +132,7 @@ const SearchMembers = () => {
               <tr
                 className="contentRow"
                 onClick={(e) => {
-                  setCurrentMemberID(row.cells[0].value);
+                  setCurrentCustomerID(row.cells[0].value);
                   handleOpen();
                 }}
                 {...row.getRowProps()}
@@ -143,7 +155,7 @@ const SearchMembers = () => {
       >
         <div>
           <Box sx={modalBox}>
-            <Profile memberID={currentMemberID} closeModal={handleClose} />
+            <Profile customerID={currentCustomerID} closeModal={handleClose} />
           </Box>
         </div>
       </Modal>
@@ -151,4 +163,4 @@ const SearchMembers = () => {
   );
 };
 
-export default SearchMembers;
+export default SearchCustomers;

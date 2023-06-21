@@ -1,8 +1,8 @@
 BEGIN;
 
-DROP TABLE IF EXISTS members, dates, couples;
+DROP TABLE IF EXISTS customers, dates, couples;
 
-CREATE TABLE members (
+CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
@@ -12,41 +12,42 @@ CREATE TABLE members (
   photo BYTEA,
   birth_date DATE,
   registration_date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  expiry_date DATE NOT NULL
+  expiry_date DATE,
+  is_member VARCHAR(50),
 );
 
 CREATE TABLE dates (
   id SERIAL PRIMARY KEY,
-  member_id INT NOT NULL,
+  customer_id INT NOT NULL,
   entry_date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_member
-      FOREIGN KEY(member_id) 
-		REFERENCES members(id)
+  CONSTRAINT fk_customer
+      FOREIGN KEY(customer_id) 
+		REFERENCES customers(id)
 );
 
 CREATE TABLE couples (
-  member_id_1 int REFERENCES members (id) ON UPDATE CASCADE ON DELETE CASCADE,
-  member_id_2 int REFERENCES members (id) ON UPDATE CASCADE, 
-  CONSTRAINT member_to_member_id PRIMARY KEY (member_id_1, member_id_2)
+  customer_id_1 int REFERENCES customers (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  customer_id_2 int REFERENCES customers (id) ON UPDATE CASCADE, 
+  CONSTRAINT member_to_customer_id PRIMARY KEY (customer_id_1, customer_id_2)
 );
 
-INSERT INTO members (first_name, last_name, expiry_date ) VALUES
+INSERT INTO customers (first_name, last_name, expiry_date ) VALUES
  ('John', 'Doe', '2024-06-11'),
   ('Jane', 'Doe', '2023-07-11'), 
   ('Mary ', 'Davis', '2023-07-11'), 
   ('William', 'Carr', '2023-07-11'), 
   ('Ginger', 'Calhoun', '2023-09-11');
 
-INSERT INTO members (first_name, last_name, notes, sex, relationship_status, photo, birth_date, expiry_date ) VALUES
+INSERT INTO customers (first_name, last_name, notes, sex, relationship_status, photo, birth_date, expiry_date ) VALUES
  ('Stephanie', 'Rose', 'comes in on weekends', 'Female', 'Couple', NULL, '1989-01-19', '2023-12-11'),
   ('Phillip', 'Petersen', NULL, 'Male', 'Single', NULL, '2002-06-26', '2023-09-11'); 
 
-INSERT INTO couples (member_id_1, member_id_2) VALUES
+INSERT INTO couples (customer_id_1, customer_id_2) VALUES
  (1, 4),
   (1, 5),
   (2, 3);
 
-INSERT INTO dates (member_id, entry_date) VALUES
+INSERT INTO dates (customer_id, entry_date) VALUES
  (1, '2023-06-01'),
   (1, '2023-06-02'),
   (1, '2023-06-03'),

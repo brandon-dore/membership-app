@@ -31,19 +31,19 @@ app.get("/", (request, response) => {
   response.json({ info: "Node.js, Express, and Postgres API" });
 });
 
-app.get("/members", db.getMembers);
-app.get("/filter", db.queryMember);
-app.get("/members/:id", db.getMemberById);
-app.post("/members", db.createMember);
-app.put("/members/:id", db.updateMember);
-app.delete("/members/:id", db.deleteMember);
-app.post("/dates/:id", db.checkinMember);
+app.get("/customers", db.getCustomers);
+app.get("/filter", db.queryCustomer);
+app.get("/customers/:id", db.getCustomerById);
+app.post("/customers", db.createCustomer);
+app.put("/customers/:id", db.updateCustomer);
+app.delete("/customers/:id", db.deleteCustomer);
+app.post("/dates/:id", db.checkinCustomer);
 
 app.get("/dates", db.getDates);
 app.get("/dates/:date", db.getDate);
 
 app.get("/couples", db.getCouples);
-app.get("/couples/:id", db.getMemberCouple);
+app.get("/couples/:id", db.getCustomerCouple);
 app.post("/couples", db.createCouple);
 app.post("/couples/delete", db.deleteCouple);
 

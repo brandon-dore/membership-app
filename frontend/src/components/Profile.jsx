@@ -12,14 +12,15 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
-import "./CreateMember.css";
+import "./CreateCustomer.css";
 import "./Profile.css";
 import { convertDate, toBase64 } from "../utils";
 import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
 import ProfilePreview from "./ProfilePreview";
-import CreateMember from "./CreateMember";
+import CreateCustomer from "./CreateCustomer";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const Profile = ({ memberID, closeModal, nested = false }) => {
+const Profile = ({ customerID, closeModal, nested = false }) => {
   const [user, setUser] = useState(null);
   const [newCoupleID, setNewCoupleID] = useState("");
   const [coupleID, setCoupleID] = useState(0);
@@ -31,7 +32,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
   const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
-    if (memberID !== null) {
+    if (customerID !== null) {
       getUser();
       getCouples();
     }
@@ -65,12 +66,12 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
       setError("");
       return;
     }
-    setError("Please enter a member ID");
+    setError("Please enter a customer ID");
   };
 
   const getUser = () => {
     axios
-      .get(`http://localhost:3000/members/${memberID}`)
+      .get(`http://localhost:3000/customers/${customerID}`)
       .then((response) => {
         return response.data;
       })
@@ -84,7 +85,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
 
   const deleteUser = () => {
     axios
-      .delete(`http://localhost:3000/members/${memberID}`)
+      .delete(`http://localhost:3000/customers/${customerID}`)
       .then((response) => {
         return response.data;
       })
@@ -99,7 +100,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
 
   const getCouples = () => {
     axios
-      .get(`http://localhost:3000/couples/${memberID}`)
+      .get(`http://localhost:3000/couples/${customerID}`)
       .then((response) => {
         return response.data;
       })
@@ -115,8 +116,8 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
     if (newCoupleID) {
       axios
         .post(`http://localhost:3000/couples`, {
-          member_1: memberID,
-          member_2: newCoupleID,
+          customer_1: customerID,
+          customer_2: newCoupleID,
         })
         .then((response) => {
           console.log(response.data);
@@ -125,7 +126,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
           getCouples();
         });
     } else {
-      setError("Please enter a member ID");
+      setError("Please enter a customer ID");
     }
   };
 
@@ -133,8 +134,8 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
     if (coupleID) {
       axios
         .post("http://localhost:3000/couples/delete", {
-          member_1: memberID,
-          member_2: coupleID,
+          customer_1: customerID,
+          customer_2: coupleID,
         })
         .then((response) => {
           handleClose();
@@ -146,7 +147,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
   };
 
   const getPartner = (idArr) => {
-    return idArr[0] == memberID ? idArr[1] : idArr[0];
+    return idArr[0] == customerID ? idArr[1] : idArr[0];
   };
 
   return (
@@ -167,18 +168,27 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
               sx={{ ...sharpButton, width: "10rem" }}
               color="info"
             >
-              Edit Member
+              Edit Customer
             </Button>
             <Button
               variant="outlined"
               onClick={handleOpenConfirm}
               sx={{ ...sharpButton, width: "10rem" }}
             >
-              Delete Member
+              Delete Customer
             </Button>
           </div>
           <div className="profileContent">
-            <Typography variant="h1">Profile</Typography>
+            <div className="profileTitle">
+              <Typography variant="h1">Profile</Typography>
+              {user.is_member === "Yes" && (
+                <div className="memberLabel">
+                  <Typography variant="h2">
+                    <FavoriteIcon /> Member
+                  </Typography>
+                </div>
+              )}
+            </div>
 
             <Typography variant="h2">First Name</Typography>
             <Typography>{user.first_name}</Typography>
@@ -188,8 +198,12 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             <Typography>
               {convertDate(user.birth_date ? user.birth_date : "Unknown")}
             </Typography>
-            <Typography variant="h2">Expiry Date</Typography>
-            <Typography>{convertDate(user.expiry_date)}</Typography>
+            {user.expiry_date && (
+              <>
+                <Typography variant="h2">Expiry Date</Typography>
+                <Typography>{convertDate(user.expiry_date)}</Typography>
+              </>
+            )}
             {couples.length !== 0 && (
               <div>
                 <Typography variant="h2">Partners</Typography>
@@ -224,7 +238,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
             <div className="photoContainer">
               {user.photo !== null && toBase64(user.photo.data) !== null ? (
                 <img
-                  key={user.membership_id}
+                  key={user.customer_id}
                   src={`data:image/jpeg;base64,${toBase64(user.photo.data)}`}
                   alt="photo"
                 />
@@ -246,7 +260,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
                 <Button onClick={handleOpenPreview}>Add Couple</Button>
               </div>
               {error && (
-                <p className="errorMessage">Please enter a member ID</p>
+                <p className="errorMessage">Please enter a customer ID</p>
               )}
             </div>
           </div>
@@ -263,7 +277,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
         <div>
           <Box sx={modalBox}>
             <Profile
-              memberID={coupleID}
+              customerID={coupleID}
               closeModal={handleClose}
               nested={true}
             />
@@ -283,7 +297,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
         <div>
           <Box sx={smallModalBox}>
             <ProfilePreview
-              memberID={newCoupleID}
+              customerID={newCoupleID}
               closeModal={handleClosePreview}
             />
             <div className="confirmContainer">
@@ -305,7 +319,7 @@ const Profile = ({ memberID, closeModal, nested = false }) => {
         aria-describedby="Confirm Check In"
       >
         <Box sx={modalBox}>
-          <CreateMember {...user} closeModal={handleCloseEdit} />
+          <CreateCustomer {...user} closeModal={handleCloseEdit} />
         </Box>
       </Modal>
 

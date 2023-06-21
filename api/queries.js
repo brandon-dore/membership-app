@@ -9,14 +9,14 @@ const pool = new Pool({
 
 const correctRelationship = async () => {
   return await  pool.query(
-    "SELECT id FROM members WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.member_id_1 = members.id OR couples.member_id_2 = members.id)"
+    "SELECT id FROM customers WHERE NOT EXISTS (SELECT 1 FROM couples WHERE couples.customer_id_1 = customers.id OR couples.customer_id_2 = customers.id)"
   );
 }
 
-const getMembers = async (request, response) => {
+const getCustomers = async (request, response) => {
   try {
     const { rows } = await pool.query(
-      "SELECT id, first_name, last_name, sex, relationship_status, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM members ORDER BY id ASC"
+      "SELECT id, first_name, last_name, sex, relationship_status, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date, is_member FROM customers ORDER BY id ASC"
     );
     response.status(200).json(rows);
   } catch (error) {
@@ -24,11 +24,11 @@ const getMembers = async (request, response) => {
   }
 };
 
-const getMemberById = async (request, response) => {
+const getCustomerById = async (request, response) => {
   try {
     const id = parseInt(request.params.id);
 
-    const { rows } = await pool.query("SELECT * FROM members WHERE id = $1", [
+    const { rows } = await pool.query("SELECT * FROM customers WHERE id = $1", [
       id,
     ]);
     response.status(200).json(rows);
@@ -37,7 +37,7 @@ const getMemberById = async (request, response) => {
   }
 };
 
-const createMember = async (request, response) => {
+const createCustomer = async (request, response) => {
   try {
     const {
       first_name,
@@ -48,10 +48,19 @@ const createMember = async (request, response) => {
       relationship_status,
       photo,
       notes,
+      is_member,
     } = request.body;
 
+    const checkExists = await pool.query(
+      'SELECT id FROM customers WHERE first_name = $1 AND last_name = $2 AND birth_date = $3', [first_name, last_name, birth_date]
+    )
+    if(checkExists.rowCount > 0){
+      response.status(400).send(`User already exists with ID: ${checkExists.rows[0]['id']}`)
+      return
+    }
+    
     const { rows } = await pool.query(
-      "INSERT INTO members (first_name, last_name, birth_date, expiry_date, sex, relationship_status, photo, notes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+      "INSERT INTO customers (first_name, last_name, birth_date, expiry_date, sex, relationship_status, photo, notes, is_member) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
       [
         first_name,
         last_name,
@@ -61,15 +70,17 @@ const createMember = async (request, response) => {
         relationship_status,
         photo,
         notes,
+        is_member
       ]
     );
     response.status(201).send(`User added with ID: ${rows.insertId}`);
   } catch (error) {
+    console.log(error)
     response.status(500).json({ error_code: error.code });
   }
 };
 
-const updateMember = async (request, response) => {
+const updateCustomer = async (request, response) => {
   try {
     const id = parseInt(request.params.id);
     const {
@@ -81,10 +92,11 @@ const updateMember = async (request, response) => {
       relationship_status,
       photo,
       notes,
+      is_member,
     } = request.body;
 
     await pool.query(
-      "UPDATE members SET first_name = $1, last_name = $2, birth_date = $3, expiry_date = $4, sex = $5, relationship_status = $6, photo = $7, notes = $8 WHERE id = $9",
+      "UPDATE customers SET first_name = $1, last_name = $2, birth_date = $3, expiry_date = $4, sex = $5, relationship_status = $6, photo = $7, notes = $8, is_member = $9 WHERE id = $10",
       [
         first_name,
         last_name,
@@ -94,24 +106,26 @@ const updateMember = async (request, response) => {
         relationship_status,
         photo,
         notes,
+        is_member,
         id,
       ]
     );
     response.status(200).send(`User modified with ID: ${id}`);
   } catch (error) {
+    console.log(error)
     response.status(500).json({ error_code: error.code });
   }
 };
 
-const deleteMember = async (request, response) => {
+const deleteCustomer = async (request, response) => {
   try {
     const id = parseInt(request.params.id);
 
-    // Need to delete all check in dates for the member before deleting the member. Cascade is weird.
-    await pool.query("DELETE FROM dates WHERE member_id = $1", [id]);
+    // Need to delete all check in dates for the customer before deleting the customer. Cascade is weird.
+    await pool.query("DELETE FROM dates WHERE customer_id = $1", [id]);
 
     await pool.query(
-      "DELETE FROM couples WHERE member_id_1 = $1 OR member_id_2 = $1",
+      "DELETE FROM couples WHERE customer_id_1 = $1 OR customer_id_2 = $1",
       [id]
     );
 
@@ -123,13 +137,13 @@ const deleteMember = async (request, response) => {
       singles.push(single.id);
     });
 
-    let query = `UPDATE members SET relationship_status = $1 WHERE id IN (${singles.join(
+    let query = `UPDATE customers SET relationship_status = $1 WHERE id IN (${singles.join(
       ","
     )})`;
 
     await pool.query(query, ["Single"]);
 
-    await pool.query("DELETE FROM members WHERE id = $1", [id]);
+    await pool.query("DELETE FROM customers WHERE id = $1", [id]);
     response.status(200).send(`User deleted with ID: ${id}`);
   } catch (error) {
     response.status(500).json({ error_code: error.code });
@@ -139,7 +153,7 @@ const deleteMember = async (request, response) => {
 const getDates = async (request, response) => {
   try {
     const { rows } = await pool.query(
-      "SELECT first_name, last_name, TO_CHAR(entry_date :: DATE, 'dd/mm/yyyy') entry_date FROM dates AS t INNER JOIN members AS m ON t.member_id = m.id ORDER BY entry_date DESC"
+      "SELECT first_name, last_name, TO_CHAR(entry_date :: DATE, 'dd/mm/yyyy') entry_date FROM dates AS t INNER JOIN customers AS m ON t.customer_id = m.id ORDER BY entry_date DESC"
     );
     response.status(200).json(rows);
   } catch (error) {
@@ -152,7 +166,7 @@ const getDate = async (request, response) => {
     const date = request.params.date;
 
     const { rows } = await pool.query(
-      "SELECT first_name, last_name, TO_CHAR(entry_date :: DATE, 'dd/mm/yyyy')  entry_date FROM dates AS t INNER JOIN members AS m ON t.member_id = m.id WHERE entry_date = $1 ORDER BY entry_date DESC",
+      "SELECT first_name, last_name, TO_CHAR(entry_date :: DATE, 'dd/mm/yyyy')  entry_date FROM dates AS t INNER JOIN customers AS m ON t.customer_id = m.id WHERE entry_date = $1 ORDER BY entry_date DESC",
       [date]
     );
     response.status(200).json(rows);
@@ -161,20 +175,20 @@ const getDate = async (request, response) => {
   }
 };
 
-const checkinMember = async (request, response) => {
+const checkinCustomer = async (request, response) => {
   try {
     const id = parseInt(request.params.id);
-    await pool.query(`INSERT INTO dates (member_id) VALUES ($1)`, [id]);
+    await pool.query(`INSERT INTO dates (customer_id) VALUES ($1)`, [id]);
     response.status(201).send(`User checked in today with ID: ${id}`);
   } catch (error) {
     response.status(500).json({ error_code: error.code });
   }
 };
 
-const queryMember = async (request, response) => {
+const queryCustomer = async (request, response) => {
   try {
     let query =
-      "SELECT id, first_name, last_name, sex, relationship_status, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM members ";
+      "SELECT id, first_name, last_name, sex, relationship_status, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date FROM customers ";
 
     const params = request.query;
 
@@ -196,31 +210,31 @@ const queryMember = async (request, response) => {
 
 const createCouple = async (request, response) => {
   try {
-    let { member_1, member_2 } = request.body;
+    let { customer_1, customer_2 } = request.body;
 
     await pool.query(
-      "UPDATE members SET relationship_status = $1 WHERE id IN ($2, $3)",
-      ["Couple", member_1, member_2]
+      "UPDATE customers SET relationship_status = $1 WHERE id IN ($2, $3)",
+      ["Couple", customer_1, customer_2]
     );
 
     await pool.query(
-      "INSERT into couples (member_id_1, member_id_2) VALUES ($1, $2)",
-      [member_1, member_2]
+      "INSERT into couples (customer_id_1, customer_id_2) VALUES ($1, $2)",
+      [customer_1, customer_2]
     );
 
     response
       .status(201)
-      .send(`Users ${member_1} and ${member_2} are now coupled.`);
+      .send(`Users ${customer_1} and ${customer_2} are now coupled.`);
   } catch (error) {
     response.status(500).json({ error_code: error.code });
   }
 };
 
-const getMemberCouple = async (request, response) => {
+const getCustomerCouple = async (request, response) => {
   try {
     const id = parseInt(request.params.id);
     const { rows } = await pool.query(
-      `SELECT * FROM couples WHERE member_id_1 = ${id} OR member_id_2 = ${id}`
+      `SELECT * FROM couples WHERE customer_id_1 = ${id} OR customer_id_2 = ${id}`
     );
     response.status(200).json(rows);
   } catch (error) {
@@ -231,7 +245,7 @@ const getMemberCouple = async (request, response) => {
 const getCouples = async (request, response) => {
   try {
     const { rows } = await pool.query(
-      `SELECT id, member_id_1, member_id_2 FROM couples`
+      `SELECT id, customer_id_1, customer_id_2 FROM couples`
     );
     response.status(200).json(rows);
   } catch (error) {
@@ -241,11 +255,11 @@ const getCouples = async (request, response) => {
 
 const deleteCouple = async (request, response) => {
   try {
-    const { member_1, member_2 } = request.body;
+    const { customer_1, customer_2 } = request.body;
 
     await pool.query(
-      "DELETE FROM couples WHERE (member_id_1 = $1 AND member_id_2 = $2) OR (member_id_1 = $2 AND member_id_2 = $1)",
-      [member_1, member_2]
+      "DELETE FROM couples WHERE (customer_id_1 = $1 AND customer_id_2 = $2) OR (customer_id_1 = $2 AND customer_id_2 = $1)",
+      [customer_1, customer_2]
     );
 
     const { rows } = await correctRelationship()
@@ -256,7 +270,7 @@ const deleteCouple = async (request, response) => {
       singles.push(single.id);
     });
 
-    let query = `UPDATE members SET relationship_status = $1 WHERE id IN (${singles.join(
+    let query = `UPDATE customers SET relationship_status = $1 WHERE id IN (${singles.join(
       ","
     )})`;
 
@@ -269,17 +283,17 @@ const deleteCouple = async (request, response) => {
 };
 
 module.exports = {
-  getMembers,
-  getMemberById,
-  createMember,
-  updateMember,
-  deleteMember,
+  getCustomers,
+  getCustomerById,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
   getDates,
   getDate,
-  queryMember,
-  checkinMember,
+  queryCustomer,
+  checkinCustomer,
   getCouples,
-  getMemberCouple,
+  getCustomerCouple,
   createCouple,
   deleteCouple,
 };

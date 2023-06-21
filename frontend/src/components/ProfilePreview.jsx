@@ -11,18 +11,18 @@ const toBase64 = (arr) => {
     return photo;
   }
 };
-const ProfilePreview = ({ memberID, closeModal }) => {
+const ProfilePreview = ({ customerID, closeModal }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (memberID !== null) {
+    if (customerID !== null) {
       getUser();
     }
   }, []);
 
   const getUser = () => {
     axios
-      .get(`http://localhost:3000/members/${memberID}`)
+      .get(`http://localhost:3000/customers/${customerID}`)
       .then((response) => {
         return response.data;
       })
@@ -41,7 +41,7 @@ const ProfilePreview = ({ memberID, closeModal }) => {
           <div className="pictureContainer">
             {user.photo !== null && toBase64(user.photo.data) !== null ? (
               <img
-                key={user.membership_id}
+                key={user.customer_id}
                 src={`data:image/jpeg;base64,${toBase64(user.photo.data)}`}
                 alt="photo"
               />

@@ -1,7 +1,9 @@
 import {
   Alert,
   Button,
+  Checkbox,
   CircularProgress,
+  FormControlLabel,
   InputLabel,
   Snackbar,
   TextField,
@@ -17,7 +19,7 @@ import axios from "axios";
 import { useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton, textField } from "../MuiStyles";
-import "./CreateMember.css";
+import "./CreateCustomer.css";
 import { convertDate, toBase64 } from "../utils";
 import moment from "moment";
 
@@ -27,7 +29,7 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-const CreateMember = (props) => {
+const CreateCustomer = (props) => {
   const [firstName, setFirstName] = useState(
     props.first_name ? props.first_name : ""
   );
@@ -40,16 +42,21 @@ const CreateMember = (props) => {
   const [exp, setExp] = useState(
     props.expiry_date ? convertDate(props.expiry_date) : null
   );
+  console.log(props.is_member === "Yes");
+  const [isMember, setIsMember] = useState(props.is_member === "Yes");
   const [sex, setSex] = useState(props.sex ? props.sex : "");
   const [pic, setPic] = useState(props.photo ? props.photo : null);
   const [notes, setNotes] = useState(props.notes ? props.notes : "");
   const [webcam, isWebcam] = useState("");
   const [webcamError, isWebcamError] = useState("");
-  const [errorCode, setErrorCode] = useState(0);
+  const [errorMsg, setErrorMsg] = useState(0);
   const [showError, setShowError] = useState(false);
 
   const checkEmpty = () => {
-    return !firstName || !lastName || !dob || !exp || !pic;
+    if (isMember) {
+      return !firstName || !lastName || !dob || !sex || !exp;
+    }
+    return !firstName || !lastName || !dob || !sex;
   };
 
   const calcExpiry = (increment) => {
@@ -59,7 +66,6 @@ const CreateMember = (props) => {
   };
 
   const handleCloseError = () => {
-    console.log(errorCode);
     setShowError(false);
   };
 
@@ -68,17 +74,19 @@ const CreateMember = (props) => {
       first_name: firstName,
       last_name: lastName,
       birth_date: dob,
-      expiry_date: exp,
+      expiry_date: isMember ? exp : null,
       sex: sex,
-      // When a couple is added, update to be Couple
       relationship_status: "Single",
       photo: pic,
       notes: notes ? notes : "",
+      is_member: isMember ? "Yes" : "No",
+      // Add this to the backend:
+      // is_barred: false,
     };
 
     if (props.id) {
       axios
-        .put(`http://localhost:3000/members/${props.id}`, formdata)
+        .put(`http://localhost:3000/customers/${props.id}`, formdata)
         .then((res) => {
           props.closeModal();
         })
@@ -87,12 +95,18 @@ const CreateMember = (props) => {
         });
     } else {
       axios
-        .post("http://localhost:3000/members", formdata)
+        .post("http://localhost:3000/customers", formdata)
         .then((res) => {
           location.reload();
         })
         .catch((e) => {
-          setErrorCode(e.response.data.error_code);
+          if (e.response.status === 400) {
+            setErrorMsg(e.response.data);
+          } else {
+            setErrorMsg(
+              `There was an error on the backend with error code: ${e.data.error_code}`
+            );
+          }
           setShowError(true);
         });
     }
@@ -101,7 +115,7 @@ const CreateMember = (props) => {
   return (
     <>
       <Typography variant="h1">
-        {props.id ? "Edit Member" : "Create Member"}
+        {props.id ? "Edit Customer" : "Create Customer"}
       </Typography>
       <div className="modalContent">
         <form className="formContainer">
@@ -131,30 +145,55 @@ const CreateMember = (props) => {
                 value={dob}
               />
             </LocalizationProvider>
+            <FormControl>
+              <InputLabel variant="filled">Sex</InputLabel>
+              <Select value={sex} onChange={(e) => setSex(e.target.value)}>
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+            <div>
+              <FormControl>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isMember}
+                      onChange={() => setIsMember(!isMember)}
+                    />
+                  }
+                  label="This customer is a member."
+                />
+              </FormControl>
+            </div>
             <div>
               <Typography style={{ marginTop: 0 }}>
                 <strong>Expires in:</strong>
               </Typography>
               <div className="expiryPicker">
                 <Button
+                  disabled={!isMember}
                   variant={exp === calcExpiry(1) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(1))}
                 >
                   1 Months
                 </Button>
                 <Button
+                  disabled={!isMember}
                   variant={exp === calcExpiry(3) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(3))}
                 >
                   3 Months
                 </Button>
                 <Button
+                  disabled={!isMember}
                   variant={exp === calcExpiry(6) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(6))}
                 >
                   6 Months
                 </Button>
                 <Button
+                  disabled={!isMember}
                   variant={exp === calcExpiry(12) ? "contained" : "outlined"}
                   onClick={() => setExp(calcExpiry(12))}
                 >
@@ -167,14 +206,6 @@ const CreateMember = (props) => {
                 )}
               </div>
             </div>
-            <FormControl>
-              <InputLabel variant="filled">Sex</InputLabel>
-              <Select value={sex} onChange={(e) => setSex(e.target.value)}>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
           </div>
           <div className="photoContainer">
             {pic ? (
@@ -236,7 +267,7 @@ const CreateMember = (props) => {
           </div>
           <div className="notesContainer">
             <TextField
-              sx={{ width: "21.5rem" }}
+              sx={{ width: "24.5rem" }}
               multiline
               label="Notes (Optional)"
               placeholder="Notes..."
@@ -251,7 +282,7 @@ const CreateMember = (props) => {
           color="info"
           variant="contained"
         >
-          {props.id ? "Edit Member" : "Create Member"}
+          {props.id ? "Edit Customer" : "Create Customer"}
         </Button>
       </div>
       <Snackbar
@@ -260,13 +291,10 @@ const CreateMember = (props) => {
         open={showError}
         onClose={handleCloseError}
       >
-        <Alert severity="error">
-          There was an error on the back-end. Please contact Amos or Brandon
-          with the error code: {errorCode}
-        </Alert>
+        <Alert severity="error">{errorMsg}</Alert>
       </Snackbar>
     </>
   );
 };
 
-export default CreateMember;
+export default CreateCustomer;

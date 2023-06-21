@@ -3,7 +3,7 @@ import { useTable } from "react-table";
 import "./DataTable.css";
 import "./SearchDates.css";
 
-import "./SearchMembers.css";
+import "./SearchCustomers.css";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Button, Typography } from "@mui/material";
@@ -61,7 +61,7 @@ const SearchDates = () => {
 
   return (
     <div>
-      <Typography variant="h1">Dates & Members</Typography>
+      <Typography variant="h1">Dates & Customers</Typography>
       <div className={`dateInput ${data.length ? "" : "focused"}`}>
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <DatePicker

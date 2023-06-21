@@ -12,18 +12,18 @@ import {
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { useFilters, useTable } from "react-table";
-import "./CheckInMember.css";
+import "./CheckInCustomer.css";
 import "./DataTable.css";
 import Profile from "./Profile";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
 import ProfilePreview from "./ProfilePreview";
 import { modalBox, smallModalBox } from "../MuiStyles";
-import CreateMember from "./CreateMember";
+import CreateCustomer from "./CreateCustomer";
 
 const COLUMNS = [
   {
-    Header: "Member ID",
+    Header: "Customer ID",
     accessor: "id",
     // Filter: FilterText,
   },
@@ -49,7 +49,7 @@ const COLUMNS = [
   },
 ];
 
-const CheckInMember = () => {
+const CheckInCustomer = () => {
   const [id, setId] = useState("");
 
   const [data, setData] = useState([]);
@@ -88,6 +88,7 @@ const CheckInMember = () => {
   };
 
   const handleCheckIn = () => {
+    handleClose();
     axios
       .post(`http://localhost:3000/dates/${id}`)
       .then((res) => {
@@ -103,13 +104,13 @@ const CheckInMember = () => {
     <>
       <Typography variant="h1">Check In</Typography>
       <div className="">
-        <Typography variant="h2">Check in member: </Typography>
+        <Typography variant="h2">Check in customer: </Typography>
         <OutlinedInput
           sx={{ width: "20rem" }}
           id="id"
           type="number"
           variant="outlined"
-          placeholder="Membership ID"
+          placeholder="Customer ID"
           onChange={(e) => setId(e.target.value)}
           value={id}
           endAdornment={<InputAdornment position="end"></InputAdornment>}
@@ -122,7 +123,7 @@ const CheckInMember = () => {
           <CheckCircleIcon />
         </IconButton>
       </div>
-      <Typography variant="h2">Search Member:</Typography>
+      <Typography variant="h2">Search Customer:</Typography>
       <div className="formContainer">
         {/* Replace this with various searchable fields to update state object */}
         <OutlinedInput
@@ -194,11 +195,11 @@ const CheckInMember = () => {
         aria-describedby="Confirm Check In"
       >
         <Box sx={smallModalBox}>
-          <ProfilePreview memberID={id} closeModal={handleClose} />
+          <ProfilePreview customerID={id} closeModal={handleClose} />
           <div className="confirmContainer">
             <Typography>Would you like to check in this user? </Typography>
             <div className="confirmButtons">
-              <Button onClick={handleClose} variant="contained">
+              <Button onClick={handleCheckIn} variant="contained">
                 Confirm
               </Button>
               <Button onClick={handleClose} variant="outlined">
@@ -212,4 +213,4 @@ const CheckInMember = () => {
   );
 };
 
-export default CheckInMember;
+export default CheckInCustomer;

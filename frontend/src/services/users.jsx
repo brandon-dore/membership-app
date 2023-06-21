@@ -1,5 +1,5 @@
 export const getUsers = async () => {
-  fetch("http://localhost:3000/members")
+  fetch("http://localhost:3000/customers")
     .then((response) => {
       return response.text();
     })

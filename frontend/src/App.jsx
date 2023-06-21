@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import SearchDates from "./components/SearchDates";
-import SearchMember from "./components/SearchMembers";
-import CheckInMember from "./components/CheckInMember";
-import CreateMember from "./components/CreateMember";
+import SearchCustomers from "./components/SearchCustomers";
+import CheckInCustomer from "./components/CheckInCustomer";
+import CreateCustomer from "./components/CreateCustomer";
 import "./App.css";
 import Modal from "@mui/material/Modal";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -60,7 +60,7 @@ const darkTheme = createTheme({
 function App() {
   const [users, setUsers] = useState(false);
   const [open, setOpen] = useState(false);
-  const [component, setComponent] = useState("CreateMember");
+  const [component, setComponent] = useState("CreateCustomer");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -70,7 +70,7 @@ function App() {
   }, []);
 
   const getUsers = () => {
-    fetch("http://localhost:3000/members")
+    fetch("http://localhost:3000/customers")
       .then((response) => {
         return response.text();
       })
@@ -96,36 +96,36 @@ function App() {
           className="primaryButton"
           onClick={() => {
             handleOpen();
-            setComponent("SearchMember");
+            setComponent("SearchCustomer");
           }}
         >
           <div className="buttonContent">
             <SearchIcon sx={{ fontSize: "6rem", color: "white" }} />
-            <Typography>Search for Member</Typography>
+            <Typography>Search for Customer</Typography>
           </div>
         </button>
         <button
           className="primaryButton"
           onClick={() => {
             handleOpen();
-            setComponent("CheckInMember");
+            setComponent("CheckInCustomer");
           }}
         >
           <div className="buttonContent">
             <HowToRegIcon sx={{ fontSize: "6rem", color: "white" }} />
-            <Typography>Check-in Member</Typography>
+            <Typography>Check-in Customer</Typography>
           </div>
         </button>
         <button
           className="primaryButton"
           onClick={() => {
             handleOpen();
-            setComponent("CreateMember");
+            setComponent("CreateCustomer");
           }}
         >
           <div className="buttonContent">
             <CreateIcon sx={{ fontSize: "6rem", color: "white" }} />
-            <Typography>Create New Member</Typography>
+            <Typography>Create New Customer</Typography>
           </div>
         </button>
       </div>
@@ -152,10 +152,10 @@ function App() {
           <Box sx={modalBox}>
             {
               {
-                CreateMember: <CreateMember />,
-                CheckInMember: <CheckInMember />,
+                CreateCustomer: <CreateCustomer />,
+                CheckInCustomer: <CheckInCustomer />,
                 SearchDates: <SearchDates />,
-                SearchMember: <SearchMember />,
+                SearchCustomer: <SearchCustomers />,
               }[component]
             }
           </Box>
