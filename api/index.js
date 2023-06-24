@@ -32,11 +32,13 @@ app.get("/", (request, response) => {
 });
 
 app.get("/customers", db.getCustomers);
-app.get("/filter", db.queryCustomer);
+app.get("/customers/names", db.queryCustomer);
 app.get("/customers/:id", db.getCustomerById);
 app.post("/customers", db.createCustomer);
 app.put("/customers/:id", db.updateCustomer);
 app.delete("/customers/:id", db.deleteCustomer);
+app.delete("/customers/:id/ban", db.banCustomer);
+app.delete("/customers/:id/unban", db.unbanCustomer);
 app.post("/dates/:id", db.checkinCustomer);
 
 app.get("/dates", db.getDates);

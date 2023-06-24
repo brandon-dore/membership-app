@@ -11,7 +11,7 @@ const FilterDropdown = ({ column }) => {
   };
 
   return (
-    <Box sx={{ minWidth: 200 }}>
+    <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <Select
           displayEmpty

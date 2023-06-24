@@ -20,6 +20,7 @@ import FilterDates from "./filters/FiterDates";
 import ProfilePreview from "./ProfilePreview";
 import { modalBox, smallModalBox } from "../MuiStyles";
 import CreateCustomer from "./CreateCustomer";
+import { capitalizeFirstLetter } from "../utils";
 
 const COLUMNS = [
   {
@@ -55,7 +56,8 @@ const CheckInCustomer = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const [filters, setFilters] = useState({});
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -65,20 +67,14 @@ const CheckInCustomer = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-  const addFilter = (label, value) => {
-    const temp = filters;
-    if (value === "") {
-      delete temp[label];
-      setFilters(temp);
-      return;
-    }
-    temp[label] = value;
-    setFilters(temp);
-  };
-
   const handleSearch = () => {
     axios
-      .get("http://localhost:3000/filter", { params: filters })
+      .get(`http://localhost:3000/customers/names/`, {
+        params: {
+          first_name: capitalizeFirstLetter(firstName),
+          last_name: capitalizeFirstLetter(lastName),
+        },
+      })
       .then((res) => {
         return res.data;
       })
@@ -92,7 +88,6 @@ const CheckInCustomer = () => {
     axios
       .post(`http://localhost:3000/dates/${id}`)
       .then((res) => {
-        console.log(res);
         handleClose();
       })
       .catch((e) => {
@@ -132,7 +127,7 @@ const CheckInCustomer = () => {
           type="text"
           variant="outlined"
           placeholder="First Name"
-          onChange={(e) => addFilter("first_name", e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
         />
         <OutlinedInput
           sx={{ width: "20rem" }}
@@ -140,7 +135,7 @@ const CheckInCustomer = () => {
           type="text"
           variant="outlined"
           placeholder="Last Name"
-          onChange={(e) => addFilter("last_name", e.target.value)}
+          onChange={(e) => setLastName(e.target.value)}
         />
         <IconButton sx={{ width: "4rem" }} onClick={handleSearch}>
           <Search />

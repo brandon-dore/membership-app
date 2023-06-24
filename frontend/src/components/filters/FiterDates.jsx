@@ -2,6 +2,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { useState } from "react";
+import { Box } from "@mui/material";
 
 const FilterDates = ({ column }) => {
   const [date, setDate] = useState(null);
@@ -9,7 +10,7 @@ const FilterDates = ({ column }) => {
   const { _, setFilter } = column;
 
   return (
-    <span>
+    <Box sx={{ minWidth: 130 }}>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <DatePicker
           clearable
@@ -29,7 +30,7 @@ const FilterDates = ({ column }) => {
           }}
         />
       </LocalizationProvider>
-    </span>
+    </Box>
   );
 };
 

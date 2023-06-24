@@ -9,11 +9,13 @@ CREATE TABLE customers (
   notes VARCHAR(600),
   sex VARCHAR(8),
   relationship_status VARCHAR(8),
+  id_number VARCHAR(50),
   photo BYTEA,
   birth_date DATE,
   registration_date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  expiry_date DATE,
-  is_member VARCHAR(50),
+  is_member BOOLEAN,
+  is_banned BOOLEAN NOT NULL DEFAULT 'false',
+  expiry_date DATE
 );
 
 CREATE TABLE dates (
@@ -38,9 +40,9 @@ INSERT INTO customers (first_name, last_name, expiry_date ) VALUES
   ('William', 'Carr', '2023-07-11'), 
   ('Ginger', 'Calhoun', '2023-09-11');
 
-INSERT INTO customers (first_name, last_name, notes, sex, relationship_status, photo, birth_date, expiry_date ) VALUES
- ('Stephanie', 'Rose', 'comes in on weekends', 'Female', 'Couple', NULL, '1989-01-19', '2023-12-11'),
-  ('Phillip', 'Petersen', NULL, 'Male', 'Single', NULL, '2002-06-26', '2023-09-11'); 
+INSERT INTO customers (first_name, last_name, notes, sex, relationship_status, photo, birth_date, is_member, is_banned, expiry_date ) VALUES
+ ('Stephanie', 'Rose', 'comes in on weekends', 'Female', 'Couple', NULL, '1989-01-19', 'true', 'false','2023-12-11'),
+  ('Phillip', 'Petersen', NULL, 'Male', 'Single', NULL, '2002-06-26', 'false', 'true', '2023-09-11'); 
 
 INSERT INTO couples (customer_id_1, customer_id_2) VALUES
  (1, 4),

@@ -20,7 +20,7 @@ import { useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton, textField } from "../MuiStyles";
 import "./CreateCustomer.css";
-import { convertDate, toBase64 } from "../utils";
+import { convertDate } from "../utils";
 import moment from "moment";
 
 const videoConstraints = {
@@ -42,12 +42,14 @@ const CreateCustomer = (props) => {
   const [exp, setExp] = useState(
     props.expiry_date ? convertDate(props.expiry_date) : null
   );
-  console.log(props.is_member === "Yes");
   const [isMember, setIsMember] = useState(props.is_member === "Yes");
   const [sex, setSex] = useState(props.sex ? props.sex : "");
   const [pic, setPic] = useState(props.photo ? props.photo : null);
   const [notes, setNotes] = useState(props.notes ? props.notes : "");
   const [webcam, isWebcam] = useState("");
+  const [IDNumber, setIDNumber] = useState(
+    props.id_number ? props.id_number : null
+  );
   const [webcamError, isWebcamError] = useState("");
   const [errorMsg, setErrorMsg] = useState(0);
   const [showError, setShowError] = useState(false);
@@ -77,11 +79,10 @@ const CreateCustomer = (props) => {
       expiry_date: isMember ? exp : null,
       sex: sex,
       relationship_status: "Single",
+      id_number: IDNumber,
       photo: pic,
       notes: notes ? notes : "",
       is_member: isMember ? "Yes" : "No",
-      // Add this to the backend:
-      // is_barred: false,
     };
 
     if (props.id) {
@@ -136,6 +137,14 @@ const CreateCustomer = (props) => {
               label="Last Name"
               variant="outlined"
             />
+            <TextField
+              onChange={(e) => setIDNumber(e.target.value)}
+              value={IDNumber}
+              sx={textField}
+              id="id_number"
+              label="ID Number"
+              variant="outlined"
+            />
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DatePicker
                 label="D.O.B."
@@ -143,6 +152,7 @@ const CreateCustomer = (props) => {
                   setDob(e.format("yyyy-MM-DD"));
                 }}
                 value={dob}
+                maxDate={moment().subtract(18, "years")}
               />
             </LocalizationProvider>
             <FormControl>
@@ -210,17 +220,7 @@ const CreateCustomer = (props) => {
           <div className="photoContainer">
             {pic ? (
               <>
-                {pic.hasOwnProperty("data") ? (
-                  <img
-                    src={`data:image/jpeg;base64,${toBase64(pic.data)}`}
-                    alt="Picture"
-                  />
-                ) : (
-                  <img
-                    src={`data:image/jpeg;base64,${atob(pic)}`}
-                    alt="Picture"
-                  />
-                )}
+                <img src={`data:image/jpeg;base64,${pic}`} alt="Picture" />
                 <Button
                   sx={sharpButton}
                   onClick={() => setPic(null)}
@@ -243,9 +243,9 @@ const CreateCustomer = (props) => {
                       {webcam ? (
                         <Button
                           sx={sharpButton}
-                          onClick={() =>
-                            setPic(btoa(getScreenshot().split(",")[1]))
-                          }
+                          onClick={() => {
+                            setPic(getScreenshot().split(",")[1]);
+                          }}
                           variant="contained"
                         >
                           Take Picture
@@ -271,7 +271,7 @@ const CreateCustomer = (props) => {
               multiline
               label="Notes (Optional)"
               placeholder="Notes..."
-              rows={2}
+              rows={4}
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>

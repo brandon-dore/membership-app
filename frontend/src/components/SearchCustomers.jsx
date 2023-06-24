@@ -11,6 +11,7 @@ import FilterDates from "./filters/FiterDates";
 import { Typography } from "@mui/material";
 
 import Box from "@mui/material/Box";
+import { capitalizeFirstLetter } from "../utils";
 const COLUMNS = [
   {
     Header: "Customer ID",
@@ -29,15 +30,29 @@ const COLUMNS = [
   },
   {
     Header: "Date of Birth",
-    accessor: "birth_date",
+    id: "birth_date",
     Filter: FilterDates,
+    accessor: (d) => {
+      if (d.birth_date === null) {
+        return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
+      } else {
+        return d.birth_date;
+      }
+    },
   },
   {
     Header: "Sex",
-    accessor: "sex",
+    id: "sex",
     Filter: FilterDropdown,
     filter: "equals",
     enableColumnFilter: true,
+    accessor: (d) => {
+      if (d.sex === null) {
+        return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
+      } else {
+        return d.sex;
+      }
+    },
     options: [
       { value: undefined, label: "Unknown" },
       { value: "Male", label: "Male" },
@@ -47,9 +62,16 @@ const COLUMNS = [
   },
   {
     Header: "Relationship",
-    accessor: "relationship_status",
+    id: "relationship_status",
     Filter: FilterDropdown,
     filter: "equals",
+    accessor: (d) => {
+      if (d.relationship_status === null) {
+        return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
+      } else {
+        return d.relationship_status;
+      }
+    },
     options: [
       { value: undefined, label: "Unknown" },
       { value: "Single", label: "Single" },
@@ -58,14 +80,41 @@ const COLUMNS = [
   },
   {
     Header: "Member",
-    accessor: "is_member",
+    id: "is_member",
     Filter: FilterDropdown,
     filter: "equals",
     options: [
       { value: undefined, label: "Unknown" },
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
+      { value: "True", label: "True" },
+      { value: "False", label: "False" },
     ],
+    accessor: (d) => {
+      if (d.is_member != null) {
+        const is_member = d.is_member.toString();
+        return capitalizeFirstLetter(is_member);
+      } else {
+        return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
+      }
+    },
+  },
+  {
+    Header: "Banned",
+    id: "is_banned",
+    Filter: FilterDropdown,
+    filter: "equals",
+    options: [
+      { value: undefined, label: "Unknown" },
+      { value: "True", label: "True" },
+      { value: "False", label: "False" },
+    ],
+    accessor: (d) => {
+      if (d.is_banned != null) {
+        const is_banned = d.is_banned.toString();
+        return is_banned.charAt(0).toUpperCase() + is_banned.slice(1);
+      } else {
+        return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
+      }
+    },
   },
 ];
 
@@ -76,7 +125,6 @@ const SearchCustomers = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
-    console.log(data);
     setOpen(false);
     fetchData();
   };

@@ -3,14 +3,6 @@ import { useEffect, useState } from "react";
 import "./ProfilePreview.css";
 import { Typography } from "@mui/material";
 
-const toBase64 = (arr) => {
-  if (arr !== null) {
-    const photo = atob(
-      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
-    );
-    return photo;
-  }
-};
 const ProfilePreview = ({ customerID, closeModal }) => {
   const [user, setUser] = useState(null);
 
@@ -39,10 +31,10 @@ const ProfilePreview = ({ customerID, closeModal }) => {
       {user !== null ? (
         <div className="modalContent">
           <div className="pictureContainer">
-            {user.photo !== null && toBase64(user.photo.data) !== null ? (
+            {user.photo != null ? (
               <img
                 key={user.customer_id}
-                src={`data:image/jpeg;base64,${toBase64(user.photo.data)}`}
+                src={`data:image/jpeg;base64,${user.photo}`}
                 alt="photo"
               />
             ) : (

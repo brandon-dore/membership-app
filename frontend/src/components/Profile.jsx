@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import "./CreateCustomer.css";
 import "./Profile.css";
-import { convertDate, toBase64 } from "../utils";
+import { convertDate } from "../utils";
 import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
 import ProfilePreview from "./ProfilePreview";
 import CreateCustomer from "./CreateCustomer";
@@ -27,8 +27,9 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
   const [couples, setCouples] = useState([]);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
-  const [confirm, setConfirm] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openBan, setOpenBan] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
@@ -49,11 +50,18 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
     getCouples();
   };
 
-  const handleOpenConfirm = () => {
-    setConfirm(true);
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
   };
-  const handleCloseConfirm = () => {
-    setConfirm(false);
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const handleOpenBan = () => {
+    setOpenBan(true);
+  };
+  const handleCloseBan = () => {
+    setOpenBan(false);
   };
 
   const handleClosePreview = () => {
@@ -98,6 +106,25 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
       });
   };
 
+  const banUser = () => {
+    let endpoint = "ban";
+    if (user.is_banned) {
+      endpoint = "unban";
+    }
+    axios
+      .delete(`http://localhost:3000/customers/${customerID}/${endpoint}`)
+      .then((response) => {
+        return response.data;
+      })
+      .then((data) => {
+        getUser();
+        handleCloseBan();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const getCouples = () => {
     axios
       .get(`http://localhost:3000/couples/${customerID}`)
@@ -120,7 +147,6 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
           customer_2: newCoupleID,
         })
         .then((response) => {
-          console.log(response.data);
           setError("");
           setShowPreview(false);
           getCouples();
@@ -152,7 +178,7 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
 
   return (
     <>
-      {user !== null ? (
+      {user != null ? (
         <div>
           <Button
             variant="contained"
@@ -172,7 +198,15 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
             </Button>
             <Button
               variant="outlined"
-              onClick={handleOpenConfirm}
+              onClick={handleOpenBan}
+              sx={{ ...sharpButton, width: "10rem" }}
+              color={user.is_banned ? "info" : "error"}
+            >
+              {user.is_banned ? "Unban Customer" : "Ban Customer"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleOpenDelete}
               sx={{ ...sharpButton, width: "10rem" }}
             >
               Delete Customer
@@ -204,6 +238,8 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
                 <Typography>{convertDate(user.expiry_date)}</Typography>
               </>
             )}
+            {user.id_number && <Typography variant="h2">ID Number</Typography>}
+            <Typography>{user.id_number}</Typography>
             {couples.length !== 0 && (
               <div>
                 <Typography variant="h2">Partners</Typography>
@@ -236,10 +272,10 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
             )}
 
             <div className="photoContainer">
-              {user.photo !== null && toBase64(user.photo.data) !== null ? (
+              {user.photo !== null && user.photo !== null ? (
                 <img
                   key={user.customer_id}
-                  src={`data:image/jpeg;base64,${toBase64(user.photo.data)}`}
+                  src={`data:image/jpeg;base64,${user.photo}`}
                   alt="photo"
                 />
               ) : (
@@ -324,22 +360,47 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
       </Modal>
 
       <Dialog
-        open={confirm}
-        onClose={handleClose}
+        open={openDelete}
+        onClose={handleCloseDelete}
         aria-labelledby="confirm-delete-user"
         aria-describedby="confirm-delete-user"
       >
-        <DialogTitle id="confirm-delete-user">Delete</DialogTitle>
+        <DialogTitle id="confirm-delete-user">Delete User</DialogTitle>
         <DialogContent>
           <DialogContentText id="confirm-delete-user">
-            Would you like to delete this user?
+            <Typography>Would you like to delete this user?</Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleCloseConfirm}>
+          <Button variant="outlined" onClick={handleCloseDelete}>
             Cancel
           </Button>
           <Button variant="outlined" onClick={deleteUser} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openBan}
+        onClose={handleCloseBan}
+        aria-labelledby="confirm-delete-user"
+        aria-describedby="confirm-delete-user"
+      >
+        <DialogTitle id="confirm-delete-user">Ban User</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-delete-user">
+            <Typography>
+              {user != null && user.is_banned
+                ? "Would you like to un-ban this user"
+                : "Would you like to ban this user"}
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleCloseBan}>
+            Cancel
+          </Button>
+          <Button variant="outlined" onClick={banUser} autoFocus>
             Confirm
           </Button>
         </DialogActions>

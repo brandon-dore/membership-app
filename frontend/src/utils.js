@@ -6,11 +6,6 @@ export const convertDate = (date) => {
   return date;
 };
 
-export const toBase64 = (arr) => {
-  if (arr !== null) {
-    const photo = atob(
-      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
-    );
-    return photo;
-  }
+export const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };
