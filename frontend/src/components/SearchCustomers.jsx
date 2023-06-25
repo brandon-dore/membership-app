@@ -178,9 +178,11 @@ const SearchCustomers = () => {
             prepareRow(row);
             return (
               <tr
-                className="contentRow"
+                className={`contentRow ${
+                  row.original.is_banned ? "banned" : ""
+                }`}
                 onClick={(e) => {
-                  setCurrentCustomerID(row.cells[0].value);
+                  setCurrentCustomerID(row.original.id);
                   handleOpen();
                 }}
                 {...row.getRowProps()}

@@ -19,3 +19,11 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: #2b2c34;
 }
+
+tr.banned {
+  background: firebrick;
+}
+
+tr.banned:hover {
+  background: rgb(125, 22, 22);
+}

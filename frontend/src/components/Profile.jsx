@@ -12,7 +12,6 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
-import "./CreateCustomer.css";
 import "./Profile.css";
 import { convertDate } from "../utils";
 import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
@@ -212,77 +211,83 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
               Delete Customer
             </Button>
           </div>
-          <div className="profileContent">
-            <div className="profileTitle">
-              <Typography variant="h1">Profile</Typography>
-              {user.is_member === "Yes" && (
-                <div className="memberLabel">
-                  <Typography variant="h2">
-                    <FavoriteIcon /> Member
-                  </Typography>
-                </div>
-              )}
-            </div>
-
-            <Typography variant="h2">First Name</Typography>
-            <Typography>{user.first_name}</Typography>
-            <Typography variant="h2">Last Name</Typography>
-            <Typography>{user.last_name}</Typography>
-            <Typography variant="h2">D.O.B</Typography>
-            <Typography>
-              {convertDate(user.birth_date ? user.birth_date : "Unknown")}
-            </Typography>
-            {user.expiry_date && (
-              <>
-                <Typography variant="h2">Expiry Date</Typography>
-                <Typography>{convertDate(user.expiry_date)}</Typography>
-              </>
-            )}
-            {user.id_number && <Typography variant="h2">ID Number</Typography>}
-            <Typography>{user.id_number}</Typography>
-            {couples.length !== 0 && (
-              <div>
-                <Typography variant="h2">Partners</Typography>
-                <div className="partnersContainer">
-                  {couples.map((couple) => {
-                    let partner = getPartner(Object.values(couple));
-                    return !nested ? (
-                      <div
-                        className="partnerBox clickable"
-                        onClick={() => {
-                          setOpen(true);
-                          setCoupleID(partner);
-                        }}
-                        key={partner}
-                      >
-                        <Typography className="partnerContent">
-                          {partner}
-                        </Typography>
-                      </div>
-                    ) : (
-                      <div key={partner} className="partnerBox">
-                        <Typography className="partnerContent">
-                          {partner}
-                        </Typography>
-                      </div>
-                    );
-                  })}
-                </div>
+          <div className="profileTitle">
+            <Typography variant="h1">Profile</Typography>
+            {user.is_member === "Yes" && (
+              <div className="memberLabel">
+                <Typography variant="h2">
+                  <FavoriteIcon /> Member
+                </Typography>
               </div>
             )}
-
-            <div className="photoContainer">
-              {user.photo !== null && user.photo !== null ? (
-                <img
-                  key={user.customer_id}
-                  src={`data:image/jpeg;base64,${user.photo}`}
-                  alt="photo"
-                />
-              ) : (
-                <Typography>No Photo Found</Typography>
+          </div>
+          <div className="profileContent">
+            <div className="left">
+              <Typography variant="h2">First Name</Typography>
+              <Typography>{user.first_name}</Typography>
+              <Typography variant="h2">Last Name</Typography>
+              <Typography>{user.last_name}</Typography>
+              <Typography variant="h2">D.O.B</Typography>
+              <Typography>
+                {convertDate(user.birth_date ? user.birth_date : "Unknown")}
+              </Typography>
+              {user.expiry_date && (
+                <>
+                  <Typography variant="h2">Expiry Date</Typography>
+                  <Typography>{convertDate(user.expiry_date)}</Typography>
+                </>
+              )}
+              {user.id_number && (
+                <Typography variant="h2">ID Number</Typography>
+              )}
+              <Typography>{user.id_number}</Typography>
+              {couples.length !== 0 && (
+                <div>
+                  <Typography variant="h2">Partners</Typography>
+                  <div className="partnersContainer">
+                    {couples.map((couple) => {
+                      let partner = getPartner(Object.values(couple));
+                      return !nested ? (
+                        <div
+                          className="partnerBox clickable"
+                          onClick={() => {
+                            setOpen(true);
+                            setCoupleID(partner);
+                          }}
+                          key={partner}
+                        >
+                          <Typography className="partnerContent">
+                            {partner}
+                          </Typography>
+                        </div>
+                      ) : (
+                        <div key={partner} className="partnerBox">
+                          <Typography className="partnerContent">
+                            {partner}
+                          </Typography>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </div>
-            <div className="coupleContainer">
+            <div className="right">
+              <div
+                className={`photoContainer ${
+                  user.photo === null ? "centered" : ""
+                }`}
+              >
+                {user.photo !== null ? (
+                  <img
+                    key={user.customer_id}
+                    src={`data:image/jpeg;base64,${user.photo}`}
+                    alt="photo"
+                  />
+                ) : (
+                  <Typography>No Photo Found</Typography>
+                )}
+              </div>
               <Typography variant="h2">Add Couple</Typography>
               <div className="inputContainer">
                 <OutlinedInput

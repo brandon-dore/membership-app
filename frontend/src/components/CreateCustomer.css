@@ -6,23 +6,29 @@ h1 {
 .inputFields {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .formContainer {
-  position: relative;
-  display: grid;
+  display: flex;
+  flex-direction: row;
   width: 90%;
-  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+
+.left,
+.right {
+  min-width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .photoContainer {
-  position: fixed;
-  left: 60%;
-  top: 19.5%;
   display: flex;
-  width: 29%;
-  aspect-ratio: 1/1;
+  width: 70%;
+  /* height: 50%; */
   align-self: center;
   justify-self: center;
   display: flex;
@@ -31,11 +37,11 @@ h1 {
   border-radius: 0 0 4px 4px;
 }
 
-.notesContainer {
-  position: fixed;
-  top: 75%;
-  left: 60%;
-  width: 50%;
+.smallFields {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .modalContent {
@@ -52,7 +58,7 @@ h1 {
   gap: 0.2rem;
 }
 
-.messageContainer{
+.messageContainer {
   display: flex;
   width: 100%;
   align-items: center;

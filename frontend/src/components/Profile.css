@@ -53,28 +53,57 @@
   cursor: pointer;
 }
 
-.profileContent{
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.profileContent {
+  display: flex;
+  flex-direction: row;
 }
 
-.actionButtons{
-    display: flex;
-    float: right;
-    gap: 1rem;
+.left,
+.right {
+  min-width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.right {
+  align-items: center;
 }
 
-.profileTitle{
+.actionButtons {
+  display: flex;
+  float: right;
+  gap: 1rem;
+}
+
+.profileTitle {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-.memberLabel{
+.memberLabel {
   padding: 0.5rem;
   border-radius: 20px;
   border: 2px solid firebrick;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoContainer {
+  display: flex;
+  width: 50%;
+  aspect-ratio: 1/1;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #b22222;
+  border-radius: 0 0 4px 4px;
+}
+
+.centered {
   display: flex;
   align-items: center;
   justify-content: center;

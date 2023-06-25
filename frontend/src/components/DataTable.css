@@ -1,8 +1,16 @@
-.contentRow{
-    cursor: pointer;
-    transition: 0.2s;
+.contentRow {
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.contentRow:hover{
-    background: #333
+.contentRow:hover {
+  background: #333;
+}
+
+.banned:hover {
+  background-color: firebrick;
+}
+
+.banned {
+  background: firebrick;
 }

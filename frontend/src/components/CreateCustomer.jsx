@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
 import { useState } from "react";
 import Webcam from "react-webcam";
-import { sharpButton, textField } from "../MuiStyles";
+import { sharpButton } from "../MuiStyles";
 import "./CreateCustomer.css";
 import { convertDate } from "../utils";
 import moment from "moment";
@@ -120,158 +120,163 @@ const CreateCustomer = (props) => {
       </Typography>
       <div className="modalContent">
         <form className="formContainer">
-          <div className="inputFields">
-            <TextField
-              onChange={(e) => setFirstName(e.target.value)}
-              value={firstName}
-              sx={textField}
-              id="first_name"
-              label="First Name"
-              variant="outlined"
-            />
-            <TextField
-              onChange={(e) => setLastName(e.target.value)}
-              value={lastName}
-              sx={textField}
-              id="last_name"
-              label="Last Name"
-              variant="outlined"
-            />
-            <TextField
-              onChange={(e) => setIDNumber(e.target.value)}
-              value={IDNumber}
-              sx={textField}
-              id="id_number"
-              label="ID Number"
-              variant="outlined"
-            />
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DatePicker
-                label="D.O.B."
-                onChange={(e) => {
-                  setDob(e.format("yyyy-MM-DD"));
-                }}
-                value={dob}
-                maxDate={moment().subtract(18, "years")}
+          <div className="left">
+            <div className="inputFields">
+              <TextField
+                onChange={(e) => setFirstName(e.target.value)}
+                value={firstName}
+                sx={{ width: "100%" }}
+                id="first_name"
+                label="First Name"
+                variant="outlined"
               />
-            </LocalizationProvider>
-            <FormControl>
-              <InputLabel variant="filled">Sex</InputLabel>
-              <Select value={sex} onChange={(e) => setSex(e.target.value)}>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-            <div>
-              <FormControl>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={isMember}
-                      onChange={() => setIsMember(!isMember)}
-                    />
-                  }
-                  label="This customer is a member."
-                />
-              </FormControl>
-            </div>
-            <div>
-              <Typography style={{ marginTop: 0 }}>
-                <strong>Expires in:</strong>
-              </Typography>
-              <div className="expiryPicker">
-                <Button
-                  disabled={!isMember}
-                  variant={exp === calcExpiry(1) ? "contained" : "outlined"}
-                  onClick={() => setExp(calcExpiry(1))}
-                >
-                  1 Months
-                </Button>
-                <Button
-                  disabled={!isMember}
-                  variant={exp === calcExpiry(3) ? "contained" : "outlined"}
-                  onClick={() => setExp(calcExpiry(3))}
-                >
-                  3 Months
-                </Button>
-                <Button
-                  disabled={!isMember}
-                  variant={exp === calcExpiry(6) ? "contained" : "outlined"}
-                  onClick={() => setExp(calcExpiry(6))}
-                >
-                  6 Months
-                </Button>
-                <Button
-                  disabled={!isMember}
-                  variant={exp === calcExpiry(12) ? "contained" : "outlined"}
-                  onClick={() => setExp(calcExpiry(12))}
-                >
-                  1 Year
-                </Button>
-                {exp && (
-                  <Typography>
-                    <strong>Expires on {convertDate(exp)}</strong>
-                  </Typography>
-                )}
+              <TextField
+                onChange={(e) => setLastName(e.target.value)}
+                value={lastName}
+                sx={{ width: "100%" }}
+                id="last_name"
+                label="Last Name"
+                variant="outlined"
+              />
+              <div className="smallFields">
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <DatePicker
+                    sx={{ width: "50%" }}
+                    label="D.O.B."
+                    onChange={(e) => {
+                      setDob(e.format("yyyy-MM-DD"));
+                    }}
+                    value={dob}
+                    maxDate={moment().subtract(18, "years")}
+                  />
+                </LocalizationProvider>
+                <FormControl sx={{ width: "50%" }}>
+                  <InputLabel>Sex</InputLabel>
+                  <Select value={sex} onChange={(e) => setSex(e.target.value)}>
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
+              <div>
+                <FormControl>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isMember}
+                        onChange={() => setIsMember(!isMember)}
+                      />
+                    }
+                    label="This customer is a member."
+                  />
+                </FormControl>
+              </div>
+              <div>
+                <Typography style={{ marginTop: 0 }}>
+                  <strong>Expires in:</strong>
+                </Typography>
+                <div className="expiryPicker">
+                  <Button
+                    disabled={!isMember}
+                    variant={exp === calcExpiry(1) ? "contained" : "outlined"}
+                    onClick={() => setExp(calcExpiry(1))}
+                  >
+                    1 Months
+                  </Button>
+                  <Button
+                    disabled={!isMember}
+                    variant={exp === calcExpiry(3) ? "contained" : "outlined"}
+                    onClick={() => setExp(calcExpiry(3))}
+                  >
+                    3 Months
+                  </Button>
+                  <Button
+                    disabled={!isMember}
+                    variant={exp === calcExpiry(6) ? "contained" : "outlined"}
+                    onClick={() => setExp(calcExpiry(6))}
+                  >
+                    6 Months
+                  </Button>
+                  <Button
+                    disabled={!isMember}
+                    variant={exp === calcExpiry(12) ? "contained" : "outlined"}
+                    onClick={() => setExp(calcExpiry(12))}
+                  >
+                    1 Year
+                  </Button>
+                  {exp && (
+                    <Typography>
+                      <strong>Expires on {convertDate(exp)}</strong>
+                    </Typography>
+                  )}
+                </div>
+              </div>
+              <TextField
+                onChange={(e) => setIDNumber(e.target.value)}
+                value={IDNumber}
+                sx={{ width: "100%" }}
+                id="id_number"
+                label="ID Number"
+                variant="outlined"
+              />
             </div>
           </div>
-          <div className="photoContainer">
-            {pic ? (
-              <>
-                <img src={`data:image/jpeg;base64,${pic}`} alt="Picture" />
-                <Button
-                  sx={sharpButton}
-                  onClick={() => setPic(null)}
-                  variant="contained"
+          <div className="right">
+            <div className="photoContainer">
+              {pic ? (
+                <>
+                  <img src={`data:image/jpeg;base64,${pic}`} alt="Picture" />
+                  <Button
+                    sx={sharpButton}
+                    onClick={() => setPic(null)}
+                    variant="contained"
+                  >
+                    Retake Picture
+                  </Button>
+                </>
+              ) : (
+                <Webcam
+                  audio={false}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={videoConstraints}
+                  onUserMedia={() => isWebcam(true)}
+                  onUserMediaError={() => isWebcamError(true)}
                 >
-                  Retake Picture
-                </Button>
-              </>
-            ) : (
-              <Webcam
-                audio={false}
-                screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
-                onUserMedia={() => isWebcam(true)}
-                onUserMediaError={() => isWebcamError(true)}
-              >
-                {({ getScreenshot }) => {
-                  return (
-                    <>
-                      {webcam ? (
-                        <Button
-                          sx={sharpButton}
-                          onClick={() => {
-                            setPic(getScreenshot().split(",")[1]);
-                          }}
-                          variant="contained"
-                        >
-                          Take Picture
-                        </Button>
-                      ) : (
-                        <div className="messageContainer">
-                          {webcamError ? (
-                            <Typography>Camera Not Dectected </Typography>
-                          ) : (
-                            <CircularProgress />
-                          )}
-                        </div>
-                      )}
-                    </>
-                  );
-                }}
-              </Webcam>
-            )}
-          </div>
-          <div className="notesContainer">
+                  {({ getScreenshot }) => {
+                    return (
+                      <>
+                        {webcam ? (
+                          <Button
+                            sx={sharpButton}
+                            onClick={() => {
+                              setPic(getScreenshot().split(",")[1]);
+                            }}
+                            variant="contained"
+                          >
+                            Take Picture
+                          </Button>
+                        ) : (
+                          <div className="messageContainer">
+                            {webcamError ? (
+                              <Typography>Camera Not Dectected </Typography>
+                            ) : (
+                              <CircularProgress />
+                            )}
+                          </div>
+                        )}
+                      </>
+                    );
+                  }}
+                </Webcam>
+              )}
+            </div>
             <TextField
               sx={{ width: "24.5rem" }}
               multiline
               label="Notes (Optional)"
               placeholder="Notes..."
-              rows={4}
+              rows={3}
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
