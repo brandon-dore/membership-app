@@ -58,29 +58,11 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [users, setUsers] = useState(false);
   const [open, setOpen] = useState(false);
   const [component, setComponent] = useState("CreateCustomer");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  const getUsers = () => {
-    fetch("http://localhost:3000/customers")
-      .then((response) => {
-        return response.text();
-      })
-      .then((data) => {
-        setUsers(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -147,7 +129,6 @@ function App() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        {/* <p>t</p> */}
         <div>
           <Box sx={modalBox}>
             {
