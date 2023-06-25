@@ -21,6 +21,8 @@ import ProfilePreview from "./ProfilePreview";
 import { modalBox, smallModalBox } from "../MuiStyles";
 import CreateCustomer from "./CreateCustomer";
 import { capitalizeFirstLetter } from "../utils";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
 const COLUMNS = [
   {
@@ -58,6 +60,7 @@ const CheckInCustomer = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -73,6 +76,7 @@ const CheckInCustomer = () => {
         params: {
           first_name: capitalizeFirstLetter(firstName),
           last_name: capitalizeFirstLetter(lastName),
+          birth_date: dob,
         },
       })
       .then((res) => {
@@ -137,6 +141,25 @@ const CheckInCustomer = () => {
           placeholder="Last Name"
           onChange={(e) => setLastName(e.target.value)}
         />
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <DatePicker
+            clearable
+            value={dob || null}
+            onChange={(e) => {
+              console.log(dob);
+              if (e === null) {
+                setDob(undefined);
+              } else {
+                setDob(e.format("yyyy-MM-DD"));
+              }
+            }}
+            slotProps={{
+              actionBar: {
+                actions: ["clear"],
+              },
+            }}
+          />
+        </LocalizationProvider>
         <IconButton sx={{ width: "4rem" }} onClick={handleSearch}>
           <Search />
         </IconButton>

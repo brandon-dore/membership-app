@@ -229,13 +229,21 @@ const queryCustomer = async (request, response) => {
   try {
     const firstName = request.query.first_name;
     const lastName = request.query.last_name;
-    let querySelector = ``;
-    if (firstName !== "" && lastName !== "") {
-      querySelector = `WHERE first_name = '${firstName}' AND last_name = '${lastName}'`;
-    } else if (firstName !== "" && lastName === "") {
-      querySelector = `WHERE first_name = '${firstName}'`;
-    } else if (firstName === "" && lastName !== "") {
-      querySelector = `WHERE last_name = '${lastName}'`;
+    const birth_date = request.query.birth_date
+    let queries = []
+    let querySelector = ``
+    if(firstName){
+      queries.push(`first_name = '${firstName}'`)
+    }
+    if(lastName){
+      queries.push(`last_name = '${lastName}'`)
+    }
+    if(birth_date){
+      queries.push(`birth_date = '${birth_date}'`)
+    }
+    if(queries.length > 0){
+      queries = queries.join(' AND ')
+      querySelector = `WHERE ${queries}`
     }
 
     let query =
