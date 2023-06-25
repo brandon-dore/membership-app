@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const favicon = require("serve-favicon");
 const app = express();
 const db = require("./queries");
 const path = require("path");
@@ -17,6 +18,9 @@ app.use(
     extended: true,
   })
 );
+
+app.use(favicon(path.join(__dirname, "public", "cupid.ico")));
+
 app.use(bodyParser.json({ limit: "100mb" }));
 
 app.use(
