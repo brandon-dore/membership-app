@@ -13,6 +13,7 @@ const FilterDates = ({ column }) => {
     <Box sx={{ minWidth: 130 }}>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <DatePicker
+          format="DD/MM/YYYY"
           clearable
           value={date || null}
           onChange={(e) => {

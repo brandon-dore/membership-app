@@ -323,9 +323,11 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
               nested={true}
             />
             <br />
-            <Button onClick={deleteCouple} variant="contained" color="error">
-              Remove Partner
-            </Button>
+            <div className="removePartnerBtn">
+              <Button onClick={deleteCouple} variant="contained" color="error">
+                Remove Partner
+              </Button>
+            </div>
           </Box>
         </div>
       </Modal>

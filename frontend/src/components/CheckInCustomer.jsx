@@ -11,16 +11,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useMemo, useState } from "react";
-import { useFilters, useTable } from "react-table";
+import { useTable } from "react-table";
 import "./CheckInCustomer.css";
 import "./DataTable.css";
-import Profile from "./Profile";
-import FilterText from "./filters/FilterText";
-import FilterDates from "./filters/FiterDates";
 import ProfilePreview from "./ProfilePreview";
-import { modalBox, smallModalBox } from "../MuiStyles";
-import CreateCustomer from "./CreateCustomer";
-import { capitalizeFirstLetter } from "../utils";
+import { smallModalBox } from "../MuiStyles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
@@ -74,8 +69,8 @@ const CheckInCustomer = () => {
     axios
       .get(`http://localhost:3000/customers/names/`, {
         params: {
-          first_name: capitalizeFirstLetter(firstName),
-          last_name: capitalizeFirstLetter(lastName),
+          first_name: firstName,
+          last_name: lastName,
           birth_date: dob,
         },
       })
@@ -143,6 +138,7 @@ const CheckInCustomer = () => {
         />
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <DatePicker
+            format="DD/MM/YYYY"
             clearable
             value={dob || null}
             onChange={(e) => {

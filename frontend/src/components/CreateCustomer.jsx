@@ -141,6 +141,7 @@ const CreateCustomer = (props) => {
               <div className="smallFields">
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DatePicker
+                    format="DD/MM/YYYY"
                     sx={{ width: "50%" }}
                     label="D.O.B."
                     onChange={(e) => {

@@ -233,10 +233,10 @@ const queryCustomer = async (request, response) => {
     let queries = []
     let querySelector = ``
     if(firstName){
-      queries.push(`first_name = '${firstName}'`)
+      queries.push(`first_name ILIKE '${firstName}'`)
     }
     if(lastName){
-      queries.push(`last_name = '${lastName}'`)
+      queries.push(`last_name ILIKE '${lastName}'`)
     }
     if(birth_date){
       queries.push(`birth_date = '${birth_date}'`)

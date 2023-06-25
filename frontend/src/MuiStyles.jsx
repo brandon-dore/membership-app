@@ -40,3 +40,12 @@ export const sharpButton = {
   borderBottomRightRadius: "0",
   borderBottomLeftRadius: "0",
 };
+
+export const closeButton = {
+  position: "absolute",
+  top: "0",
+  right: "0",
+  margin: "1rem",
+  aspectRatio: "1/1",
+  borderRadius: "50%",
+};

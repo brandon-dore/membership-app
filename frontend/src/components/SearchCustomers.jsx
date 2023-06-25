@@ -91,7 +91,7 @@ const COLUMNS = [
     accessor: (d) => {
       if (d.is_member != null) {
         const is_member = d.is_member.toString();
-        return capitalizeFirstLetter(is_member);
+        return d.is_member ? "Yes" : "No";
       } else {
         return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
       }
@@ -109,8 +109,9 @@ const COLUMNS = [
     ],
     accessor: (d) => {
       if (d.is_banned != null) {
-        const is_banned = d.is_banned.toString();
-        return is_banned.charAt(0).toUpperCase() + is_banned.slice(1);
+        // const is_banned = d.is_banned.toString();
+        // return is_banned.charAt(0).toUpperCase() + is_banned.slice(1);
+        return d.is_banned ? "Yes" : "No";
       } else {
         return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
       }

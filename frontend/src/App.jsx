@@ -8,11 +8,12 @@ import Modal from "@mui/material/Modal";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import cupidImg from "./assets/cupid.png";
-import { modalBox } from "./MuiStyles";
+import { closeButton, modalBox } from "./MuiStyles";
 import SearchIcon from "@mui/icons-material/Search";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CreateIcon from "@mui/icons-material/Create";
 import { Button, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const darkTheme = createTheme({
   palette: {
@@ -131,6 +132,9 @@ function App() {
       >
         <div>
           <Box sx={modalBox}>
+            <Button onClick={handleClose} sx={closeButton}>
+              <CloseIcon />
+            </Button>
             {
               {
                 CreateCustomer: <CreateCustomer />,
