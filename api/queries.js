@@ -32,7 +32,11 @@ const getCustomerById = async (request, response) => {
       "SELECT id, first_name, last_name, sex, relationship_status, id_number, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date, is_member, is_banned, ENCODE(photo,'base64') as photo FROM customers WHERE id = $1",
       [id]
     );
-    response.status(200).json(rows);
+    if(rows.length === 0){
+      response.status(404).send("User not found.")
+    }else{
+      response.status(200).json(rows);
+    }
   } catch (error) {
     response.status(500).json({ error_code: error.code });
   }
