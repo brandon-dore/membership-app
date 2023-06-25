@@ -1,6 +1,6 @@
 import Modal from "@mui/material/Modal";
 import { useEffect, useMemo, useState } from "react";
-import { useFilters, useTable } from "react-table";
+import { useFilters, usePagination, useTable } from "react-table";
 import { modalBox } from "../MuiStyles";
 import "./DataTable.css";
 import Profile from "./Profile";
@@ -8,7 +8,7 @@ import "./SearchCustomers.css";
 import FilterDropdown from "./filters/FilterDropdown";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 import Box from "@mui/material/Box";
 import { capitalizeFirstLetter } from "../utils";
@@ -148,14 +148,29 @@ const SearchCustomers = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-      },
-      useFilters
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 10 },
+    },
+    useFilters,
+    usePagination
+  );
 
   return (
     <div>
@@ -174,7 +189,7 @@ const SearchCustomers = () => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {page.map((row) => {
             prepareRow(row);
             return (
               <tr
@@ -197,6 +212,42 @@ const SearchCustomers = () => {
           })}
         </tbody>
       </table>
+      <div className="pagination">
+        <Button
+          variant="outlined"
+          onClick={() => gotoPage(0)}
+          disabled={!canPreviousPage}
+        >
+          {"<<"}
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
+          {"<"}
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
+          {">"}
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+        >
+          {">>"}
+        </Button>
+        <Typography>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </Typography>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}

@@ -3,8 +3,14 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const db = require("./queries");
+const path = require("path");
 const port = 3000;
-const allowedOrigins = ["http://localhost:5173", "http://localhost:4173"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:4173",
+  "http://localhost:8000",
+  "http://localhost:3000",
+];
 
 app.use(
   bodyParser.urlencoded({
@@ -27,8 +33,11 @@ app.use(
   })
 );
 
-app.get("/", (request, response) => {
-  response.json({ info: "Node.js, Express, and Postgres API" });
+app.use(express.static(path.join(__dirname, "dist")));
+
+// Build files and move them to the AI folder before running this :)
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.get("/customers", db.getCustomers);

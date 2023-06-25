@@ -27,3 +27,7 @@ tr.banned {
 tr.banned:hover {
   background: rgb(125, 22, 22);
 }
+
+.pagination {
+  margin: 10px 0px;
+}

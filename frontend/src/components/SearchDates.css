@@ -24,6 +24,8 @@
 .tableContainer {
   height: fit-content;
   max-height: 30rem;
-  overflow: hidden;
-  overflow-y: auto;
+}
+
+.pagination {
+  margin: 10px 0px;
 }

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useTable } from "react-table";
+import { usePagination, useTable } from "react-table";
 import "./DataTable.css";
 import "./SearchDates.css";
 
@@ -53,11 +53,28 @@ const SearchDates = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    {
       columns,
       data,
-    });
+      initialState: { pageIndex: 0, pageSize: 9 },
+    },
+    usePagination
+  );
 
   return (
     <div>
@@ -106,7 +123,7 @@ const SearchDates = () => {
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
+              {page.map((row) => {
                 prepareRow(row);
                 return (
                   <tr className="contentRow" {...row.getRowProps()}>
@@ -127,9 +144,49 @@ const SearchDates = () => {
         </div>
       )}
       {data.length !== 0 && (
-        <Typography>
-          Total visitors in search: <strong>{data.length}</strong>
-        </Typography>
+        <div>
+          <div>
+            <Typography>
+              Total visitors in search: <strong>{data.length}</strong>
+            </Typography>
+          </div>
+          <div className="pagination">
+            <Button
+              variant="outlined"
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+            >
+              {"<<"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+            >
+              {"<"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+            >
+              {">"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              {">>"}
+            </Button>
+            <Typography>
+              Page{" "}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>
+            </Typography>
+          </div>
+        </div>
       )}
     </div>
   );
