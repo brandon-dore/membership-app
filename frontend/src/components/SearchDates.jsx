@@ -45,10 +45,10 @@ const SearchDates = () => {
     axios
       .get(URL)
       .then((response) => {
-        return response.text();
+        return response.data;
       })
       .then((data) => {
-        setData(JSON.parse(data));
+        setData(data);
       })
       .catch((e) => {
         setError(true);

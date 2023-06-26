@@ -43,7 +43,6 @@ const COLUMNS = [
   },
   {
     Header: "Expiry Date",
-    accessor: "expiry_date",
     accessor: (d) => {
       if (d.expiry_date != null) {
         // const is_banned = d.is_banned.toString();

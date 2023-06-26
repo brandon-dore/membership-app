@@ -139,7 +139,7 @@ const SearchCustomers = () => {
     axios
       .get("http://localhost:3000/customers")
       .then((response) => {
-        return response.text();
+        return response.data;
       })
       .then((data) => {
         setData(data);
