@@ -71,7 +71,13 @@ const CreateCustomer = (props) => {
     setShowError(false);
   };
 
-  const handleSubmit = () => {
+  const handleCheckin = (id) => {
+    axios.post(`http://localhost:3000/dates/${id}`).catch((e) => {
+      console.log(e);
+    });
+  };
+
+  const handleSubmit = (checkin = false) => {
     const formdata = {
       first_name: firstName,
       last_name: lastName,
@@ -89,6 +95,9 @@ const CreateCustomer = (props) => {
       axios
         .put(`http://localhost:3000/customers/${props.id}`, formdata)
         .then((res) => {
+          if (checkin) {
+            handleCheckin(props.id);
+          }
           props.closeModal();
         })
         .catch((e) => {
@@ -98,6 +107,11 @@ const CreateCustomer = (props) => {
       axios
         .post("http://localhost:3000/customers", formdata)
         .then((res) => {
+          if (checkin) {
+            let id = Number(res.data.split(": ")[1]);
+            console.log(id);
+            // handleCheckin(id);
+          }
           location.reload();
         })
         .catch((e) => {
@@ -286,14 +300,24 @@ const CreateCustomer = (props) => {
             />
           </div>
         </form>
-        <Button
-          disabled={checkEmpty()}
-          onClick={handleSubmit}
-          color="info"
-          variant="contained"
-        >
-          {props.id ? "Edit Customer" : "Create Customer"}
-        </Button>
+        <div className="submitButtons">
+          <Button
+            disabled={checkEmpty()}
+            onClick={() => handleSubmit(false)}
+            color="info"
+            variant="contained"
+          >
+            {props.id ? "Edit Customer" : "Create Customer"}
+          </Button>
+          <Button
+            disabled={checkEmpty()}
+            onClick={() => handleSubmit(true)}
+            color="info"
+            variant="contained"
+          >
+            {props.id ? "Edit and Check-In" : "Create and Check-In"}
+          </Button>
+        </div>
       </div>
       <Snackbar
         sx={{ position: "absolute" }}

@@ -74,3 +74,8 @@ h1 {
   top: 3.8rem;
   left: -3.8rem;
 }
+
+.submitButtons{
+  display: flex;
+  gap: 2rem;
+}

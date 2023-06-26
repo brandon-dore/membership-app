@@ -175,11 +175,10 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
   };
 
   const handleCheckIn = () => {
-    closeModal();
     axios
       .post(`http://localhost:3000/dates/${customerID}`)
       .then((res) => {
-        handleClose();
+        closeModal();
       })
       .catch((e) => {
         console.log(e);
