@@ -39,6 +39,7 @@ export const sharpButton = {
   borderTopLeftRadius: "0",
   borderBottomRightRadius: "0",
   borderBottomLeftRadius: "0",
+  width: "10rem",
 };
 
 export const closeButton = {

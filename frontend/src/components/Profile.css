@@ -101,6 +101,7 @@
   flex-direction: column;
   border: 1px solid #b22222;
   border-radius: 0 0 4px 4px;
+  transform: rotate(-90deg);
 }
 
 .centered {
@@ -109,9 +110,13 @@
   justify-content: center;
 }
 
-.removePartnerBtn{
+.removePartnerBtn {
   position: fixed;
   bottom: 0;
   left: 0;
   margin: 1rem;
+}
+
+.photoMessage {
+  transform: rotate(90deg);
 }

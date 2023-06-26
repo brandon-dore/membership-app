@@ -228,13 +228,15 @@ const CreateCustomer = (props) => {
               {pic ? (
                 <>
                   <img src={`data:image/jpeg;base64,${pic}`} alt="Picture" />
-                  <Button
-                    sx={sharpButton}
-                    onClick={() => setPic(null)}
-                    variant="contained"
-                  >
-                    Retake Picture
-                  </Button>
+                  <div className="actionButton">
+                    <Button
+                      sx={sharpButton}
+                      onClick={() => setPic(null)}
+                      variant="contained"
+                    >
+                      Retake Picture
+                    </Button>
+                  </div>
                 </>
               ) : (
                 <Webcam
@@ -248,15 +250,17 @@ const CreateCustomer = (props) => {
                     return (
                       <>
                         {webcam ? (
-                          <Button
-                            sx={sharpButton}
-                            onClick={() => {
-                              setPic(getScreenshot().split(",")[1]);
-                            }}
-                            variant="contained"
-                          >
-                            Take Picture
-                          </Button>
+                          <div className="actionButton">
+                            <Button
+                              sx={sharpButton}
+                              onClick={() => {
+                                setPic(getScreenshot().split(",")[1]);
+                              }}
+                              variant="contained"
+                            >
+                              Take Picture
+                            </Button>
+                          </div>
                         ) : (
                           <div className="messageContainer">
                             {webcamError ? (

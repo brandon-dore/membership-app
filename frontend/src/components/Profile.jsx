@@ -285,7 +285,9 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
                     alt="photo"
                   />
                 ) : (
-                  <Typography>No Photo Found</Typography>
+                  <div className="photoMessage">
+                    <Typography>No Photo Found</Typography>
+                  </div>
                 )}
               </div>
               <Typography variant="h2">Add Couple</Typography>
