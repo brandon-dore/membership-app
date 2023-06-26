@@ -331,6 +331,18 @@ const deleteCouple = async (request, response) => {
   }
 };
 
+const getMaxId = async (request, response) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT id FROM customers ORDER BY id DESC LIMIT 1;"
+    );
+    response.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ error_code: error.code });
+  }
+};
+
 module.exports = {
   getCustomers,
   getCustomerById,
@@ -347,4 +359,5 @@ module.exports = {
   getCustomerCouple,
   createCouple,
   deleteCouple,
+  getMaxId,
 };

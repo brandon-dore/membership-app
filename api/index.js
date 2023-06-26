@@ -49,6 +49,7 @@ app.get("/", function (req, res) {
 app.get("/customers", db.getCustomers);
 app.get("/customers/names", db.queryCustomer);
 app.get("/customers/:id", db.getCustomerById);
+app.get("/maxid", db.getMaxId);
 app.post("/customers", db.createCustomer);
 app.put("/customers/:id", db.updateCustomer);
 app.delete("/customers/:id", db.deleteCustomer);

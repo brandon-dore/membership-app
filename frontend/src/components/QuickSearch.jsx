@@ -138,48 +138,53 @@ const QuickSearch = () => {
       <br />
       <Typography variant="h2">Quick Search:</Typography>
       <div className="formContainer">
-        <OutlinedInput
-          sx={{ width: "20rem" }}
-          id="first_name"
-          type="text"
-          variant="outlined"
-          placeholder="First Name"
-          onChange={(e) => setFirstName(e.target.value)}
-          value={firstName}
-          onKeyDown={(e) => handleKeyDown(e)}
-        />
-        <OutlinedInput
-          sx={{ width: "20rem" }}
-          id="last_name"
-          type="text"
-          variant="outlined"
-          placeholder="Last Name"
-          onChange={(e) => setLastName(e.target.value)}
-          value={lastName}
-          onKeyDown={(e) => handleKeyDown(e)}
-        />
-        <LocalizationProvider dateAdapter={AdapterMoment}>
-          <DatePicker
-            format="DD/MM/YYYY"
-            clearable
-            value={dob || null}
-            onChange={(e) => {
-              if (e === null) {
-                setDob(undefined);
-              } else {
-                setDob(e.format("yyyy-MM-DD"));
-              }
-            }}
-            slotProps={{
-              actionBar: {
-                actions: ["clear"],
-              },
-            }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+        >
+          <OutlinedInput
+            sx={{ width: "20rem" }}
+            id="first_name"
+            type="text"
+            variant="outlined"
+            placeholder="First Name"
+            onChange={(e) => setFirstName(e.target.value)}
+            value={firstName}
           />
-        </LocalizationProvider>
-        <IconButton sx={{ width: "4rem" }} onClick={handleSearch}>
-          <Search />
-        </IconButton>
+          <OutlinedInput
+            sx={{ width: "20rem" }}
+            id="last_name"
+            type="text"
+            variant="outlined"
+            placeholder="Last Name"
+            onChange={(e) => setLastName(e.target.value)}
+            value={lastName}
+          />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DatePicker
+              format="DD/MM/YYYY"
+              clearable
+              value={dob || null}
+              onChange={(e) => {
+                if (e === null) {
+                  setDob(undefined);
+                } else {
+                  setDob(e.format("yyyy-MM-DD"));
+                }
+              }}
+              slotProps={{
+                actionBar: {
+                  actions: ["clear"],
+                },
+              }}
+            />
+          </LocalizationProvider>
+          <IconButton sx={{ width: "4rem" }} type="submit">
+            <Search />
+          </IconButton>
+        </form>
       </div>
       <br />
 

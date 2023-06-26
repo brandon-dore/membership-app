@@ -20,7 +20,7 @@ const FilterDropdown = ({ column }) => {
         >
           {options.map((opt) => {
             return (
-              <MenuItem key={opt.value} value={opt.value}>
+              <MenuItem key={`${opt.value}${id}`} value={opt.value}>
                 {opt.label}
               </MenuItem>
             );

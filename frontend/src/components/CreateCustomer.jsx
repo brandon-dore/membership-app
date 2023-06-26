@@ -16,7 +16,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton } from "../MuiStyles";
 import "./CreateCustomer.css";
@@ -50,9 +50,14 @@ const CreateCustomer = (props) => {
   const [IDNumber, setIDNumber] = useState(
     props.id_number ? props.id_number : null
   );
+  const [maxID, setMaxID] = useState(null);
   const [webcamError, isWebcamError] = useState("");
   const [errorMsg, setErrorMsg] = useState(0);
   const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    getMaxID();
+  });
 
   const checkEmpty = () => {
     if (isMember) {
@@ -62,8 +67,15 @@ const CreateCustomer = (props) => {
   };
 
   const calcExpiry = (increment) => {
-    let date = new Date();
-    let expiryDate = new Date(date.setMonth(date.getMonth() + increment));
+    let expiryDate;
+    if (props.expiry_date) {
+      expiryDate = moment(`${props.expiry_date} `, "DD/MM/YYYY").add(
+        increment,
+        "months"
+      );
+    } else {
+      expiryDate = moment().add(increment, "months");
+    }
     return expiryDate.toISOString().split("T")[0];
   };
 
@@ -75,6 +87,21 @@ const CreateCustomer = (props) => {
     axios.post(`http://localhost:3000/dates/${id}`).catch((e) => {
       console.log(e);
     });
+  };
+
+  const getMaxID = () => {
+    axios
+      .get(`http://localhost:3000/maxid`)
+      .then((response) => {
+        return response.data;
+      })
+      .then((data) => {
+        console.log(data);
+        setMaxID(data[0].id + 1);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const handleSubmit = (checkin = false) => {
@@ -106,11 +133,9 @@ const CreateCustomer = (props) => {
     } else {
       axios
         .post("http://localhost:3000/customers", formdata)
-        .then((res) => {
+        .then(() => {
           if (checkin) {
-            let id = Number(res.data.split(": ")[1]);
-            console.log(id);
-            // handleCheckin(id);
+            handleCheckin(maxID);
           }
           location.reload();
         })
@@ -187,10 +212,14 @@ const CreateCustomer = (props) => {
                   />
                 </FormControl>
               </div>
-              <div>
-                <Typography style={{ marginTop: 0 }}>
-                  <strong>Expires in:</strong>
+              {!props.id && isMember && (
+                <Typography>
+                  Member ID: <strong>{maxID}</strong>
                 </Typography>
+              )}
+
+              <div>
+                <Typography style={{ marginTop: 0 }}>Expires in: </Typography>
                 <div className="expiryPicker">
                   <Button
                     disabled={!isMember}
@@ -222,7 +251,7 @@ const CreateCustomer = (props) => {
                   </Button>
                   {exp && (
                     <Typography>
-                      <strong>Expires on {convertDate(exp)}</strong>
+                      Expires on: <strong>{convertDate(exp)}</strong>
                     </Typography>
                   )}
                 </div>

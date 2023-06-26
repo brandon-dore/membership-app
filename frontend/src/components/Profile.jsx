@@ -253,6 +253,12 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
           </div>
           <div className="profileContent">
             <div className="left">
+              {user.is_member && (
+                <>
+                  <Typography variant="h2">Member ID</Typography>
+                  <Typography>{user.id}</Typography>
+                </>
+              )}
               <Typography variant="h2">First Name</Typography>
               <Typography>{user.first_name}</Typography>
               <Typography variant="h2">Last Name</Typography>

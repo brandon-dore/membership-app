@@ -1,5 +1,2 @@
-- Expiry dates adds onto valid dates
-- Add id to profile page
-- Add (to-be) id to create form
-- Check exp coours fixed
-- Fix create & checkin button
+- Check exp coours fixed???
+- Fix ID serial WITH (ALTER SEQUENCE customers_id_seq RESTART WITH 100;)
