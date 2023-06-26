@@ -30,17 +30,17 @@ const ProfilePreview = ({ customerID, closeModal }) => {
     <>
       {user != null ? (
         <div className="modalContent">
-          <div className="pictureContainer">
-            {user.photo != null ? (
+          {user.photo != null ? (
+            <div className="photoContainer">
               <img
                 key={user.customer_id}
                 src={`data:image/jpeg;base64,${user.photo}`}
                 alt="photo"
               />
-            ) : (
-              <Typography>No Photo Found</Typography>
-            )}
-          </div>
+            </div>
+          ) : (
+            <Typography>No Photo Found</Typography>
+          )}
           <div className="namesContainer">
             {user.is_banned ? (
               <>

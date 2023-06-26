@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchDates from "./components/SearchDates";
 import SearchCustomers from "./components/SearchCustomers";
-import CheckInCustomer from "./components/CheckInCustomer";
 import CreateCustomer from "./components/CreateCustomer";
 import "./App.css";
 import Modal from "@mui/material/Modal";
@@ -14,6 +13,8 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CreateIcon from "@mui/icons-material/Create";
 import { Button, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchMenu from "./components/SearchMenu";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const darkTheme = createTheme({
   palette: {
@@ -79,12 +80,12 @@ function App() {
           className="primaryButton"
           onClick={() => {
             handleOpen();
-            setComponent("SearchCustomer");
+            setComponent("SearchDates");
           }}
         >
           <div className="buttonContent">
-            <SearchIcon sx={{ fontSize: "6rem", color: "white" }} />
-            <Typography>Search for Customer</Typography>
+            <CalendarMonthIcon sx={{ fontSize: "6rem", color: "white" }} />
+            <Typography>Check-In Dates</Typography>
           </div>
         </button>
         <button
@@ -95,8 +96,8 @@ function App() {
           }}
         >
           <div className="buttonContent">
-            <HowToRegIcon sx={{ fontSize: "6rem", color: "white" }} />
-            <Typography>Check-in Customer</Typography>
+            <SearchIcon sx={{ fontSize: "6rem", color: "white" }} />
+            <Typography>Search for Customer</Typography>
           </div>
         </button>
         <button
@@ -112,18 +113,6 @@ function App() {
           </div>
         </button>
       </div>
-      <div className="secondaryButtons">
-        <Button
-          variant="contained"
-          className="secondaryButton"
-          onClick={() => {
-            handleOpen();
-            setComponent("SearchDates");
-          }}
-        >
-          Check-In Dates
-        </Button>
-      </div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -138,7 +127,7 @@ function App() {
             {
               {
                 CreateCustomer: <CreateCustomer />,
-                CheckInCustomer: <CheckInCustomer />,
+                CheckInCustomer: <SearchMenu />,
                 SearchDates: <SearchDates />,
                 SearchCustomer: <SearchCustomers />,
               }[component]

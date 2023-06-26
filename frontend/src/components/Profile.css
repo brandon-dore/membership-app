@@ -82,13 +82,17 @@
   gap: 2rem;
 }
 
-.memberLabel {
+.profileAnnotation {
   padding: 0.5rem;
   border-radius: 20px;
   border: 2px solid firebrick;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.member{
+  border-color: #29B6F6 ;
 }
 
 .photoContainer {

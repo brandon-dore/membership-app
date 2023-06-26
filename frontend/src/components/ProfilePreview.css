@@ -8,6 +8,11 @@
   box-sizing: border-box;
   border: 1px solid #0088d1;
   border-radius: 0 0 4px 4px;
+  transform: rotate(-90deg);
+}
+
+.photoMessage {
+  transform: rotate(90deg);
 }
 
 .namesContainer {

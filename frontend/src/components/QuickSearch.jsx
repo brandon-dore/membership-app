@@ -3,9 +3,7 @@ import Search from "@mui/icons-material/Search";
 import {
   Alert,
   Box,
-  Button,
   IconButton,
-  InputAdornment,
   Modal,
   OutlinedInput,
   Typography,
@@ -13,12 +11,12 @@ import {
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { useTable } from "react-table";
-import "./CheckInCustomer.css";
+import "./QuickSearch.css";
 import "./DataTable.css";
-import ProfilePreview from "./ProfilePreview";
-import { smallModalBox } from "../MuiStyles";
+import { modalBox } from "../MuiStyles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import Profile from "./Profile";
 
 const checkDate = (d) => {
   let today = Date.now();
@@ -64,7 +62,7 @@ const COLUMNS = [
   },
 ];
 
-const CheckInCustomer = () => {
+const QuickSearch = () => {
   const [id, setId] = useState("");
 
   const [data, setData] = useState([]);
@@ -83,7 +81,14 @@ const CheckInCustomer = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
+  const handleKeyDown = (e) => {
+    if (e.code === "Enter") {
+      handleSearch();
+    }
+  };
+
   const handleSearch = () => {
+    console.log("e");
     axios
       .get(`http://localhost:3000/customers/names/`, {
         params: {
@@ -102,45 +107,37 @@ const CheckInCustomer = () => {
         setError(true);
       });
   };
-
-  const handleCheckIn = () => {
-    handleClose();
-    axios
-      .post(`http://localhost:3000/dates/${id}`)
-      .then((res) => {
-        handleClose();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   return (
     <>
-      <Typography variant="h1">Check In</Typography>
-      <div className="">
-        <Typography variant="h2">Check in customer: </Typography>
-        <OutlinedInput
-          sx={{ width: "20rem" }}
-          id="id"
-          type="number"
-          variant="outlined"
-          placeholder="Customer ID"
-          onChange={(e) => setId(e.target.value)}
-          value={id}
-          endAdornment={<InputAdornment position="end"></InputAdornment>}
-        />
-        <IconButton
-          sx={{ width: "3rem", aspectRatio: "1/1" }}
-          disabled={!id}
-          onClick={handleOpen}
+      <div>
+        <Typography variant="h2">Enter ID: </Typography>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleOpen();
+          }}
         >
-          <CheckCircleIcon />
-        </IconButton>
+          <OutlinedInput
+            sx={{ width: "20rem" }}
+            id="id"
+            type="number"
+            variant="outlined"
+            placeholder="Customer ID"
+            onChange={(e) => setId(e.target.value)}
+            value={id}
+          />
+          <IconButton
+            sx={{ width: "3rem", aspectRatio: "1/1" }}
+            disabled={!id}
+            onClick={handleOpen}
+          >
+            <CheckCircleIcon />
+          </IconButton>
+        </form>
       </div>
-      <Typography variant="h2">Search Customer:</Typography>
+      <br />
+      <Typography variant="h2">Quick Search:</Typography>
       <div className="formContainer">
-        {/* Replace this with various searchable fields to update state object */}
         <OutlinedInput
           sx={{ width: "20rem" }}
           id="first_name"
@@ -148,6 +145,8 @@ const CheckInCustomer = () => {
           variant="outlined"
           placeholder="First Name"
           onChange={(e) => setFirstName(e.target.value)}
+          value={firstName}
+          onKeyDown={(e) => handleKeyDown(e)}
         />
         <OutlinedInput
           sx={{ width: "20rem" }}
@@ -156,6 +155,8 @@ const CheckInCustomer = () => {
           variant="outlined"
           placeholder="Last Name"
           onChange={(e) => setLastName(e.target.value)}
+          value={lastName}
+          onKeyDown={(e) => handleKeyDown(e)}
         />
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <DatePicker
@@ -163,7 +164,6 @@ const CheckInCustomer = () => {
             clearable
             value={dob || null}
             onChange={(e) => {
-              console.log(dob);
               if (e === null) {
                 setDob(undefined);
               } else {
@@ -229,29 +229,19 @@ const CheckInCustomer = () => {
           </tbody>
         </table>
       )}
+
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="Confirm Check In"
         aria-describedby="Confirm Check In"
       >
-        <Box sx={smallModalBox}>
-          <ProfilePreview customerID={id} closeModal={handleClose} />
-          <div className="confirmContainer">
-            <Typography>Would you like to check in this user? </Typography>
-            <div className="confirmButtons">
-              <Button onClick={handleCheckIn} variant="contained">
-                Confirm
-              </Button>
-              <Button onClick={handleClose} variant="outlined">
-                Cancel
-              </Button>
-            </div>
-          </div>
+        <Box sx={modalBox}>
+          <Profile customerID={id} closeModal={handleClose} />
         </Box>
       </Modal>
     </>
   );
 };
 
-export default CheckInCustomer;
+export default QuickSearch;

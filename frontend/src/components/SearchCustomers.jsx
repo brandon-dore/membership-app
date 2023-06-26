@@ -85,8 +85,8 @@ const COLUMNS = [
     filter: "equals",
     options: [
       { value: undefined, label: "Unknown" },
-      { value: "True", label: "True" },
-      { value: "False", label: "False" },
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
     ],
     accessor: (d) => {
       if (d.is_member != null) {
@@ -104,13 +104,11 @@ const COLUMNS = [
     filter: "equals",
     options: [
       { value: undefined, label: "Unknown" },
-      { value: "True", label: "True" },
-      { value: "False", label: "False" },
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
     ],
     accessor: (d) => {
       if (d.is_banned != null) {
-        // const is_banned = d.is_banned.toString();
-        // return is_banned.charAt(0).toUpperCase() + is_banned.slice(1);
         return d.is_banned ? "Yes" : "No";
       } else {
         return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
@@ -183,7 +181,6 @@ const SearchCustomers = () => {
         </Alert>
       ) : (
         <>
-          <Typography variant="h1">Search for Customer</Typography>
           <table {...getTableProps()}>
             <thead>
               {headerGroups.map((headerGroup) => (

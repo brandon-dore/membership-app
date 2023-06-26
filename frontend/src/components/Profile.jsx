@@ -18,6 +18,7 @@ import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
 import ProfilePreview from "./ProfilePreview";
 import CreateCustomer from "./CreateCustomer";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 const Profile = ({ customerID, closeModal, nested = false }) => {
   const [user, setUser] = useState(null);
@@ -98,7 +99,8 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
       })
       .then((data) => {
         setUser(data[0]);
-        handleClosePreview();
+        handleCloseDelete();
+        closeModal();
       })
       .catch((e) => {
         console.log(e);
@@ -164,11 +166,24 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
         })
         .then((response) => {
           handleClose();
+          closeModal();
         })
         .catch((error) => {
           console.log(error);
         });
     }
+  };
+
+  const handleCheckIn = () => {
+    closeModal();
+    axios
+      .post(`http://localhost:3000/dates/${customerID}`)
+      .then((res) => {
+        handleClose();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const getPartner = (idArr) => {
@@ -187,6 +202,14 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
             Back
           </Button>
           <div className="actionButtons">
+            <Button
+              variant="contained"
+              onClick={handleCheckIn}
+              sx={{ ...sharpButton, width: "10rem" }}
+              color="info"
+            >
+              Check-In Customer
+            </Button>
             <Button
               variant="outlined"
               onClick={handleOpenEdit}
@@ -213,12 +236,20 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
           </div>
           <div className="profileTitle">
             <Typography variant="h1">Profile</Typography>
-            {user.is_member === "Yes" && (
-              <div className="memberLabel">
+            {user.is_banned ? (
+              <div className="profileAnnotation">
                 <Typography variant="h2">
-                  <FavoriteIcon /> Member
+                  <RemoveCircleIcon /> Banned
                 </Typography>
               </div>
+            ) : (
+              user.is_member && (
+                <div className="profileAnnotation member">
+                  <Typography variant="h2">
+                    <FavoriteIcon /> Member
+                  </Typography>
+                </div>
+              )
             )}
           </div>
           <div className="profileContent">
