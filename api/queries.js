@@ -32,9 +32,9 @@ const getCustomerById = async (request, response) => {
       "SELECT id, first_name, last_name, sex, relationship_status, id_number, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date, is_member, is_banned, ENCODE(photo,'base64') as photo FROM customers WHERE id = $1",
       [id]
     );
-    if(rows.length === 0){
-      response.status(404).send("User not found.")
-    }else{
+    if (rows.length === 0) {
+      response.status(404).send("User not found.");
+    } else {
       response.status(200).json(rows);
     }
   } catch (error) {
@@ -229,21 +229,21 @@ const queryCustomer = async (request, response) => {
   try {
     const firstName = request.query.first_name;
     const lastName = request.query.last_name;
-    const birth_date = request.query.birth_date
-    let queries = []
-    let querySelector = ``
-    if(firstName){
-      queries.push(`first_name ILIKE '${firstName}'`)
+    const birth_date = request.query.birth_date;
+    let queries = [];
+    let querySelector = ``;
+    if (firstName) {
+      queries.push(`first_name ILIKE '${firstName}'`);
     }
-    if(lastName){
-      queries.push(`last_name ILIKE '${lastName}'`)
+    if (lastName) {
+      queries.push(`last_name ILIKE '${lastName}'`);
     }
-    if(birth_date){
-      queries.push(`birth_date = '${birth_date}'`)
+    if (birth_date) {
+      queries.push(`birth_date = '${birth_date}'`);
     }
-    if(queries.length > 0){
-      queries = queries.join(' AND ')
-      querySelector = `WHERE ${queries}`
+    if (queries.length > 0) {
+      queries = queries.join(" AND ");
+      querySelector = `WHERE ${queries}`;
     }
 
     let query =

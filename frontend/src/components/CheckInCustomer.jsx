@@ -1,6 +1,7 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Search from "@mui/icons-material/Search";
 import {
+  Alert,
   Box,
   Button,
   IconButton,
@@ -56,6 +57,7 @@ const CheckInCustomer = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [dob, setDob] = useState(null);
+  const [error, setError] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -79,6 +81,9 @@ const CheckInCustomer = () => {
       })
       .then((data) => {
         setData(data);
+      })
+      .catch((e) => {
+        setError(true);
       });
   };
 
@@ -161,6 +166,12 @@ const CheckInCustomer = () => {
         </IconButton>
       </div>
       <br />
+
+      {error && (
+        <Alert severity="error">
+          Something went wrong. Please contact the Development Team.
+        </Alert>
+      )}
 
       {data.length > 0 && (
         <table {...getTableProps()}>

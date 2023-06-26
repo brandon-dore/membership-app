@@ -8,10 +8,10 @@ import "./SearchCustomers.css";
 import FilterDropdown from "./filters/FilterDropdown";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
-import { Button, Typography } from "@mui/material";
+import { Alert, Button, Typography } from "@mui/material";
 
 import Box from "@mui/material/Box";
-import { capitalizeFirstLetter } from "../utils";
+import axios from "axios";
 const COLUMNS = [
   {
     Header: "Customer ID",
@@ -121,6 +121,7 @@ const COLUMNS = [
 
 const SearchCustomers = () => {
   const [data, setData] = useState([]);
+  const [error, setError] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentCustomerID, setCurrentCustomerID] = useState(null);
 
@@ -135,15 +136,16 @@ const SearchCustomers = () => {
   }, []);
 
   const fetchData = () => {
-    fetch("http://localhost:3000/customers")
+    axios
+      .get("http://localhost:3000/customers")
       .then((response) => {
         return response.text();
       })
       .then((data) => {
-        setData(JSON.parse(data));
+        setData(data);
       })
       .catch((e) => {
-        console.log(e);
+        setError(true);
       });
   };
 
@@ -175,92 +177,105 @@ const SearchCustomers = () => {
 
   return (
     <div>
-      <Typography variant="h1">Search for Customer</Typography>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>
-                  {column.render("Header")}
-                  <div>{column.canFilter ? column.render("Filter") : null}</div>
-                </th>
+      {error ? (
+        <Alert severity="error">
+          Something went wrong. Please contact the Development Team.
+        </Alert>
+      ) : (
+        <>
+          <Typography variant="h1">Search for Customer</Typography>
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                      <div>
+                        {column.canFilter ? column.render("Filter") : null}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr
-                className={`contentRow ${
-                  row.original.is_banned ? "banned" : ""
-                }`}
-                onClick={(e) => {
-                  setCurrentCustomerID(row.original.id);
-                  handleOpen();
-                }}
-                {...row.getRowProps()}
-              >
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className="pagination">
-        <Button
-          variant="outlined"
-          onClick={() => gotoPage(0)}
-          disabled={!canPreviousPage}
-        >
-          {"<<"}
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => previousPage()}
-          disabled={!canPreviousPage}
-        >
-          {"<"}
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => nextPage()}
-          disabled={!canNextPage}
-        >
-          {">"}
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => gotoPage(pageCount - 1)}
-          disabled={!canNextPage}
-        >
-          {">>"}
-        </Button>
-        <Typography>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>
-        </Typography>
-      </div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="Open Profile"
-        aria-describedby="Open Profile"
-      >
-        <div>
-          <Box sx={modalBox}>
-            <Profile customerID={currentCustomerID} closeModal={handleClose} />
-          </Box>
-        </div>
-      </Modal>
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    className={`contentRow ${
+                      row.original.is_banned ? "banned" : ""
+                    }`}
+                    onClick={(e) => {
+                      setCurrentCustomerID(row.original.id);
+                      handleOpen();
+                    }}
+                    {...row.getRowProps()}
+                  >
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <Button
+              variant="outlined"
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+            >
+              {"<<"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+            >
+              {"<"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+            >
+              {">"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              {">>"}
+            </Button>
+            <Typography>
+              Page{" "}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>
+            </Typography>
+          </div>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="Open Profile"
+            aria-describedby="Open Profile"
+          >
+            <div>
+              <Box sx={modalBox}>
+                <Profile
+                  customerID={currentCustomerID}
+                  closeModal={handleClose}
+                />
+              </Box>
+            </div>
+          </Modal>
+        </>
+      )}
     </div>
   );
 };

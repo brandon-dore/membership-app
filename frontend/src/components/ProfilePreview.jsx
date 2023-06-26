@@ -28,7 +28,7 @@ const ProfilePreview = ({ customerID, closeModal }) => {
 
   return (
     <>
-      {user !== null ? (
+      {user != null ? (
         <div className="modalContent">
           <div className="pictureContainer">
             {user.photo != null ? (
@@ -42,13 +42,31 @@ const ProfilePreview = ({ customerID, closeModal }) => {
             )}
           </div>
           <div className="namesContainer">
-            <Typography>
-              {user.first_name} {user.last_name}
-            </Typography>
+            {user.is_banned ? (
+              <>
+                <Typography sx={{ color: "red", fontWeight: "bold" }}>
+                  BANNED
+                </Typography>
+                <Typography>
+                  {user.first_name} {user.last_name}
+                </Typography>
+                <Typography sx={{ color: "red", fontWeight: "bold" }}>
+                  BANNED
+                </Typography>
+              </>
+            ) : (
+              <Typography>
+                {user.first_name} {user.last_name}
+              </Typography>
+            )}
           </div>
         </div>
       ) : (
-        <Typography>No profile selected</Typography>
+        <div className="modalContent">
+          <Typography sx={{ color: "red", fontWeight: "bold" }}>
+            NO USER FOUND
+          </Typography>
+        </div>
       )}
     </>
   );
