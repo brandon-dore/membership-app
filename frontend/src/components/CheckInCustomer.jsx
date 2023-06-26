@@ -20,6 +20,11 @@ import { smallModalBox } from "../MuiStyles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
+const checkDate = (d) => {
+  let today = Date.now();
+  return today > new Date(d);
+};
+
 const COLUMNS = [
   {
     Header: "Customer ID",
@@ -39,7 +44,19 @@ const COLUMNS = [
   {
     Header: "Expiry Date",
     accessor: "expiry_date",
-    // Filter: FilterDates,
+    accessor: (d) => {
+      if (d.expiry_date != null) {
+        // const is_banned = d.is_banned.toString();
+        // return is_banned.charAt(0).toUpperCase() + is_banned.slice(1);
+        return checkDate(d.expiry_date) ? (
+          <Typography sx={{ color: "firebrick" }}>{d.expiry_date} </Typography>
+        ) : (
+          d.expiry_date
+        );
+      } else {
+        return <Typography sx={{ opacity: "0.5" }}>Unknown</Typography>;
+      }
+    },
   },
   {
     Header: "Date of Birth",
