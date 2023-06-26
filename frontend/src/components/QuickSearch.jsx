@@ -81,12 +81,6 @@ const QuickSearch = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-  const handleKeyDown = (e) => {
-    if (e.code === "Enter") {
-      handleSearch();
-    }
-  };
-
   const handleSearch = () => {
     console.log("e");
     axios

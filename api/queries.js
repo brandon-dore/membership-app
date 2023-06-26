@@ -85,7 +85,6 @@ const createCustomer = async (request, response) => {
     );
     response.status(201).send(`User added with ID: ${rows.insertId}`);
   } catch (error) {
-    console.log(error);
     response.status(500).json({ error_code: error.code });
   }
 };
@@ -124,7 +123,6 @@ const updateCustomer = async (request, response) => {
     );
     response.status(200).send(`User modified with ID: ${id}`);
   } catch (error) {
-    console.log(error);
     response.status(500).json({ error_code: error.code });
   }
 };
@@ -138,7 +136,6 @@ const banCustomer = async (request, response) => {
     ]);
     response.status(200).send(`User banned with ID: ${id}`);
   } catch (error) {
-    console.log(error);
     response.status(500).json({ error_code: error.code });
   }
 };
@@ -152,7 +149,6 @@ const unbanCustomer = async (request, response) => {
     ]);
     response.status(200).send(`User banned with ID: ${id}`);
   } catch (error) {
-    console.log(error);
     response.status(500).json({ error_code: error.code });
   }
 };
@@ -338,7 +334,6 @@ const getMaxId = async (request, response) => {
     );
     response.status(200).json(rows);
   } catch (error) {
-    console.log(error);
     response.status(500).json({ error_code: error.code });
   }
 };
