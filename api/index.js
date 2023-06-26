@@ -13,6 +13,8 @@ const allowedOrigins = [
   "http://localhost:3000",
 ];
 
+app.disable("etag");
+
 app.use(
   bodyParser.urlencoded({
     extended: true,
