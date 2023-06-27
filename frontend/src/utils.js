@@ -6,6 +6,13 @@ export const convertDate = (date) => {
   return date;
 };
 
+export const pgDate = (date)=> {
+  if(date){
+    date = date.split('/')
+    return date.reverse().join('/')
+  }
+}
+
 export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };

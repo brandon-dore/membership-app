@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton, subtleText } from "../MuiStyles";
 import "./CreateCustomer.css";
-import { convertDate, checkDate } from "../utils";
+import { convertDate, checkDate, pgDate } from "../utils";
 import moment from "moment";
 
 const videoConstraints = {
@@ -42,7 +42,7 @@ const CreateCustomer = (props) => {
   const [exp, setExp] = useState(
     props.expiry_date ? convertDate(props.expiry_date) : null
   );
-  const [isMember, setIsMember] = useState(props.is_member);
+  const [isMember, setIsMember] = useState(props.expiry_date ? true : false);
   const [sex, setSex] = useState(props.sex ? props.sex : "");
   const [pic, setPic] = useState(props.photo ? props.photo : null);
   const [notes, setNotes] = useState(props.notes ? props.notes : "");
@@ -68,7 +68,6 @@ const CreateCustomer = (props) => {
 
   const calcExpiry = (increment) => {
     let expiryDate;
-    console.log(checkDate(props.expiry_date));
     if (props.expiry_date && !checkDate(props.expiry_date)) {
       expiryDate = moment(`${props.expiry_date} `, "DD/MM/YYYY").add(
         increment,
@@ -109,7 +108,7 @@ const CreateCustomer = (props) => {
       first_name: firstName,
       last_name: lastName,
       birth_date: dob,
-      expiry_date: isMember ? exp : null,
+      expiry_date: isMember ? pgDate(exp) : null,
       sex: sex,
       relationship_status: "Single",
       id_number: IDNumber,
