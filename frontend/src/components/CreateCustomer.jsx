@@ -96,8 +96,7 @@ const CreateCustomer = (props) => {
         return response.data;
       })
       .then((data) => {
-        console.log(data);
-        setMaxID(data[0].id + 1);
+        setMaxID(data[0].id);
       })
       .catch((e) => {
         console.log(e);
