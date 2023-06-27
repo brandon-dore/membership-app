@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import { sharpButton, subtleText } from "../MuiStyles";
 import "./CreateCustomer.css";
-import { convertDate } from "../utils";
+import { convertDate, checkDate } from "../utils";
 import moment from "moment";
 
 const videoConstraints = {
@@ -68,7 +68,8 @@ const CreateCustomer = (props) => {
 
   const calcExpiry = (increment) => {
     let expiryDate;
-    if (props.expiry_date) {
+    console.log(checkDate(props.expiry_date));
+    if (props.expiry_date && !checkDate(props.expiry_date)) {
       expiryDate = moment(`${props.expiry_date} `, "DD/MM/YYYY").add(
         increment,
         "months"
