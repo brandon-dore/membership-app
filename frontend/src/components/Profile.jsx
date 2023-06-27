@@ -273,10 +273,14 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
                   <Typography variant="h2">Expiry Date</Typography>
                   <Typography>
                     {convertDate(user.expiry_date)}
-                    {checkDate(
-                      user.expiry_date && (
-                        <ErrorIcon sx={{ color: "firebrick" }} />
-                      )
+                    {checkDate(user.expiry_date) && (
+                      <ErrorIcon
+                        sx={{
+                          color: "firebrick",
+                          verticalAlign: "top",
+                          marginLeft: "0.3rem",
+                        }}
+                      />
                     )}
                   </Typography>
                 </>
