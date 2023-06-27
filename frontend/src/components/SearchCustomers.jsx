@@ -9,6 +9,10 @@ import FilterDropdown from "./filters/FilterDropdown";
 import FilterText from "./filters/FilterText";
 import FilterDates from "./filters/FiterDates";
 import { Alert, Button, Typography } from "@mui/material";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 import Box from "@mui/material/Box";
 import axios from "axios";
@@ -226,28 +230,28 @@ const SearchCustomers = () => {
               onClick={() => gotoPage(0)}
               disabled={!canPreviousPage}
             >
-              {"<<"}
+              <FirstPageIcon />
             </Button>
             <Button
               variant="outlined"
               onClick={() => previousPage()}
               disabled={!canPreviousPage}
             >
-              {"<"}
+              <NavigateBeforeIcon />
             </Button>
             <Button
               variant="outlined"
               onClick={() => nextPage()}
               disabled={!canNextPage}
             >
-              {">"}
+              <NavigateNextIcon />
             </Button>
             <Button
               variant="outlined"
               onClick={() => gotoPage(pageCount - 1)}
               disabled={!canNextPage}
             >
-              {">>"}
+              <LastPageIcon />
             </Button>
             <Typography>
               Page{" "}

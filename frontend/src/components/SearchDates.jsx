@@ -9,6 +9,11 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Alert, Button, Typography } from "@mui/material";
 import axios from "axios";
 
+import LastPageIcon from "@mui/icons-material/LastPage";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+
 const COLUMNS = [
   {
     Header: "First Name",
@@ -168,28 +173,28 @@ const SearchDates = () => {
                   onClick={() => gotoPage(0)}
                   disabled={!canPreviousPage}
                 >
-                  {"<<"}
+                  <FirstPageIcon />
                 </Button>
                 <Button
                   variant="outlined"
                   onClick={() => previousPage()}
                   disabled={!canPreviousPage}
                 >
-                  {"<"}
+                  <NavigateBeforeIcon />
                 </Button>
                 <Button
                   variant="outlined"
                   onClick={() => nextPage()}
                   disabled={!canNextPage}
                 >
-                  {">"}
+                  <NavigateNextIcon />
                 </Button>
                 <Button
                   variant="outlined"
                   onClick={() => gotoPage(pageCount - 1)}
                   disabled={!canNextPage}
                 >
-                  {">>"}
+                  <LastPageIcon />
                 </Button>
                 <Typography>
                   Page{" "}
