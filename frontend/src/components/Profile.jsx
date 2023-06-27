@@ -351,7 +351,14 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
                 )}
               </div>
               <Typography variant="h2">Add Couple</Typography>
-              <div className="inputContainer">
+
+              <form
+                className="inputContainer"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleOpenPreview();
+                }}
+              >
                 <OutlinedInput
                   sx={{ width: "20rem" }}
                   id="couple_id"
@@ -360,8 +367,15 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
                   placeholder="Couple ID"
                   onChange={(e) => setNewCoupleID(e.target.value)}
                 />
-                <Button onClick={handleOpenPreview}>Add Couple</Button>
-              </div>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenPreview();
+                  }}
+                >
+                  Add Couple
+                </Button>
+              </form>
               {error && (
                 <p className="errorMessage">Please enter a customer ID</p>
               )}
