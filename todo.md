@@ -1,2 +1,1 @@
-- Check exp coours fixed???
 - Fix ID serial WITH (ALTER SEQUENCE customers_id_seq RESTART WITH 100;)
