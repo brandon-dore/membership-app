@@ -14,7 +14,7 @@ const SearchMenu = () => {
       <Typography variant="h1">Customers</Typography>
       <Tabs variant="fullWidth" value={tab} onChange={handleChangeTab}>
         <Tab label="Quick Search" />
-        <Tab label="Search Database" />
+        <Tab label="Search All Customers" />
       </Tabs>
       <br />
       {tab === 0 && (
