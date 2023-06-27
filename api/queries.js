@@ -330,7 +330,7 @@ const deleteCouple = async (request, response) => {
 const getMaxId = async (request, response) => {
   try {
     const { rows } = await pool.query(
-      "SELECT nextval(pg_get_serial_sequence('customers', 'id')) as new_id;"
+      "SELECT nextval(pg_get_serial_sequence('customers', 'id')) as id;"
     );
     response.status(200).json(rows);
   } catch (error) {
