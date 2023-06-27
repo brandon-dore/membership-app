@@ -211,12 +211,6 @@ const CreateCustomer = (props) => {
                   />
                 </FormControl>
               </div>
-              {!props.id && isMember && (
-                <Typography>
-                  Member ID: <strong>{maxID}</strong>
-                </Typography>
-              )}
-
               <div>
                 <Typography style={{ marginTop: 0 }}>Expires in: </Typography>
                 <div className="expiryPicker">
@@ -264,7 +258,7 @@ const CreateCustomer = (props) => {
                 variant="outlined"
               />
             </div>
-            <Typography>This user will have ID: {maxID}</Typography>
+            <Typography>This customer will have ID: {maxID}</Typography>
           </div>
           <div className="right">
             <div className="photoContainer">

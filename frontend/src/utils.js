@@ -12,5 +12,7 @@ export const capitalizeFirstLetter = (string) => {
 
 export const checkDate = (d) => {
   let today = Date.now();
-  return today > new Date(d);
+  let exp = d.split('/')
+  exp = new Date(`${exp[2]}/${exp[1]}/${exp[0]}`)
+  return today > exp;
 };
