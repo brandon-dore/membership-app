@@ -96,7 +96,7 @@ const CreateCustomer = (props) => {
         return response.data;
       })
       .then((data) => {
-        setMaxID(data[0].id);
+        setMaxID(Number(data[0].last_value) + 1);
       })
       .catch((e) => {
         console.log(e);
@@ -136,7 +136,7 @@ const CreateCustomer = (props) => {
           if (checkin) {
             handleCheckin(maxID);
           }
-          location.reload();
+          props.closeModal();
         })
         .catch((e) => {
           if (e.response.status === 400) {
@@ -260,10 +260,11 @@ const CreateCustomer = (props) => {
                 value={IDNumber}
                 sx={{ width: "100%" }}
                 id="id_number"
-                label="ID Number"
+                label="License / Passport Number"
                 variant="outlined"
               />
             </div>
+            <Typography>This user will have ID: {maxID}</Typography>
           </div>
           <div className="right">
             <div className="photoContainer">

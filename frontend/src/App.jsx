@@ -126,7 +126,7 @@ function App() {
             </Button>
             {
               {
-                CreateCustomer: <CreateCustomer />,
+                CreateCustomer: <CreateCustomer closeModal={handleClose} />,
                 CheckInCustomer: <SearchMenu />,
                 SearchDates: <SearchDates />,
                 SearchCustomer: <SearchCustomers />,

@@ -83,7 +83,7 @@ const createCustomer = async (request, response) => {
         is_member,
       ]
     );
-    response.status(201).send(`User added with ID: ${rows.insertId}`);
+    response.status(201).send(`User created.`);
   } catch (error) {
     response.status(500).json({ error_code: error.code });
   }
@@ -330,10 +330,11 @@ const deleteCouple = async (request, response) => {
 const getMaxId = async (request, response) => {
   try {
     const { rows } = await pool.query(
-      "SELECT nextval(pg_get_serial_sequence('customers', 'id')) as id;"
+      "SELECT last_value FROM customers_id_seq"
     );
     response.status(200).json(rows);
   } catch (error) {
+    console.log(error)
     response.status(500).json({ error_code: error.code });
   }
 };
