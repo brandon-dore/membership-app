@@ -254,22 +254,26 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
           </div>
           <div className="profileContent">
             <div className="left">
-              {user.is_member && (
-                <>
-                  <Typography variant="h2">Member ID</Typography>
-                  <Typography>{user.id}</Typography>
-                </>
-              )}
-              <Typography variant="h2">First Name</Typography>
-              <Typography>{user.first_name}</Typography>
-              <Typography variant="h2">Last Name</Typography>
-              <Typography>{user.last_name}</Typography>
-              <Typography variant="h2">D.O.B</Typography>
-              <Typography>
-                {convertDate(user.birth_date ? user.birth_date : "Unknown")}
-              </Typography>
+              <div>
+                <Typography variant="h2">
+                  Customer ID: <strong>{user.id}</strong>
+                </Typography>
+              </div>
+              <hr style={{ width: "100%" }} />
+              <div>
+                <Typography variant="h2">Name</Typography>
+                <Typography>
+                  {user.first_name} {user.last_name}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant="h2">Date of Birth</Typography>
+                <Typography>
+                  {convertDate(user.birth_date ? user.birth_date : "Unknown")}
+                </Typography>
+              </div>
               {user.expiry_date && (
-                <>
+                <div>
                   <Typography variant="h2">Expiry Date</Typography>
                   <Typography>
                     {convertDate(user.expiry_date)}
@@ -283,12 +287,20 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
                       />
                     )}
                   </Typography>
-                </>
+                </div>
               )}
               {user.id_number && (
-                <Typography variant="h2">ID Number</Typography>
+                <div>
+                  <Typography variant="h2">Licence/Passport Number</Typography>
+                  <Typography>{user.id_number}</Typography>
+                </div>
               )}
-              <Typography>{user.id_number}</Typography>
+              {user.notes && (
+                <div>
+                  <Typography variant="h2">Notes</Typography>
+                  <Typography>{user.notes}</Typography>
+                </div>
+              )}
               {couples.length !== 0 && (
                 <div>
                   <Typography variant="h2">Partners</Typography>

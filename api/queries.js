@@ -29,7 +29,7 @@ const getCustomerById = async (request, response) => {
     const id = parseInt(request.params.id);
 
     const { rows } = await pool.query(
-      "SELECT id, first_name, last_name, sex, relationship_status, id_number, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date, is_member, is_banned, ENCODE(photo,'base64') as photo FROM customers WHERE id = $1",
+      "SELECT id, first_name, last_name, sex, relationship_status, id_number, TO_CHAR(birth_date :: DATE, 'dd/mm/yyyy') birth_date, TO_CHAR(expiry_date :: DATE, 'dd/mm/yyyy') expiry_date, is_member, notes, is_banned, ENCODE(photo,'base64') as photo FROM customers WHERE id = $1",
       [id]
     );
     if (rows.length === 0) {

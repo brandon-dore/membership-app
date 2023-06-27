@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Webcam from "react-webcam";
-import { sharpButton } from "../MuiStyles";
+import { sharpButton, subtleText } from "../MuiStyles";
 import "./CreateCustomer.css";
 import { convertDate } from "../utils";
 import moment from "moment";
@@ -37,12 +37,12 @@ const CreateCustomer = (props) => {
     props.last_name ? props.last_name : ""
   );
   const [dob, setDob] = useState(
-    props.birth_date ? moment(props.birth_date, "YYYY-MM-DD") : null
+    props.birth_date ? moment(props.birth_date, "DD-MM-YYYY") : null
   );
   const [exp, setExp] = useState(
     props.expiry_date ? convertDate(props.expiry_date) : null
   );
-  const [isMember, setIsMember] = useState(props.is_member === "Yes");
+  const [isMember, setIsMember] = useState(props.is_member);
   const [sex, setSex] = useState(props.sex ? props.sex : "");
   const [pic, setPic] = useState(props.photo ? props.photo : null);
   const [notes, setNotes] = useState(props.notes ? props.notes : "");
@@ -212,7 +212,9 @@ const CreateCustomer = (props) => {
                 </FormControl>
               </div>
               <div>
-                <Typography style={{ marginTop: 0 }}>Expires in: </Typography>
+                <Typography style={{ marginTop: 0 }}>
+                  {props.is_member ? "Extend Membership:" : "Expires in:"}{" "}
+                </Typography>
                 <div className="expiryPicker">
                   <Button
                     disabled={!isMember}
@@ -254,11 +256,15 @@ const CreateCustomer = (props) => {
                 value={IDNumber}
                 sx={{ width: "100%" }}
                 id="id_number"
-                label="License / Passport Number"
+                label="Licence / Passport Number"
                 variant="outlined"
               />
             </div>
-            <Typography>This customer will have ID: {maxID}</Typography>
+            {props.id ? (
+              <Typography>This customer has an ID of: {props.id}</Typography>
+            ) : (
+              <Typography>This customer will have ID: {maxID}</Typography>
+            )}
           </div>
           <div className="right">
             <div className="photoContainer">
@@ -313,17 +319,27 @@ const CreateCustomer = (props) => {
                 </Webcam>
               )}
             </div>
-            <TextField
-              sx={{ width: "24.5rem" }}
-              multiline
-              label="Notes (Optional)"
-              placeholder="Notes..."
-              rows={3}
-              onChange={(e) => setNotes(e.target.value)}
-            />
+            <div>
+              <TextField
+                sx={{ width: "24.5rem" }}
+                multiline
+                label="Notes (Optional)"
+                placeholder="Notes..."
+                rows={3}
+                inputProps={{ maxLength: 250 }}
+                onChange={(e) => setNotes(e.target.value)}
+                value={notes}
+              />
+              <Typography sx={subtleText}>
+                {notes.length}/250 Characters
+              </Typography>
+            </div>
           </div>
         </form>
         <div className="submitButtons">
+          <Button onClick={props.closeModal} color="error" variant="outlined">
+            Cancel
+          </Button>
           <Button
             disabled={checkEmpty()}
             onClick={() => handleSubmit(false)}

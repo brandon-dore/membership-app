@@ -6,7 +6,7 @@ export const modalBox = {
   width: "80rem",
   height: "fitContent",
   minHeight: "30rem",
-  maxHeight: "45rem",
+  maxHeight: "50rem",
   bgcolor: "#121212",
   border: "2px solid #000",
   borderRadius: "4px",
@@ -49,4 +49,10 @@ export const closeButton = {
   margin: "1rem",
   aspectRatio: "1/1",
   borderRadius: "50%",
+};
+
+export const subtleText = {
+  fontSize: "0.8rem",
+  opacity: "0.8",
+  marginLeft: "0.5rem",
 };
