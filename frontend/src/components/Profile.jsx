@@ -13,12 +13,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import "./Profile.css";
-import { convertDate } from "../utils";
+import { checkDate, convertDate } from "../utils";
 import { modalBox, sharpButton, smallModalBox } from "../MuiStyles";
 import ProfilePreview from "./ProfilePreview";
 import CreateCustomer from "./CreateCustomer";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const Profile = ({ customerID, closeModal, nested = false }) => {
   const [user, setUser] = useState(null);
@@ -270,7 +271,14 @@ const Profile = ({ customerID, closeModal, nested = false }) => {
               {user.expiry_date && (
                 <>
                   <Typography variant="h2">Expiry Date</Typography>
-                  <Typography>{convertDate(user.expiry_date)}</Typography>
+                  <Typography>
+                    {convertDate(user.expiry_date)}
+                    {checkDate(
+                      user.expiry_date && (
+                        <ErrorIcon sx={{ color: "firebrick" }} />
+                      )
+                    )}
+                  </Typography>
                 </>
               )}
               {user.id_number && (
