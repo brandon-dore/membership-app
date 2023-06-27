@@ -3,6 +3,7 @@ import Search from "@mui/icons-material/Search";
 import {
   Alert,
   Box,
+  Button,
   IconButton,
   Modal,
   OutlinedInput,
@@ -10,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useMemo, useState } from "react";
-import { useTable } from "react-table";
+import { usePagination, useTable } from "react-table";
 import "./QuickSearch.css";
 import "./DataTable.css";
 import { modalBox } from "../MuiStyles";
@@ -18,6 +19,10 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import Profile from "./Profile";
 import { checkDate } from "../utils";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 const COLUMNS = [
   {
@@ -72,11 +77,30 @@ const QuickSearch = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 5 },
+    },
+    usePagination
+  );
 
   const handleSearch = () => {
-    console.log("e");
     axios
       .get(`http://localhost:3000/customers/names/`, {
         params: {
@@ -125,55 +149,56 @@ const QuickSearch = () => {
       </div>
       <br />
       <Typography variant="h2">Quick Search:</Typography>
-      <div className="formContainer">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSearch();
-          }}
-        >
-          <OutlinedInput
-            sx={{ width: "20rem" }}
-            id="first_name"
-            type="text"
-            variant="outlined"
-            placeholder="First Name"
-            onChange={(e) => setFirstName(e.target.value)}
-            value={firstName}
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
+        className="formContainer"
+      >
+        <OutlinedInput
+          sx={{ width: "20rem" }}
+          id="first_name"
+          type="text"
+          variant="outlined"
+          placeholder="First Name"
+          onChange={(e) => setFirstName(e.target.value)}
+          value={firstName}
+        />
+        <OutlinedInput
+          sx={{ width: "20rem" }}
+          id="last_name"
+          type="text"
+          variant="outlined"
+          placeholder="Last Name"
+          onChange={(e) => setLastName(e.target.value)}
+          value={lastName}
+        />
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <DatePicker
+            format="DD/MM/YYYY"
+            clearable
+            value={dob || null}
+            onChange={(e) => {
+              if (e === null) {
+                setDob(undefined);
+              } else {
+                setDob(e.format("yyyy-MM-DD"));
+              }
+            }}
+            slotProps={{
+              actionBar: {
+                actions: ["clear"],
+              },
+            }}
           />
-          <OutlinedInput
-            sx={{ width: "20rem" }}
-            id="last_name"
-            type="text"
-            variant="outlined"
-            placeholder="Last Name"
-            onChange={(e) => setLastName(e.target.value)}
-            value={lastName}
-          />
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker
-              format="DD/MM/YYYY"
-              clearable
-              value={dob || null}
-              onChange={(e) => {
-                if (e === null) {
-                  setDob(undefined);
-                } else {
-                  setDob(e.format("yyyy-MM-DD"));
-                }
-              }}
-              slotProps={{
-                actionBar: {
-                  actions: ["clear"],
-                },
-              }}
-            />
-          </LocalizationProvider>
-          <IconButton sx={{ width: "4rem" }} type="submit">
-            <Search />
-          </IconButton>
-        </form>
-      </div>
+        </LocalizationProvider>
+        <IconButton sx={{ width: "4rem" }} type="submit">
+          <Search />
+        </IconButton>
+      </form>
+
       <br />
 
       {error && (
@@ -183,44 +208,82 @@ const QuickSearch = () => {
       )}
 
       {data.length > 0 && (
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                    <div>
-                      {column.canFilter ? column.render("Filter") : null}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr
-                  className="contentRow"
-                  onClick={(e) => {
-                    handleOpen();
-                    setId(row.cells[0].value);
-                  }}
-                  {...row.getRowProps()}
-                  style={{ cursor: "pointer" }}
-                >
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
+        <>
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                      <div>
+                        {column.canFilter ? column.render("Filter") : null}
+                      </div>
+                    </th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    className="contentRow"
+                    onClick={(e) => {
+                      handleOpen();
+                      setId(row.cells[0].value);
+                    }}
+                    {...row.getRowProps()}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <Button
+              variant="outlined"
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+            >
+              <FirstPageIcon />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+            >
+              <NavigateBeforeIcon />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+            >
+              <NavigateNextIcon />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              <LastPageIcon />
+            </Button>
+            <Typography>
+              Page{" "}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>
+            </Typography>
+          </div>
+        </>
       )}
 
       <Modal
