@@ -57,7 +57,7 @@ const CreateCustomer = (props) => {
 
   useEffect(() => {
     getMaxID();
-  });
+  }, []);
 
   const checkEmpty = () => {
     if (isMember) {
