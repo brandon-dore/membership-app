@@ -54,6 +54,7 @@ const CreateCustomer = (props) => {
   const [webcamError, isWebcamError] = useState("");
   const [errorMsg, setErrorMsg] = useState(0);
   const [showError, setShowError] = useState(false);
+  const [customExp, setCustomExp] = useState();
 
   useEffect(() => {
     getMaxID();
@@ -213,7 +214,7 @@ const CreateCustomer = (props) => {
               </div>
               <div>
                 <Typography style={{ marginTop: 0 }}>
-                  {props.is_member ? "Extend Membership:" : "Expires in:"}{" "}
+                  {props.is_member ? "Extend Membership:" : "Quick Options:"}{" "}
                 </Typography>
                 <div className="expiryPicker">
                   <Button
@@ -221,7 +222,7 @@ const CreateCustomer = (props) => {
                     variant={exp === calcExpiry(1) ? "contained" : "outlined"}
                     onClick={() => setExp(calcExpiry(1))}
                   >
-                    1 Months
+                    1 Month
                   </Button>
                   <Button
                     disabled={!isMember}
@@ -244,12 +245,21 @@ const CreateCustomer = (props) => {
                   >
                     1 Year
                   </Button>
-                  {exp && (
-                    <Typography>
-                      Expires on: <strong>{convertDate(exp)}</strong>
-                    </Typography>
-                  )}
                 </div>
+                <br />
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <DatePicker
+                    disabled={!isMember}
+                    format="DD/MM/YYYY"
+                    sx={{ width: "100%" }}
+                    label="Expires on:"
+                    onChange={(e) => {
+                      setExp(e.format("yyyy-MM-DD"));
+                    }}
+                    value={exp ? moment(exp) : undefined}
+                    minDate={moment().add(1, "day")}
+                  />
+                </LocalizationProvider>
               </div>
               <TextField
                 onChange={(e) => setIDNumber(e.target.value)}
