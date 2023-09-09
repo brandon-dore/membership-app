@@ -339,6 +339,25 @@ const getMaxId = async (request, response) => {
   }
 };
 
+const getStats = async (request, response) => {
+  try{
+    const is_member = await pool.query(
+      "SELECT COUNT(id) FROM customers WHERE is_member = TRUE"
+    )
+    console.log(is_member)
+    const male = await pool.query(
+      "SELECT COUNT(id) FROM customers WHERE sex = 'Male'"
+    )
+    const female = await pool.query(
+      "SELECT COUNT(id) FROM customers WHERE sex = 'Female'"
+    )
+    response.status(200).json({'Members': is_member.rows[0].count, 'Males': male.rows[0].count, 'Females': female.rows[0].count})
+  } catch(error){
+    console.log(error)
+    response.status(500).json({ error_code: error.code });
+  }
+}
+
 module.exports = {
   getCustomers,
   getCustomerById,
@@ -356,4 +375,5 @@ module.exports = {
   createCouple,
   deleteCouple,
   getMaxId,
+  getStats
 };

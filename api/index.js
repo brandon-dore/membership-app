@@ -65,6 +65,8 @@ app.get("/couples/:id", db.getCustomerCouple);
 app.post("/couples", db.createCouple);
 app.post("/couples/delete", db.deleteCouple);
 
+app.get('/stats', db.getStats);
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });

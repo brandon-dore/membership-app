@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchDates from "./components/SearchDates";
 import SearchCustomers from "./components/SearchCustomers";
 import CreateCustomer from "./components/CreateCustomer";
@@ -15,6 +15,7 @@ import { Button, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchMenu from "./components/SearchMenu";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import axios from "axios";
 
 const darkTheme = createTheme({
   palette: {
@@ -62,9 +63,16 @@ const darkTheme = createTheme({
 function App() {
   const [open, setOpen] = useState(false);
   const [component, setComponent] = useState("CreateCustomer");
+  const [stats, setStats] = useState({});
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/stats").then((response) => {
+      setStats(response.data);
+    });
+  }, []);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -74,6 +82,15 @@ function App() {
           <Typography variant="h1">Cupid's</Typography>
           <img className="logo" src={cupidImg} alt="logo" />
         </h1>
+      </div>
+      <div className="stats">
+        {Object.entries(stats).map(([key, val]) => {
+          return (
+            <Typography>
+              {key}: {val}
+            </Typography>
+          );
+        })}
       </div>
       <div className="buttons">
         <button
