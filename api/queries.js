@@ -344,7 +344,6 @@ const getStats = async (request, response) => {
     const is_member = await pool.query(
       "SELECT COUNT(id) FROM customers WHERE is_member = TRUE"
     )
-    console.log(is_member)
     const male = await pool.query(
       "SELECT COUNT(id) FROM customers WHERE sex = 'Male'"
     )
@@ -355,6 +354,16 @@ const getStats = async (request, response) => {
   } catch(error){
     console.log(error)
     response.status(500).json({ error_code: error.code });
+  }
+}
+
+const updateMemebership = async () => {
+  try{
+    await pool.query(
+      "UPDATE customers SET is_member = FALSE WHERE expiry_date < CURRENT_DATE"
+    )
+  }catch (error){
+    console.log(error)
   }
 }
 
@@ -375,5 +384,6 @@ module.exports = {
   createCouple,
   deleteCouple,
   getMaxId,
-  getStats
+  getStats,
+  updateMemebership
 };

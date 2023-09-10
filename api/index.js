@@ -46,6 +46,12 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
+db.updateMemebership()
+
+setInterval(() => {
+  db.updateMemebership()
+}, 60*60*6*1000);
+
 app.get("/customers", db.getCustomers);
 app.get("/customers/names", db.queryCustomer);
 app.get("/customers/:id", db.getCustomerById);
